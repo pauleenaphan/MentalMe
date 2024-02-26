@@ -3,6 +3,8 @@ import { Button } from 'react-native';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 
+const validator = require('validator');
+
 
 const db = SQLite.openDatabase('mydb.db');
 
@@ -41,17 +43,34 @@ export default function App() {
   const createUser = () =>{
     db.transaction((tx) =>{
       tx.executeSql(
-        "INSERT INTO user (email, password) VALUES (?,?)",
-        [personalInfo.email, personalInfo.password],
-        () =>{
-          console.log("new user is created " + personalInfo.email);
-        },
-        (error) =>{
-          console.log("new user was not created", error)
+        //checks for duplicate emails
+        'SELECT * FROM user WHERE email = ?', [personalInfo.email],
+        (_, results) =>{
+          if(results.rows.length > 0){
+            console.log("User already exist with this email");
+
+            //checks for empty email or pass NOTE: you can also implement this real time
+          }else if(personalInfo.email == "" || personalInfo.password == ""){
+            console.log("one of the values is empty");
+            //checks for valid email
+          }else if(validator.isEmail(personalInfo.email) == false){
+            console.log("email is not valid");
+          }
+          else{
+            //if it is valid info then insert the user into the db 
+            tx.executeSql(
+              'INSERT INTO user (email, password) VALUES (?,?)', [personalInfo.email, personalInfo.password],
+              console.log(personalInfo.email + " was created")
+            )
+          }
+          (error)=>{
+            console.log("could not insert error" + error)
+          }
         }
       )
     })
   }
+
 
   //console log the table and its values
   const showUsers = () =>{
