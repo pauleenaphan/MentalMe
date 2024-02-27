@@ -50,11 +50,12 @@ export default function App() {
             console.log("User already exist with this email");
 
             //checks for empty email or pass NOTE: you can also implement this real time
-          }else if(personalInfo.email == "" || personalInfo.password == ""){
-            console.log("one of the values is empty");
-            //checks for valid email
+            //checks for valid email first before checking for empty password
           }else if(validator.isEmail(personalInfo.email) == false){
             console.log("email is not valid");
+            //checks for valid email
+          }else if(personalInfo.password == ""){
+            console.log("one of the values is empty");
           }
           else{
             //if it is valid info then insert the user into the db 
