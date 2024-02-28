@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDatabase } from './database.js';
+// import { createDatabase } from './database.js';
 import { CreateAccPage, LoginPage } from './account.js';
 import { LoadingPage } from './loading.js';
 
@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  createDatabase();
+  // createDatabase();
 
 
   return (
