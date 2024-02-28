@@ -80,8 +80,10 @@ export const LoginPage = ({navigation}) =>{
         try{
             await signInWithEmailAndPassword(auth, personalInfo.email, personalInfo.password);
             console.log("successfully logged in")
+            return true;
         }catch(error){
             console.log("error" + error);
+            return false;
         }
     }
     
@@ -100,7 +102,13 @@ export const LoginPage = ({navigation}) =>{
             />
             <Button
                 title = "Login"
-                onPress={loginAcc}
+                onPress={async () =>{
+                    if(await loginAcc()){
+                        navigation.navigate('Loading Page');
+                    }else{
+                        console.log('login info is not correct');
+                    }
+                }}
             />
             <Button
                 title = "Create Account (go to create acc page)"
