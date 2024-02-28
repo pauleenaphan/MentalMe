@@ -1,126 +1,119 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'react-native';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import * as SQLite from 'expo-sqlite';
+import React from 'react'
+import { useState } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { auth } from '../firebase/index.js';
+// import { createUser, showUsers, clearTable, checkExistingUser} from './database.js';
+import { styles } from './styles.js'; 
+const auth1 = auth;
 
-
-const db = SQLite.openDatabase('mydb.db');
-
-export default function App() {
-  const [personalInfo, setPersonalInfo] = useState({
-    email: ' ',
-    password: ' ' 
-  });
-
-  //while the user is inputting text it will update the current value of email to the value in the inputbox
-  const handleInfo = (name, text) =>{
-    setPersonalInfo({
-      ...personalInfo,
-      [name]: text
-    })
-  }
-
-  showInfo = () => {
-    console.log("Email " + personalInfo.email + " Password " + personalInfo.password);
-  }
-
-  //useeffect will run code in here everytime we render
-  useEffect(() => {
-    //creates a new table if user does not exist
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR, password VARCHAR)',
-        [],
-        () => console.log('Table created successfully'),
-        (error) => console.log('Error creating table:', error)
-      );
+export const CreateAccPage = ({navigation}) => {
+    const [personalInfo, setPersonalInfo] = useState({
+        email: ' ',
+        password: ' ' 
     });
-  }, []);
 
-  //creates a new user 
-  const createUser = () =>{
-    db.transaction((tx) =>{
-      tx.executeSql(
-        "INSERT INTO user (email, password) VALUES (?,?)",
-        [personalInfo.email, personalInfo.password],
-        () =>{
-          console.log("new user is created " + personalInfo.email);
-        },
-        (error) =>{
-          console.log("new user was not created", error)
+    
+    //while the user is inputting text it will update the current value of email to the value in the inputbox
+    const handleInfo = (name, text) =>{
+        setPersonalInfo({
+            ...personalInfo,
+            [name]: text
+        })
+    }
+
+    //password should be at least 6 characters
+    //has the check already that email is in use already
+    const createAcc = async () =>{
+        try{
+            await createUserWithEmailAndPassword(auth1, personalInfo.email, personalInfo.password);
+            console.log("success creating new account");
+        }catch(error){
+            console.log("error " + error);
         }
-      )
-    })
-  }
+    }
 
-  //console log the table and its values
-  const showUsers = () =>{
-    db.transaction(tx => {
-      tx.executeSql(
-        'SELECT * FROM user',
-        [],
-        (_, { rows: { _array } }) => {
-          console.log('Retrieved data:', _array); // Log the retrieved data
-          // setData(_array);
-        },
-        error => console.error('Error executing SQL query:', error)
-      );
+    return(
+        <View style = {styles.container}>
+            <Text>
+                Create Account
+            </Text>
+            <TextInput 
+                placeholder = 'email'
+                //gets user email from textinput and set the value to email
+                onChangeText = {(text) => handleInfo('email', text)}
+            />
+
+            <TextInput
+                placeholder = "password"
+                onChangeText = {(text) => handleInfo('password', text)}
+            />
+
+            <Button
+                title = "Submit (to create account)"
+                onPress={createAcc}
+                // onPress = {showInfo}
+            />
+
+            <Button
+                title = "Login (go to login page)"
+                onPress = {() => navigation.navigate('Login Page')}
+            />
+        </View>
+    );
+};
+
+export const LoginPage = ({navigation}) =>{
+    const [personalInfo, setPersonalInfo] = useState({
+        email: ' ',
+        password: ' ' 
     });
-  }
 
-  //clears the whole table
-  const clearTable = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'DELETE FROM user',
-        [],
-        () => {
-          console.log('Table cleared successfully');
-        },
-        error => console.error('Error clearing table:', error)
-      );
-    });
-  };
-  
+    const handleInfo = (name, text) =>{
+        setPersonalInfo({
+            ...personalInfo,
+            [name]: text
+        })
+    }
 
-  return (
-    <View style={styles.container}>
-      <TextInput 
-        placeholder = 'email'
-        //gets user email from textinput and set the value to email
-        onChangeText = {(text) => handleInfo('email', text)}
-      />
-
-      <TextInput
-        placeholder = "password"
-        onChangeText = {(text) => handleInfo('password', text)}
-      />
-
-
-      <Button
-        title = "submit"
-        onPress = {createUser}
-        // onPress = {showInfo}
-      />
-
-      <Button
-        title = "console table"
-        onPress = {showUsers}
-      />
-
-      <Button
-        title = "clear table"
-        onPress = {clearTable}
-      />
-    </View>
-  );
+    const loginAcc = async () =>{
+        try{
+            await signInWithEmailAndPassword(auth, personalInfo.email, personalInfo.password);
+            console.log("successfully logged in")
+            return true;
+        }catch(error){
+            console.log("error" + error);
+            return false;
+        }
+    }
+    
+    return(
+        <View style={styles.container}>
+            <Text>
+                Login
+            </Text>
+            <TextInput
+                placeholder = "email"
+                onChangeText = {(text) => handleInfo('email', text)}
+            />
+            <TextInput
+                placeholder = "password"
+                onChangeText = {(text) => handleInfo('password', text)}
+            />
+            <Button
+                title = "Login"
+                onPress={async () =>{
+                    if(await loginAcc()){
+                        navigation.navigate('Loading Page');
+                    }else{
+                        console.log('login info is not correct');
+                    }
+                }}
+            />
+            <Button
+                title = "Create Account (go to create acc page)"
+                onPress = {() => navigation.navigate('Create Account Page')}
+            />
+        </View>
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
