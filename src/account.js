@@ -1,15 +1,18 @@
 import React from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-
-import { createUser, showUsers, clearTable, checkExistingUser} from './database.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { auth } from '../firebase/index.js';
+// import { createUser, showUsers, clearTable, checkExistingUser} from './database.js';
 import { styles } from './styles.js'; 
+const auth1 = auth;
 
 export const CreateAccPage = ({navigation}) => {
     const [personalInfo, setPersonalInfo] = useState({
         email: ' ',
         password: ' ' 
     });
+
     
     //while the user is inputting text it will update the current value of email to the value in the inputbox
     const handleInfo = (name, text) =>{
@@ -17,6 +20,17 @@ export const CreateAccPage = ({navigation}) => {
             ...personalInfo,
             [name]: text
         })
+    }
+
+    //password should be at least 6 characters
+    //has the check already that email is in use already
+    const createAcc = async () =>{
+        try{
+            await createUserWithEmailAndPassword(auth1, personalInfo.email, personalInfo.password);
+            console.log("success creating new account");
+        }catch(error){
+            console.log("error " + error);
+        }
     }
 
     return(
@@ -37,19 +51,10 @@ export const CreateAccPage = ({navigation}) => {
 
             <Button
                 title = "Submit (to create account)"
-                onPress={() => createUser(personalInfo)}
+                onPress={createAcc}
                 // onPress = {showInfo}
             />
 
-            <Button
-                title = "console table"
-                onPress = {showUsers}
-            />
-
-            <Button
-                title = "clear table"
-                onPress = {clearTable}
-            />
             <Button
                 title = "Login (go to login page)"
                 onPress = {() => navigation.navigate('Login Page')}
@@ -70,6 +75,15 @@ export const LoginPage = ({navigation}) =>{
             [name]: text
         })
     }
+
+    const loginAcc = async () =>{
+        try{
+            await signInWithEmailAndPassword(auth, personalInfo.email, personalInfo.password);
+            console.log("successfully logged in")
+        }catch(error){
+            console.log("error" + error);
+        }
+    }
     
     return(
         <View style={styles.container}>
@@ -86,20 +100,7 @@ export const LoginPage = ({navigation}) =>{
             />
             <Button
                 title = "Login"
-                onPress = { async() =>{
-                    try{
-                        const loggedIn = await checkExistingUser(personalInfo);
-                        if(loggedIn){
-                            console.log("user is login successful");
-                            navigation.navigate('Loading Page');
-                        }else{
-                            console.log("Login failed")
-                        }
-                    }catch(error){
-                        console.log("Error" + error)
-                    }
-                }}
-                
+                onPress={loginAcc}
             />
             <Button
                 title = "Create Account (go to create acc page)"
