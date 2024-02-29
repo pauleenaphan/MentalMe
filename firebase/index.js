@@ -5,6 +5,7 @@ import { isSupported as isAnalyticsSupported, getAnalytics } from "firebase/anal
 // https://firebase.google.com/docs/web/setup#available-libraries
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -21,13 +22,16 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
+
 if (isAnalyticsSupported()) {
     const analytics = getAnalytics(app);
     // Initialize Firebase Analytics
   } else {
     // Firebase Analytics is not supported in this environment
   }
-// export const firebase_auth = getAuth(app);
+
 export const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   });
+
+export const db = getFirestore(app);
