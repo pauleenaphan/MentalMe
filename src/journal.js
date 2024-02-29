@@ -10,8 +10,10 @@ function getDate(){
     const month = today.getMonth();
     const year = today.getFullYear();
     const date = today.getDate();
-    return currentDate = (month + date + year);
+    return `${month}/${date}/${year}`;
 }
+
+const currentUser = "testing"
 
 export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
@@ -21,7 +23,7 @@ export const JournalHomePage = ({navigation}) =>{
         const getEntries = async () =>{
             try{
                 // const docData = doc.data();
-                const entries = await getDocs(collection(db, "paul"));
+                const entries = await getDocs(collection(db, currentUser));
                 const entriesReceived = entries.docs.map(doc => ({
                     id: doc.id, 
                     title:doc.data().title, 
@@ -91,7 +93,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
-            const entry = await addDoc(collection(db, "paul"),{
+            const entry = await addDoc(collection(db, currentUser),{
                 title: journalInfo.title.toString(),
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
