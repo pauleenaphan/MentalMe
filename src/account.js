@@ -7,7 +7,6 @@ import { auth } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 
 const auth1 = auth;
-
 //Login and account creation uses firebase authentication
 export const CreateAccPage = ({navigation}) => {
     const [personalInfo, setPersonalInfo] = useState({
@@ -21,10 +20,6 @@ export const CreateAccPage = ({navigation}) => {
             ...personalInfo,
             [titleValue]: value
         })
-    }
-
-    const getUserEmail = () =>{
-      return personalInfo.email
     }
 
     //password should be at least 6 characters
@@ -72,7 +67,8 @@ export const CreateAccPage = ({navigation}) => {
     );
 };
 
-export const LoginPage = ({navigation, route}) =>{
+
+export const LoginPage = ({navigation}) =>{
     const [personalInfo, setPersonalInfo] = useState({
         email: ' ',
         password: ' ' 
