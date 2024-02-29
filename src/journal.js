@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
-import firestore from '@react-native-firebase/firestore';
+import { collection, addDoc, doc } from "firebase/firestore"; 
 import { styles } from "./styles.js";
 import { getUserEmail } from "./account.js";
+import { db } from "../firebase/index.js";
 
 export const JournalHomePage = ({navigation}) =>{
 
@@ -29,7 +30,6 @@ export const JournalHomePage = ({navigation}) =>{
 
 //TODO: add journal entry logs 
 export const AddJournalEntryPage = ({navigation}) =>{
-    const currentUser = firestore().collection('Users');
 
     const[journalInfo, setJournalInfo] = useState({
         title: '',
@@ -42,6 +42,18 @@ export const AddJournalEntryPage = ({navigation}) =>{
             [titleValue]: value
         })
     }
+
+    const addEntry = async () =>{
+        try{
+        const entry = await addDoc(doc(collection(db, "testing"), (journalInfo.title).toString()),{
+            description: journalInfo.description
+        });
+        console.log("entry was created " + entry.id);
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+    
     return(
         <View style = {styles.container}>
             <TextInput
@@ -54,6 +66,14 @@ export const AddJournalEntryPage = ({navigation}) =>{
             />
             <Button
                 title = "submit log"
+                onPress={addEntry}
+            />
+            <Button
+                title = "print user email"
+                onPress = {() => {
+                    // console.log(getUserEmail);
+                    // console.log("testing");
+                }}
             />
         </View>
     )
