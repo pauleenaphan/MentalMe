@@ -1,15 +1,21 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 
 import { styles } from "./styles.js";
 
 
-export const LoadingPage = ({navigation}) =>{
+export const LoadingPage = ({navigation, personalInfo}) =>{
     return(
         <View style = {styles.container}>
             <Text>
-                Moobie Loading Page
+                Moobie loading page
             </Text>
+            <Button
+                title = "print user email"
+                onPress = {()=>{
+                    console.log(personalInfo.email)
+                }}
+            />
         </View>
     );
 };
