@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
@@ -28,8 +28,10 @@ export const CreateAccPage = ({navigation}) => {
         try{
             await createUserWithEmailAndPassword(auth1, personalInfo.email, personalInfo.password);
             console.log("success creating new account");
+            return true;
         }catch(error){
             console.log("error " + error);
+            return false;
         }
     }
 
@@ -51,7 +53,13 @@ export const CreateAccPage = ({navigation}) => {
 
         <Button
             title = "Submit (to create account)"
-            onPress={createAcc}
+            onPress={async()=>{
+                if(await createAcc()){
+                    navigation.navigate('Loading Page');
+                }else{
+                    console.log('account error');
+                }
+            }}
             // onPress = {showInfo}
         />
 
