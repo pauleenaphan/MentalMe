@@ -2,24 +2,29 @@ import React from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+
 import { auth } from '../firebase/index.js';
-// import { createUser, showUsers, clearTable, checkExistingUser} from './database.js';
 import { styles } from './styles.js'; 
+
 const auth1 = auth;
 
+//Login and account creation uses firebase authentication
 export const CreateAccPage = ({navigation}) => {
     const [personalInfo, setPersonalInfo] = useState({
         email: ' ',
-        password: ' ' 
+        password: ' ',
     });
 
-    
     //while the user is inputting text it will update the current value of email to the value in the inputbox
-    const handleInfo = (name, text) =>{
+    const handleInfo = (titleValue, value) =>{
         setPersonalInfo({
             ...personalInfo,
-            [name]: text
+            [titleValue]: value
         })
+    }
+
+    const getUserEmail = () =>{
+      return personalInfo.email
     }
 
     //password should be at least 6 characters
@@ -34,36 +39,40 @@ export const CreateAccPage = ({navigation}) => {
     }
 
     return(
-        <View style = {styles.container}>
-            <Text>
-                Create Account
-            </Text>
-            <TextInput 
-                placeholder = 'email'
-                //gets user email from textinput and set the value to email
-                onChangeText = {(text) => handleInfo('email', text)}
-            />
+    <View style = {styles.container}>
+        <Text>
+            Create Account
+        </Text>
+        <TextInput 
+            placeholder = 'email'
+            //gets user email from textinput and set the value to email
+            onChangeText = {(text) => handleInfo('email', text)}
+        />
 
-            <TextInput
-                placeholder = "password"
-                onChangeText = {(text) => handleInfo('password', text)}
-            />
+        <TextInput
+            placeholder = "password"
+            onChangeText = {(text) => handleInfo('password', text)}
+        />
 
-            <Button
-                title = "Submit (to create account)"
-                onPress={createAcc}
-                // onPress = {showInfo}
-            />
+        <Button
+            title = "Submit (to create account)"
+            onPress={createAcc}
+            // onPress = {showInfo}
+        />
 
-            <Button
-                title = "Login (go to login page)"
-                onPress = {() => navigation.navigate('Login Page')}
-            />
-        </View>
+        <Button
+            title = "Login (go to login page)"
+            onPress = {() => navigation.navigate('Login Page')}
+        />
+        <Button
+          title = "go to main journal page (temp)"
+          onPress = {() => navigation.navigate('Journal Home Page')}
+        />
+    </View>
     );
 };
 
-export const LoginPage = ({navigation}) =>{
+export const LoginPage = ({navigation, route}) =>{
     const [personalInfo, setPersonalInfo] = useState({
         email: ' ',
         password: ' ' 
@@ -109,7 +118,7 @@ export const LoginPage = ({navigation}) =>{
                         console.log('login info is not correct');
                     }
                 }}
-            />
+              />
             <Button
                 title = "Create Account (go to create acc page)"
                 onPress = {() => navigation.navigate('Create Account Page')}
