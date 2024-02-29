@@ -11,8 +11,6 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  // createDatabase();
-
 
   return (
     <NavigationContainer>
