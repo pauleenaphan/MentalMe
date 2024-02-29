@@ -8,7 +8,7 @@ export const CoverPage = ({navigation}) =>{
     return(
         <View style = {styles.container}>
             <TouchableOpacity style = {{flex: 1, justifyContent: "center"}} onPress = {()=>{
-                navigation.navigate('Create Account Page');
+                navigation.navigate('Login Page');
             }}>
                 <Text>
                     Welcome to Mental Me
