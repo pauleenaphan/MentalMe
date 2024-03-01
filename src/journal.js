@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
 import { collection, addDoc, doc, getDocs } from "firebase/firestore"; 
+import { useFocusEffect } from "@react-navigation/native";
 import { styles } from "./styles.js";
-import { getUserEmail } from "./account.js";
+import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 
 function getDate(){
@@ -13,30 +14,31 @@ function getDate(){
     return `${month}/${date}/${year}`;
 }
 
-const currentUser = "testing"
-
 export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
 
     //shows all entries in journal
-    useEffect(() =>{
-        const getEntries = async () =>{
-            try{
-                // const docData = doc.data();
-                const entries = await getDocs(collection(db, currentUser));
-                const entriesReceived = entries.docs.map(doc => ({
-                    id: doc.id, 
-                    title:doc.data().title, 
-                    description: doc.data().description ,
-                    date: doc.data().date
-                }));
-                setEntries(entriesReceived);
-            }catch(error){
-                console.log("error getting entries" + error);
-            }
-        }
-        getEntries();
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            const getEntries = async () => {
+                try {
+                    const email = await getCurrEmail();
+                    const currentUser = email;
+                    const entries = await getDocs(collection(db, currentUser));
+                    const entriesReceived = entries.docs.map(doc => ({
+                        id: doc.id, 
+                        title: doc.data().title, 
+                        description: doc.data().description,
+                        date: doc.data().date
+                    }));
+                    setEntries(entriesReceived);
+                } catch (error) {
+                    console.log("error getting entries", error);
+                }
+            };
+            getEntries();
+        }, [])
+    );
     
 
     return(
@@ -50,9 +52,6 @@ export const JournalHomePage = ({navigation}) =>{
             />
             <Button
                 title = "trash can picture"
-                onPress = {()=>{
-                    console.log(getUserEmail);
-                }}
             />
             {/* <Button
                 title = "view entries"
@@ -93,6 +92,8 @@ export const AddJournalEntryPage = ({navigation}) =>{
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
+            const email = await getCurrEmail();
+            let currentUser = email;
             const entry = await addDoc(collection(db, currentUser),{
                 title: journalInfo.title.toString(),
                 description: journalInfo.description.toString(),
@@ -116,15 +117,16 @@ export const AddJournalEntryPage = ({navigation}) =>{
             />
             <Button
                 title = "submit log"
-                onPress={addEntry}
+                onPress={()=>{
+                    addEntry();
+                    navigation.navigate('Journal Home Page')
+                }}
             />
             <Button
                 title = "print user email"
-                onPress = {() => {
-                    console.log(getUserEmail);
-                }}
             />
         </View>
     )
 }
 
+// TODO: Need to delete journal, view journal in single page
