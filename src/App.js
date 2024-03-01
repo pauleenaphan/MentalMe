@@ -28,7 +28,7 @@ export default function App() {
     }
   }
 
-  // const updateUserEmail = async () =>{,............................
+  // const updateUserEmail = async () =>{,...........................
   //   try{
   //     const recievedEmail = await AsyncStorage.getItem("UserEmail");
   //     console.log(recievedEmail);
