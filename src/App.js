@@ -8,6 +8,7 @@ import { LoadingPage } from './loading.js';
 import { CoverPage } from './cover.js';
 import { AddJournalEntryPage, JournalHomePage } from './journal.js';
 import { HomePage } from './homepage.js';
+import { ProgressTracker } from "./progress.js";
 import { UserInfoProvider, getUserInfo } from './userInfo.js';
 
 
@@ -72,6 +73,7 @@ export default function App() {
           <Stack.Screen name = "Journal Home Page" component = {JournalHomePage}></Stack.Screen>
           <Stack.Screen name = "Journal New Entry Page" component = {AddJournalEntryPage}></Stack.Screen>
           <Stack.Screen name = "Home Page" component = {HomePage}></Stack.Screen>
+          <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </UserInfoProvider>

@@ -34,6 +34,10 @@ export const HomePage = ({navigation, personalInfo}) =>{
                 onPress = {() => navigation.navigate('Journal Home Page')}
             />
             <Button
+                title="progress tracking (temp)"
+                onPress = {() => navigation.navigate("Progress Tracking")}
+            />
+            <Button
                 title = "print user email"
                 onPress = {async () => {
                     try{
