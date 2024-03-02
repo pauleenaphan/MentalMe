@@ -60,6 +60,7 @@ export const CreateAccPage = ({navigation}) => {
                 if(await createAcc()){
                     AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                     AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
                     navigation.navigate('Home Page');
                 }else{
                     console.log('account error');
