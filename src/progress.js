@@ -30,7 +30,7 @@ export const ProgressTracker = ({navigation, personalInfo}) => {
 
     // If the user has logged in today, just set the daily logins to already stored value
     // Else, increment by 1
-    useEffect (() => {
+    // useEffect (() => {
         DailyIncrement = async () => {
             try {
                 const storedDate = await AsyncStorage.getItem("LastestDate");
@@ -53,7 +53,7 @@ export const ProgressTracker = ({navigation, personalInfo}) => {
         if (dailyLogins === 0) {
             DailyIncrement();
         };
-    });
+    // });
 
     // Function to increment "DailyLogins"
     const Counter = async () => {
