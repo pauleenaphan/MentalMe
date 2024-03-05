@@ -3,10 +3,9 @@ import { View, Text, Button } from "react-native"
 
 import { styles } from "./styles.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserInfo } from "./userInfo.js";
 import { getCurrEmail } from "./account.js";
 
-
+//Main home page 
 export const HomePage = ({navigation, personalInfo}) =>{
 
     //logs the user out
