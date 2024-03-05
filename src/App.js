@@ -10,6 +10,7 @@ import { AddJournalEntryPage, JournalHomePage, ViewJournalEntry } from './journa
 import { HomePage } from './homepage.js';
 import { ProgressTracker } from "./progress.js";
 import { UserInfoProvider} from './userInfo.js';
+import { AccountSettingsPage, SettingsPage } from './settings.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -59,6 +60,8 @@ export default function App() {
             options = {{headerBackVisible: true, animation: 'none', gestureEnabled: false}}>
           </Stack.Screen>
           <Stack.Screen name = "Journal Home Page" component = {JournalHomePage}></Stack.Screen>
+          <Stack.Screen name = "Settings Page" component = {SettingsPage}></Stack.Screen>
+          <Stack.Screen name = "Account Settings Page" component = {AccountSettingsPage}></Stack.Screen>
           <Stack.Screen name = "Journal New Entry Page" component = {AddJournalEntryPage}></Stack.Screen>
           <Stack.Screen name = "Journal Entry Page" component = {ViewJournalEntry}></Stack.Screen>
           <Stack.Screen name = "Home Page" component = {HomePage}></Stack.Screen>
