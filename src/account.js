@@ -9,24 +9,13 @@ import { getUserInfo } from './userInfo.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth1 = auth;
-//Login and account creation uses firebase authentication
-export const CreateAccPage = ({navigation}) => {
-    // const [personalInfo, setPersonalInfo] = useState({
-    //     email: ' ',
-    //     password: ' ',
-    // });
 
-    // //while the user is inputting text it will update the current value of email to the value in the inputbox
-    // const handleInfo = (titleValue, value) =>{
-    //     setPersonalInfo({
-    //         ...personalInfo,
-    //         [titleValue]: value
-    //     })
-    // }
+//Page where user can create an account
+export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
 
     //password should be at least 6 characters
-    //has the check already that email is in use already
+    //firebase already checks if user exists
     const createAcc = async () =>{
         try{
             await createUserWithEmailAndPassword(auth1, userEmail, userPassword);
@@ -66,7 +55,6 @@ export const CreateAccPage = ({navigation}) => {
                     console.log('account error');
                 }
             }}
-            // onPress = {showInfo}
         />
 
         <Button
@@ -77,19 +65,8 @@ export const CreateAccPage = ({navigation}) => {
     );
 };
 
-
+//Page where user can login
 export const LoginPage = ({navigation}) =>{
-    // const [personalInfo, setPersonalInfo] = useState({
-    //     email: ' ',
-    //     password: ' ' 
-    // });
-
-    // const handleInfo = (name, text) =>{
-    //     setPersonalInfo({
-    //         ...personalInfo,
-    //         [name]: text
-    //     })
-    // }
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
 
     const loginAcc = async () =>{
@@ -136,6 +113,7 @@ export const LoginPage = ({navigation}) =>{
     )
 }
 
+//Returns the current user's email
 export const getCurrEmail = async () =>{
     try{
         const email = await AsyncStorage.getItem("UserEmail");
