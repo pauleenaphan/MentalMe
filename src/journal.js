@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
-import { collection, addDoc, doc, getDocs } from "firebase/firestore"; 
+import { collection, addDoc, doc, getDocs, deleteDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
+
 import { styles } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 
+//Return's today's date
 function getDate(){
     const today = new Date();
     const month = today.getMonth();
@@ -14,6 +16,7 @@ function getDate(){
     return `${month}/${date}/${year}`;
 }
 
+//Main Journal Homepage
 export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
 
@@ -22,9 +25,8 @@ export const JournalHomePage = ({navigation}) =>{
         React.useCallback(() => {
             const getEntries = async () => {
                 try {
-                    const email = await getCurrEmail();
-                    const currentUser = email;
-                    const entries = await getDocs(collection(db, currentUser));
+                    const currentUserEmail = await getCurrEmail();
+                    const entries = await getDocs(collection(db, currentUserEmail));
                     const entriesReceived = entries.docs.map(doc => ({
                         id: doc.id, 
                         title: doc.data().title, 
@@ -40,7 +42,6 @@ export const JournalHomePage = ({navigation}) =>{
         }, [])
     );
     
-
     return(
         <View style = {styles.container}>
             <Text>
@@ -53,28 +54,33 @@ export const JournalHomePage = ({navigation}) =>{
             <Button
                 title = "trash can picture"
             />
-            {/* <Button
-                title = "view entries"
-                onPress = {()=>{
-                    getEntries;
-                }}
-            /> */}
             <Text>
                 Entries:
             </Text>
             {/* maps out the entries in our db  */}
             {entries.map(entry =>(
                 <View key = {entry.id}>
-                    <Text> Title: {entry.title} </Text>
-                    {/* <Text> Description: {entry.description} </Text> */}
-                    <Text> Date: {entry.date} </Text>
+                    <Button 
+                        title = {entry.title}
+                        onPress = {() =>{
+                            console.log(entry.title, entry.date, entry.description);
+                            navigation.navigate('Journal Entry Page', {
+                                entryId: entry.id,
+                                entryTitle: entry.title,
+                                entryDate: entry.date,
+                                entryDescription: entry.description
+                            });
+
+                        }}
+                    /> 
+                    <Text> {entry.date} </Text>
                 </View>
             ))}
         </View>
     )
 }
 
-//TODO: add journal entry logs 
+//Adds journal entry
 export const AddJournalEntryPage = ({navigation}) =>{
     const[journalInfo, setJournalInfo] = useState({
         title: '',
@@ -92,14 +98,13 @@ export const AddJournalEntryPage = ({navigation}) =>{
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
-            const email = await getCurrEmail();
-            let currentUser = email;
-            const entry = await addDoc(collection(db, currentUser),{
+            let currentUserEmail = await getCurrEmail();
+            const entry = await addDoc(collection(db, currentUserEmail),{
                 title: journalInfo.title.toString(),
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
-        });
-        console.log("entry was created " + entry.id);
+            });
+            console.log("entry was created " + entry.id);
         }catch(error){
             console.log("error " + error)
         }
@@ -119,7 +124,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 title = "submit log"
                 onPress={()=>{
                     addEntry();
-                    navigation.navigate('Journal Home Page')
+                    navigation.navigate('Journal Home Page');
                 }}
             />
             <Button
@@ -129,4 +134,38 @@ export const AddJournalEntryPage = ({navigation}) =>{
     )
 }
 
-// TODO: Need to delete journal, view journal in single page
+//Shows the journal entry in the page
+export const ViewJournalEntry = ({route, navigation}) =>{
+    const {entryId, entryTitle, entryDate, entryDescription} = route.params
+
+    //removes journal entry 
+    const removeEntry = async () =>{
+        try{
+            const currentUserEmail = await getCurrEmail();
+            await deleteDoc(doc(db, currentUserEmail, entryId));
+            console.log('entry was successfully removed');
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
+    return(
+        //Prints the journal entry that the user pressed on 
+        <View style = {styles.container}>
+            <Text> {entryTitle} </Text>
+            <Text> {entryDate} </Text>
+            <Text> {entryDescription} </Text>
+            <Button
+                title = "Remove Entry"
+                onPress={()=>{
+                    removeEntry();
+                    navigation.navigate('Journal Home Page');
+                }}
+            />
+        </View>
+    )
+}
+
+
+    
+
