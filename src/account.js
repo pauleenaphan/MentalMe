@@ -49,6 +49,7 @@ export const CreateAccPage = ({navigation}) => {
                 if(await createAcc()){
                     AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                     AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                    AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                     AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
                     navigation.navigate('Home Page');
                 }else{
@@ -99,6 +100,7 @@ export const LoginPage = ({navigation}) =>{
                     if(await loginAcc()){
                         AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                         AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                        AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                         navigation.navigate('Home Page');
                     }else{
                         console.log('login info is not correct');
@@ -116,9 +118,16 @@ export const LoginPage = ({navigation}) =>{
 //Returns the current user's email
 export const getCurrEmail = async () =>{
     try{
-        const email = await AsyncStorage.getItem("UserEmail");
-        console.log("email " + email);
-        return email;
+        return await AsyncStorage.getItem("UserEmail");
+    }catch(error){
+        console.log("error" + error);
+        return null;
+    }
+}
+
+export const getCurrPassword = async () =>{
+    try{
+        return await AsyncStorage.getItem("UserPassword");
     }catch(error){
         console.log("error" + error);
         return null;
