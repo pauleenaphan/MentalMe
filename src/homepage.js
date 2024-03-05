@@ -3,10 +3,9 @@ import { View, Text, Button } from "react-native"
 
 import { styles } from "./styles.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserInfo } from "./userInfo.js";
 import { getCurrEmail } from "./account.js";
 
-
+//Main home page 
 export const HomePage = ({navigation, personalInfo}) =>{
 
     //logs the user out
@@ -32,6 +31,10 @@ export const HomePage = ({navigation, personalInfo}) =>{
             <Button
                 title = "go to main journal page (temp)"
                 onPress = {() => navigation.navigate('Journal Home Page')}
+            />
+            <Button
+                title="progress tracking (temp)"
+                onPress = {() => navigation.navigate("Progress Tracking")}
             />
             <Button
                 title = "print user email"
