@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'; //global storage in react, data will stay even when the app is closed
-// import { createDatabase } from './database.js';
+
 import { CreateAccPage, LoginPage } from './account.js';
 import { LoadingPage } from './loading.js';
 import { CoverPage } from './cover.js';
-import { AddJournalEntryPage, JournalHomePage } from './journal.js';
+import { AddJournalEntryPage, JournalHomePage, ViewJournalEntry } from './journal.js';
 import { HomePage } from './homepage.js';
 import { ProgressTracker } from "./progress.js";
-import { UserInfoProvider, getUserInfo } from './userInfo.js';
+import { UserInfoProvider} from './userInfo.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +17,6 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   //initial value is false
   const [isLogged, setLogged] = useState(false);
-  // const {setUserEmail} = getUserInfo();
 
   const getUserStatus = async () =>{
     try{
@@ -29,20 +28,9 @@ export default function App() {
     }
   }
 
-  // const updateUserEmail = async () =>{,...........................
-  //   try{
-  //     const recievedEmail = await AsyncStorage.getItem("UserEmail");
-  //     console.log(recievedEmail);
-  //     setUserEmail(recievedEmail);
-  //   }catch(error){
-  //     console.log("error" + error);
-  //   }
-  // }
-
   //everytime the app opens and renders we check is the user is logged in
   useEffect(()=>{
     getUserStatus();
-    // updateUserEmail();
   })
 
   return (
@@ -72,6 +60,7 @@ export default function App() {
           </Stack.Screen>
           <Stack.Screen name = "Journal Home Page" component = {JournalHomePage}></Stack.Screen>
           <Stack.Screen name = "Journal New Entry Page" component = {AddJournalEntryPage}></Stack.Screen>
+          <Stack.Screen name = "Journal Entry Page" component = {ViewJournalEntry}></Stack.Screen>
           <Stack.Screen name = "Home Page" component = {HomePage}></Stack.Screen>
           <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
         </Stack.Navigator>
