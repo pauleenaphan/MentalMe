@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@fir
 import { auth } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
+import { ProgressTracker } from "./progress";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth1 = auth;
