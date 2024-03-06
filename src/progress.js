@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, Button } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,42 +13,52 @@ export const ProgressTracker = () => {
     // This state allows us to display the daily logins.
     // Note: The code always tries to match dailyLogins with the .getItem('DailyLogins')
     // These two values should always try to be the same, but they are different variables.
-    const [dailyLogins, setDailyLogins] = useState(null);
+    const [dailyLogins, setDailyLogins] = useState();
 
     // Attempt at fixing the no-show value upon opening
-    // useEffect(() => {
-    //     DailyIncrement();
-    //     setDailyLogins(parseInt(AsyncStorage.getItem('DailyLogins'), 10));
-    // });
+    useFocusEffect(
+        React.useCallback(() => {
+            const StartUpDisplay = async () => {
+            try {
+                DailyIncrement();
+            } catch (error) {
+                console.log("Opening Error: " + error);
+            };
+            };
+            StartUpDisplay();
+        }, [])
+    );
 
     // If the user has logged in today, just set the daily logins to already stored value
     // Else, increment by 1
     const DailyIncrement = async () => {
         try {
-            const storedDate = await AsyncStorage.getItem("LastestDate");
-            const currentDate = new Date().toLocaleDateString();
-
-            if (dailyLogins === 0) {
+            setDailyLogins(parseInt(await AsyncStorage.getItem("DailyLogins"), 10));
+            let dailyLogs = parseInt(await AsyncStorage.getItem("DailyLogins"), 10);
+            let storedDate = await AsyncStorage.getItem("LatestDate");
+            let currentDate = new Date().toLocaleDateString();
+            console.log("Stored Date: " + storedDate)
+            console.log("Current Date: " + currentDate)
+            console.log("Initial Daily Logins: " + dailyLogs);
+            if (dailyLogs === 0) {
                 addPersonalCounter();
                 console.log("Incrementing by 1 from 0...");
                 let newDL = await Counter();
                 setDailyLogins(newDL);
-            } else if (dailyLogins === null) {
-                addPersonalCounter();
-                console.log("Incrementing by 1 from null...");
-                let newDL = 0;
-                setDailyLogins(newDL);
-            }
-
-            if (storedDate === currentDate) {
+            } else if (dailyLogs === null) {
+                console.log(dailyLogs);
+            } else if (storedDate === currentDate) {
                 console.log("Daily done today already.");
                 let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
                 setDailyLogins(DL);
                 counterCheck();
+                console.log(dailyLogs);
             } else {
                 console.log("Incrementing by 1...");
                 let newDL = await Counter();
                 setDailyLogins(newDL);
+                await AsyncStorage.setItem("LatestDate", currentDate);
+                console.log(dailyLogins);
             };
         } catch (error) {
             console.log("DailyIncrement Error: " + error);
@@ -60,8 +71,8 @@ export const ProgressTracker = () => {
             const email = await getCurrEmail();
             let currentUser = email;
             let firstDL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
-            let lastLogin = await AsyncStorage.getItem("LastestDate");
-            const entry = await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
+            let lastLogin = await AsyncStorage.getItem("LatestDate");
+            await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
                 userDL: firstDL.toString(),
                 userLastLogin: lastLogin.toString()
             });
@@ -96,14 +107,16 @@ export const ProgressTracker = () => {
         };
     };   
 
-    // check with the current database document
+    // Update Database with new Daily Logins and Time
     const counterCheck = async () => {
         try {
             const email = await getCurrEmail();
             let currentUser = email;
             let currentDL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
-            const entryHolder = await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
-                userDL: currentDL.toString()
+            let lastLogin = await AsyncStorage.getItem("LatestDate");
+            await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
+                userDL: currentDL.toString(),
+                userLastLogin: lastLogin.toString()
             });
             console.log("Current DL: " + currentDL)
         } catch(error) {
@@ -117,7 +130,7 @@ export const ProgressTracker = () => {
             await AsyncStorage.setItem('DailyLogins', JSON.stringify(0));
             setDailyLogins(0);
             console.log('DailyLogins cleared successfully.');
-            DailyIncrement();
+            // DailyIncrement();
         } catch (error) {
             console.log('Error clearing DailyLogins:', error);
         }
