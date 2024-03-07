@@ -59,7 +59,7 @@ export const ProgressTracker = () => {
                 let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
                 setDailyLogins(DL);
                 counterCheck();
-                console.log(dailyLogs);
+                console.log("Same daily logs: " + dailyLogs);
             } else { // new day incrementation
                 console.log("Incrementing by 1...");
                 await Counter();
@@ -132,9 +132,20 @@ export const ProgressTracker = () => {
             let currentUser = email;
             let currentDL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
             let lastLogin = await AsyncStorage.getItem("LatestDate");
+            let consecutiveDLs = parseInt(await AsyncStorage.getItem("ConsecutiveDLs"), 10);
+            let longestStreak = parseInt(await AsyncStorage.getItem("longestStreak"), 10);
+            if (longestStreak < 1 || longestStreak === null) {
+                await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
+                setLongestStreak(1);
+                console.log("Longest Streak set to 1.");
+            } else {
+                console.log("LS Already Made.");
+            }
             await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
                 userDL: currentDL.toString(),
-                userLastLogin: lastLogin.toString()
+                userLastLogin: lastLogin.toString(),
+                userConsecutiveLogins: consecutiveDLs.toString(),
+                userLongestStreak: longestStreak.toString()
             });
             console.log("Current DL: " + currentDL)
         } catch(error) {
@@ -154,14 +165,14 @@ export const ProgressTracker = () => {
             if (dailyLogins >= consDLs) {
                 await AsyncStorage.setItem('ConsecutiveDLs', JSON.stringify(dailyLogins))
                 setConsecutiveDLs(dailyLogins);
-                // console.log("New Consecutive Login2: " + consDLs)
                 consDLs = parseInt(await AsyncStorage.getItem('ConsecutiveDLs'), 10);
                 console.log("New Consecutive Login: " + consDLs)
             }
             if (consDLs >= longestStreak) { // if consecutive streak is equal or greater to the longest streak
                 await AsyncStorage.setItem('longestStreak', JSON.stringify(consDLs))
                 setLongestStreak(consDLs); // set them equal to each other
-                console.log("The New longest streak: " + consDLs)
+                longestStreak = parseInt(await AsyncStorage.getItem('longestStreak'), 10);
+                console.log("The New longest streak: " + longestStreak);
             }
             let latestDate = await AsyncStorage.getItem("LatestDate");
             let currentDate = new Date().toLocaleDateString();
@@ -173,7 +184,8 @@ export const ProgressTracker = () => {
                     console.log("New longest streak: " + consDLs)
                 }
             } else { // else if current date is same date as today do nothing to consecutive count
-                console.log("Same day, no consecutive changes. Current Streak: " + longestStreak) // do nothing to consecutive count
+                setLongestStreak(longestStreak);
+                console.log("Same day, no consecutive changes. Current Streak: " + longestStreak); // do nothing to consecutive count
                 // await AsyncStorage.setItem('ConsecutiveDLs', JSON.stringify(1))
                 // setConsecutiveDLs(1);  // reset consecutive logins to 1
             }
@@ -231,7 +243,7 @@ export const ProgressTracker = () => {
                 let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
                 setDailyLogins(DL);
                 counterCheck();
-                console.log(dailyLogs);
+                console.log("Same daily logs: " + dailyLogs);
             } else { // new day incrementation
                 console.log("Incrementing by 1...");
                 await Counter();
@@ -248,7 +260,7 @@ export const ProgressTracker = () => {
             <Text>Progress Tracker</Text>
             <Button title="Increment +1 (Testing Only)" onPress={TestDailyIncrement}></Button>
             <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button>
-            {<Text>Daily Logins: {dailyLogins}</Text>}
+            {<Text>Total Daily Logins: {dailyLogins}</Text>}
             {<Text>Consecutive Logins: {consecutiveDLs}</Text>}
             {<Text>Longest Streak: {longestStreak}</Text>}
         </View>
