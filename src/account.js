@@ -14,6 +14,7 @@ const auth1 = auth;
 //Page where user can create an account
 export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const [confirmPass, setConfirmPass] = useState('');
 
     //password should be at least 6 characters
     //firebase already checks if user exists
@@ -26,6 +27,13 @@ export const CreateAccPage = ({navigation}) => {
             console.log("error " + error);
             return false;
         }
+    }
+
+    //cchecks whether or not the confirm password matches the new user's password
+    const checkConfirmPass = (text) =>{
+        const passwordStatus = text == userPassword;
+        setConfirmPass(text);
+        return passwordStatus;
     }
 
     return(
@@ -43,20 +51,29 @@ export const CreateAccPage = ({navigation}) => {
             placeholder = "password"
             onChangeText = {(text) => setUserPassword(text)}
         />
-
+        <TextInput
+            placeholder = "confirm password"
+            onChangeText = {(text) => checkConfirmPass(text)}
+        />
         <Button
             title = "Submit (to create account)"
-            onPress={async()=>{
-                if(await createAcc()){
-                    AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
-                    AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
-                    AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
-                    navigation.navigate('Home Page');
-                }else{
-                    console.log('account error');
-                }
-            }}
+            onPress={
+                async()=>{
+                    //if both new password matches then create the account
+                    if(checkConfirmPass(confirmPass)){
+                        if(await createAcc()){
+                            AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
+                            AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                            AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                            AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                            navigation.navigate('Home Page');
+                        }else{
+                            console.log('account error');
+                        }
+                    }else{
+                        console.log("passwords did not match");
+                    }
+                }}
         />
 
         <Button
