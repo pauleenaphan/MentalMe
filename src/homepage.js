@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, Button } from "react-native"
+import React, { useEffect } from "react";
+import { View, Text, Button, Image } from "react-native"
 
 import { styles } from "./styles.js";
 
 //Main home page 
-export const HomePage = ({navigation, personalInfo}) =>{
+export const HomePage = ({navigation}) =>{
     return(
         <View style = {styles.container}>
             <Text>

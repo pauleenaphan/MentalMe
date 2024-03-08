@@ -77,6 +77,7 @@ export const AccountChangePassword = () => {
     const {userPassword, setUserPassword} = getUserInfo();
     const [currentPass, setCurrentPass] = useState('');
     const [newPass, setNewPass] = useState('');
+    const [confirmPass, setConfirmPass] = useState('');
 
     const user = auth.currentUser;
 
@@ -94,7 +95,7 @@ export const AccountChangePassword = () => {
     //checks if the user enter their current password correctly
     const checkOldPassword = (text) => {
         const passwordStatus = text === userPassword.slice(1, -1);
-        // console.log(isCorrect ? "passwords match" : "passwords don't match");
+        console.log(passwordStatus ? "your current password is correct" : "your current password is wrong");
         return passwordStatus;
     }
 
@@ -102,8 +103,16 @@ export const AccountChangePassword = () => {
     //set new password 
     const checkNewPassword = (text) => {
         const passwordStatus = text !== userPassword.slice(1, -1);
-        // console.log(isDifferent ? "passwords is not the same" : "password is the same as old one");
+        console.log(passwordStatus ? "passwords is new" : "password is the same as old one");
         setNewPass(text);
+        return passwordStatus;
+    }
+
+    //checks if the new passowrd and confirm password matches
+    const checkConfirmPassword = (text) =>{
+        const passwordStatus = text == newPass;
+        console.log(passwordStatus ? "your confirm password matches" : "confirm password does not match");
+        setConfirmPass(text);
         return passwordStatus;
     }
 
@@ -120,20 +129,24 @@ export const AccountChangePassword = () => {
         <View style={styles.container}>
             <Text> Change Password </Text>
             <TextInput
-                placeholder="current password"
+                placeholder = "current password"
                 // sets to the user input of the old password
-                onChangeText={(text) => setCurrentPass(text)}
+                onChangeText = {(text) => setCurrentPass(text)}
             />
             <TextInput
-                placeholder="new password"
+                placeholder = "new password"
                 onChangeText={(text) => checkNewPassword(text)}
+            />
+            <TextInput
+                placeholder = "confirm new password"
+                onChangeText = {(text) => checkConfirmPassword(text)}
             />
             <Button
                 title="Confirm Password Change"
                 onPress={() => {
                     //then we check the old password based on the user input
                     //also check the new password from user input to see if it is different from the old one
-                    if (checkOldPassword(currentPass) && checkNewPassword(newPass)) {
+                    if (checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)) {
                         changePassword();
                         console.log("password has been changed");
                     }else{
