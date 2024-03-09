@@ -93,8 +93,8 @@ export const ProgressTracker = () => {
             let consecutiveDLs = parseInt(await AsyncStorage.getItem("ConsecutiveDLs"), 10);
             let longestStreak = parseInt(await AsyncStorage.getItem("longestStreak"), 10);
             await AsyncStorage.setItem("ConsecutiveDLs", JSON.stringify(1));
-            let serializedWeeklyLogins = JSON.stringify(weeklyLogins);
-            await AsyncStorage.setItem(weeklyLogins, JSON.stringify(serializedWeeklyLogins));
+            let serializedWeeklyLogins = await AsyncStorage.getItem("weeklyLogins");
+            await AsyncStorage.setItem("weeklyLogins", JSON.stringify(serializedWeeklyLogins));
             setConsecutiveDLs(1);
             if (longestStreak < 1 || longestStreak === null) {
                 await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
@@ -149,7 +149,7 @@ export const ProgressTracker = () => {
             let lastLogin = await AsyncStorage.getItem("LatestDate");
             let consecutiveDLs = parseInt(await AsyncStorage.getItem("ConsecutiveDLs"), 10);
             let longestStreak = parseInt(await AsyncStorage.getItem("longestStreak"), 10);
-            let serializedWeeklyLogins = JSON.stringify(weeklyLogins);
+            let serializedWeeklyLogins = JSON.stringify(await AsyncStorage.getItem("weeklyLogins"));
             if (longestStreak < 1 || longestStreak === null) {
                 await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
                 setLongestStreak(1);
@@ -164,7 +164,7 @@ export const ProgressTracker = () => {
                 userLongestStreak: longestStreak.toString(),
                 userWeeklyLogins: serializedWeeklyLogins.toString()
             });
-            console.log("Yesssss: " + JSON.stringify(weeklyLogins));
+            console.log("CounterCheck WeeklyLogins: " + JSON.stringify(weeklyLogins));
             console.log("Current DL: " + currentDL)
         } catch(error) {
             console.log("Current DL Error: " + error);
@@ -177,8 +177,6 @@ export const ProgressTracker = () => {
             let currentUser = email;
             let consDLs = parseInt(await AsyncStorage.getItem('ConsecutiveDLs'), 10);
             let dailyLogins = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
-            // console.log("DailyLogin is currently: " + dailyLogins)
-            // console.log("Consecutive Logins is currently: " + consDLs)
             let longestStreak = parseInt(await AsyncStorage.getItem('longestStreak'), 10);
             if (dailyLogins >= consDLs) {
                 await AsyncStorage.setItem('ConsecutiveDLs', JSON.stringify(dailyLogins))
@@ -204,8 +202,6 @@ export const ProgressTracker = () => {
             } else { // else if current date is same date as today do nothing to consecutive count
                 setLongestStreak(longestStreak);
                 console.log("Same day, no consecutive changes. Current Streak: " + longestStreak); // do nothing to consecutive count
-                // await AsyncStorage.setItem('ConsecutiveDLs', JSON.stringify(1))
-                // setConsecutiveDLs(1);  // reset consecutive logins to 1
             }
         } catch (error) {
             console.log("Consecutive Error: " + error);
@@ -233,15 +229,21 @@ export const ProgressTracker = () => {
             const currentDate = parseDMY(storedDate);
             console.log("Parsed Current Date: " + currentDate);
 
-            const weeklyLoginsData = { 
-                SundayLogin: false, 
-                MondayLogin: false, 
-                TuesdayLogin: false, 
-                WednesdayLogin: false,  
-                ThursdayLogin: false, 
-                FridayLogin: false, 
-                SaturdayLogin: false
-             };
+            let weeklyLoginsData = await AsyncStorage.getItem("weeklyLogins");
+            if (weeklyLoginsData === null) {
+                weeklyLoginsData = {
+                    SundayLogin: false,
+                    MondayLogin: false,
+                    TuesdayLogin: false,
+                    WednesdayLogin: false,
+                    ThursdayLogin: false,
+                    FridayLogin: false,
+                    SaturdayLogin: false
+                };
+            } else {
+                weeklyLoginsData = JSON.parse(weeklyLoginsData);
+            }
+            console.log("New weekly login data: " + weeklyLoginsData);
 
             if (currentDate.getDay() === 0) {
                 for (const day in weeklyLoginsData) {
@@ -249,37 +251,37 @@ export const ProgressTracker = () => {
                 }
                 weeklyLoginsData["SundayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Sunday Checked!");
             } else if (currentDate.getDay() === 1) {
                 weeklyLoginsData["MondayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Monday Checked!");
             } else if (currentDate.getDay() === 2) {
                 weeklyLoginsData["TuesdayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Tuesday Checked!");
             } else if (currentDate.getDay() === 3) {
                 weeklyLoginsData["WednesdayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Wednesday Checked!");
             } else if (currentDate.getDay() === 4) {
                 weeklyLoginsData["ThursdayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Thursday Checked!");
             } else if (currentDate.getDay() === 5) {
                 weeklyLoginsData["FridayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Friday Checked!" + JSON.stringify(weeklyLoginsData));
             } else if (currentDate.getDay() === 6) {
                 weeklyLoginsData["SaturdayLogin"] = true;
                 setWeeklyLogins(weeklyLoginsData);
-                await AsyncStorage.setItem(JSON.stringify(weeklyLogins), JSON.stringify(weeklyLoginsData));
+                await AsyncStorage.setItem("weeklyLogins", JSON.stringify(weeklyLoginsData));
                 console.log("Saturday Checked!");
             } else {
                 console.log("Error with checking day? "+ currentDate);
@@ -359,7 +361,7 @@ export const ProgressTracker = () => {
                 await Counter();
                 await AsyncStorage.setItem("LatestDate", currentDate);
                 ConsecutiveDL();
-                console.log("Yesssss1: " + JSON.stringify(weeklyLogins));
+                console.log("TDIY WeeklyLogins: " + JSON.stringify(weeklyLogins));
             };
         } catch (error) {
             console.log("DailyIncrement Error: " + error);
