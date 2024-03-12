@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { View, Text, Button, Image } from "react-native"
 
-import { styles } from "./styles.js";
+import { moobie, styles } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -20,9 +20,9 @@ export const HomePage = ({navigation}) =>{
             <Text>
                 homepage
             </Text>
-            <Image source = {bodyPart.head} style = {styles.moobie_head}/>
-            <Image source = {bodyPart.body} style = {styles.moobie_body}/>
-            <Image source = {bodyPart.feet} style = {styles.moobie_feet}/>
+            <Image source = {bodyPart.head} style = {moobie.moobie_head}/>
+            <Image source = {bodyPart.body} style = {moobie.moobie_body}/>
+            <Image source = {bodyPart.feet} style = {moobie.moobie_feet}/>
             <Button
                 title = "go to main journal page (temp)"
                 onPress = {() => navigation.navigate('Journal Home Page')}
