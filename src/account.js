@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@fir
 import { auth } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
+import { ProgressTracker } from "./progress";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth1 = auth;
@@ -13,6 +14,7 @@ const auth1 = auth;
 //Page where user can create an account
 export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const [confirmPass, setConfirmPass] = useState('');
 
     //password should be at least 6 characters
     //firebase already checks if user exists
@@ -25,6 +27,13 @@ export const CreateAccPage = ({navigation}) => {
             console.log("error " + error);
             return false;
         }
+    }
+
+    //cchecks whether or not the confirm password matches the new user's password
+    const checkConfirmPass = (text) =>{
+        const passwordStatus = text == userPassword;
+        setConfirmPass(text);
+        return passwordStatus;
     }
 
     return(
@@ -42,19 +51,29 @@ export const CreateAccPage = ({navigation}) => {
             placeholder = "password"
             onChangeText = {(text) => setUserPassword(text)}
         />
-
+        <TextInput
+            placeholder = "confirm password"
+            onChangeText = {(text) => checkConfirmPass(text)}
+        />
         <Button
             title = "Submit (to create account)"
-            onPress={async()=>{
-                if(await createAcc()){
-                    AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
-                    AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
-                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
-                    navigation.navigate('Home Page');
-                }else{
-                    console.log('account error');
-                }
-            }}
+            onPress={
+                async()=>{
+                    //if both new password matches then create the account
+                    if(checkConfirmPass(confirmPass)){
+                        if(await createAcc()){
+                            AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
+                            AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                            AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                            AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                            navigation.navigate('Home Page');
+                        }else{
+                            console.log('account error');
+                        }
+                    }else{
+                        console.log("passwords did not match");
+                    }
+                }}
         />
 
         <Button
@@ -99,6 +118,7 @@ export const LoginPage = ({navigation}) =>{
                     if(await loginAcc()){
                         AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                         AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                        AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                         navigation.navigate('Home Page');
                     }else{
                         console.log('login info is not correct');
@@ -116,9 +136,16 @@ export const LoginPage = ({navigation}) =>{
 //Returns the current user's email
 export const getCurrEmail = async () =>{
     try{
-        const email = await AsyncStorage.getItem("UserEmail");
-        console.log("email " + email);
-        return email;
+        return await AsyncStorage.getItem("UserEmail");
+    }catch(error){
+        console.log("error" + error);
+        return null;
+    }
+}
+
+export const getCurrPassword = async () =>{
+    try{
+        return await AsyncStorage.getItem("UserPassword");
     }catch(error){
         console.log("error" + error);
         return null;
