@@ -8,5 +8,26 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  moobie_head:{
+    position: 'absolute',
+    width: 400,
+    height: 300,
+    top: 174,
+    left: -25
+  },
+  moobie_body:{
+    position: 'absolute',
+    width: 500,
+    height: 400,
+    top: 172,
+    right: -40
+  },
+  moobie_feet:{
+    position: 'absolute',
+    width: 400,
+    height: 310,
+    bottom: 173,
+    right: 22
+  }
 });
 
