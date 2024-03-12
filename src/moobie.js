@@ -4,9 +4,9 @@ const MoobieContext = createContext();
 
 export const MoobieProvider = ({children}) =>{
     const[bodyPart, setBodyPart] = useState({
-        head: require('../imgs/moobie_head/head1.png'),
-        body: require('../imgs/moobie_body/body1.png'),
-        feet: require('../imgs/moobie_feet/feet1.png')
+        head: require('../imgs/moobie_head/head4.png'),
+        body: require('../imgs/moobie_body/body2.png'),
+        feet: require('../imgs/moobie_feet/feet2.png')
     })
 
     const handlePart = (part, imgFile) =>{

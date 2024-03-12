@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { View, Text, Button, Image } from "react-native"
 
 import { styles } from "./styles.js";
 import { getMoobie } from "./moobie.js";
+import { useFocusEffect } from "@react-navigation/native";
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
+
+    useFocusEffect(
+        React.useCallback(()=>{
+            console.log("body part changed");
+        }, [bodyPart])
+    )
     
     return(
         <View style = {styles.container}>

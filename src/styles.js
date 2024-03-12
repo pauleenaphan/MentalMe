@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
   moobie_head:{
     position: 'absolute',
     width: 400,
-    height: 300,
-    top: 174,
+    height: 400,
+    top: 125,
     left: -25
   },
   moobie_body:{
