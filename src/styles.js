@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
+});
+
+//style for the moobie model
+export const moobie = StyleSheet.create({
   moobie_head:{
     position: 'absolute',
     width: 400,
@@ -29,5 +34,12 @@ export const styles = StyleSheet.create({
     bottom: 173,
     right: 22
   }
-});
+})
 
+
+export const storeImgs = StyleSheet.create({
+  item:{
+    width: 200,
+    height: 200
+  }
+})
