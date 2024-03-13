@@ -2,8 +2,12 @@ import React, { useEffect, useState, useFocusEffect } from "react";
 import { View, Text, Button, Image, ScrollView } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
+import { doc, setDoc } from "@firebase/firestore";
 
+import { db } from "../firebase/index.js";
+import { getCurrEmail } from "./account.js";
 import { storeImgs, styles } from "./styles.js";
+
 
 
 const Tab = createBottomTabNavigator();
@@ -13,17 +17,30 @@ export const StorePage = () =>{
     //popup view for the item confirmation
     const [isPopupVisible, setPopup] = useState(false);
     const [confirmPopupVisible, setConfirmPopup] = useState(false);
-    const [headAcc, setHeadAcc] = useState({
+    const [boughtItem, setBoughtItem] = useState({
         itemName: '',
         image: ''
+    })
+
+    const [headAcc, setHeadAcc] = useState({
+        itemName: '',
+        image: '',
+        imageSrc: ''
     });
 
-    const handleHeadAcc = (itemName, itemImg) =>{
-        setHeadAcc({
+    const handleBoughtItem = (itemName, itemImg)=>{
+        setBoughtItem({
             itemName: itemName,
             image: itemImg
         })
+    }
 
+    const handleHeadAcc = (itemName, itemImg, itemSrc) =>{
+        setHeadAcc({
+            itemName: itemName,
+            image: itemImg,
+            imageSrc: itemSrc
+        })
     }
 
     //toggles the itempopup
@@ -31,16 +48,11 @@ export const StorePage = () =>{
         setPopup(!isPopupVisible);
     }
 
-    //toggle the confirm popup
-    const toggleConfirmPopup = () =>{
-        setConfirmPopup(!confirmPopupVisible);
-    }
-
     const HeadAccTab = () =>{
         const headImgs = [
-            {name: 'Detective Hat', image: require('../imgs/moobie_head/head2.png')},
-            {name: 'Wicked Glasses', image: require('../imgs/moobie_head/head3.png')},
-            {name: 'Shades', image: require('../imgs/moobie_head/head4.png')},
+            {name: 'Detective Hat', image: require('../imgs/moobie_head/head2.png'), imageP: ('../imgs/moobie_head/head2.png'),},
+            {name: 'Wicked Glasses', image: require('../imgs/moobie_head/head3.png'), imageP: ('../imgs/moobie_head/head3.png')},
+            {name: 'Shades', image: require('../imgs/moobie_head/head4.png'), imageP: ('../imgs/moobie_head/head4.png')},
         ]
 
         return(
@@ -55,23 +67,13 @@ export const StorePage = () =>{
                                 title = {img.name}
                                 onPress = {()=>{
                                     toggleItemPopup();
-                                    handleHeadAcc(img.name, img.image);
+                                    //After pressing on an item, set that item to the current head item
+                                    handleHeadAcc(img.name, img.image, img.imageP);
+                                    console.log("Thsi is img.image path" + img.imageP);
                                 }}
                             /> 
                         </View>
                     ))}
-                    {/* This modal was not working correctly disabled for now */}
-                    {/* <Modal isVisible = {confirmPopupVisible}>
-                        <View style = {styles.container}>
-                            <Button
-                                title = "Confirm Purchase"
-                            />
-                            <Button
-                                title = "Cancel Purchase"
-                                onPress = {toggleConfirmPopup}
-                            />
-                        </View>
-                    </Modal> */}
 
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
@@ -86,6 +88,10 @@ export const StorePage = () =>{
                                 title = "Buy Item"
                                 onPress = {() =>{
                                     console.log("user bought item");
+                                    console.log("headacc values" + headAcc.itemName + headAcc.imageSrc);
+                                    handleBoughtItem(headAcc.itemName, headAcc.imageSrc);
+                                    addToCloset();
+                                    console.log("test 2");
                                     toggleItemPopup();
                                 }}
                             />
@@ -150,3 +156,4 @@ export const StorePage = () =>{
         </Tab.Navigator>
     );
 };
+
