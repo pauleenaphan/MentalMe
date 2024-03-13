@@ -2,6 +2,8 @@ import React, { createRef } from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { addDoc, collection} from '@firebase/firestore';
+import { db } from '../firebase/index.js';
 
 import { auth } from '../firebase/index.js';
 import { styles } from './styles.js'; 
@@ -26,6 +28,19 @@ export const CreateAccPage = ({navigation}) => {
         }catch(error){
             console.log("error " + error);
             return false;
+        }
+    }
+
+    //create collection for user in the firebase
+    const addUserToDb = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+            await addDoc(collection(db, currentUserEmail),{
+
+            });
+            console.log("user was addded");
+        }catch(error){
+            console.log("error " + error)
         }
     }
 
@@ -66,6 +81,7 @@ export const CreateAccPage = ({navigation}) => {
                             AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                             AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                            addUserToDb();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('account error');
