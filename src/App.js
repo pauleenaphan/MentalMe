@@ -74,7 +74,7 @@ export default function App() {
             <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
 
             <Stack.Screen name = "Store Page" component = {StorePage}></Stack.Screen>
-            <Stack.Screen name = "View Item Page" component = {ViewItemPage}></Stack.Screen>
+            {/* <Stack.Screen name = "View Item Page" component = {ViewItemPage}></Stack.Screen> */}
           </Stack.Navigator>
         </NavigationContainer>
       </MoobieProvider>
