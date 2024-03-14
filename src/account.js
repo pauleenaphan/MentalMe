@@ -44,6 +44,19 @@ export const CreateAccPage = ({navigation}) => {
         }
     }
 
+    //gives user the free honeycomb ears 
+    const giveUserReleaseItem = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+            //creates a subcollection in User Information Document called Journal Entries
+            await addDoc(collection(db, currentUserEmail, "User Information Document", "Moobie's Closet"),{
+                itemName: "HoneyComb Ears",
+            });
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
     //cchecks whether or not the confirm password matches the new user's password
     const checkConfirmPass = (text) =>{
         const passwordStatus = text == userPassword;
@@ -82,6 +95,7 @@ export const CreateAccPage = ({navigation}) => {
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                             AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
                             addUserToDb();
+                            giveUserReleaseItem();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('account error');
