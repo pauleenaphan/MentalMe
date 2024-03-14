@@ -7,6 +7,7 @@ import { doc, setDoc, addDoc, collection } from "@firebase/firestore";
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
 import { clothesImg, styles } from "./styles.js";
+import { images } from "./images.js";
 
 
 
@@ -14,62 +15,37 @@ const Tab = createBottomTabNavigator();
 
 //Main home page 
 export const StorePage = () =>{
-    //popup view for the item confirmation
     const [isPopupVisible, setPopup] = useState(false);
-    const [confirmPopupVisible, setConfirmPopup] = useState(false);
     const [boughtItem, setBoughtItem] = useState({
         itemName: '',
-        image: ''
+        image: '',
     })
 
-    const [headAcc, setHeadAcc] = useState({
-        itemName: '',
-        image: '',
-        imageSrc: ''
-    });
-
-    const handleBoughtItem = (itemName, itemImg)=>{
+    const handleBoughtItem = (itemName, itemImg, itemPath)=>{
         setBoughtItem({
             itemName: itemName,
-            image: itemImg
-        })
-    }
-
-    const handleHeadAcc = (itemName, itemImg, itemSrc) =>{
-        setHeadAcc({
-            itemName: itemName,
             image: itemImg,
-            imageSrc: itemSrc
         })
     }
-
     //toggles the itempopup
     const toggleItemPopup = () =>{
         setPopup(!isPopupVisible);
     }
 
     const HeadAccTab = () =>{
-        const headImgs = [
-            {name: 'Detective Hat', image: require('../imgs/moobie_head/head2.png'), imageP: ('../imgs/moobie_head/head2.png'),},
-            {name: 'Wicked Glasses', image: require('../imgs/moobie_head/head3.png'), imageP: ('../imgs/moobie_head/head3.png')},
-            {name: 'Shades', image: require('../imgs/moobie_head/head4.png'), imageP: ('../imgs/moobie_head/head4.png')},
-        ]
-
         return(
             <ScrollView>
                 <View style = {styles.container}>
                     
                     {/* maps through the headimgs instead of printing them all out here */}
-                    {headImgs.map((img) =>(
+                    {images.headImgs.map((img) =>(
                         <View key = {img.name}>
                             <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
+                                    handleBoughtItem(img.name, img.image);
                                     toggleItemPopup();
-                                    //After pressing on an item, set that item to the current head item
-                                    handleHeadAcc(img.name, img.image, img.imageP);
-                                    console.log("Thsi is img.image path" + img.imageP);
                                 }}
                             /> 
                         </View>
@@ -78,8 +54,8 @@ export const StorePage = () =>{
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
                             <Text> This is the popup</Text>
-                            <Text> {headAcc.itemName} </Text>
-                            <Image source = {headAcc.image} style = {clothesImg.store}/>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
                             <Button
                                 title = "return to store page"
                                 onPress = {toggleItemPopup}
@@ -87,9 +63,7 @@ export const StorePage = () =>{
                             <Button
                                 title = "Buy Item"
                                 onPress = {() =>{
-                                    console.log("user bought item");
-                                    console.log("headacc values" + headAcc.itemName + headAcc.imageSrc);
-                                    handleBoughtItem(headAcc.itemName, headAcc.imageSrc);
+                                    console.log("user bought item: " + boughtItem.itemName);
                                     addToCloset();
                                     toggleItemPopup();
                                 }}
@@ -103,15 +77,11 @@ export const StorePage = () =>{
     
     //tab for body accessory items
     const BodyAccTab = () =>{
-        const bodyImgs = [
-            {name: 'Gold Chain', image: require('../imgs/moobie_body/body2.png')},
-        ]
-        
         return(
             <ScrollView>
                 <View style = {styles.container}>
                 {/* maps through the headimgs instead of printing them all out here */}
-                    {bodyImgs.map((img) =>(
+                    {images.bodyImgs.map((img) =>(
                         <View key = {img.name}>
                             <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
@@ -126,15 +96,11 @@ export const StorePage = () =>{
 
     //tab for shoe accessory items
     const ShoeAccTab = ({navigation}) =>{
-        const lowerBodyImgs = [
-            {name: 'Pink Bunny Slippers', image: require('../imgs/moobie_feet/feet2.png')},
-        ]
-        
         return(
             <ScrollView>
                 <View style = {styles.container}>
                 {/* maps through the headimgs instead of printing them all out here */}
-                    {lowerBodyImgs.map((img) =>(
+                    {images.lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
                             <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
@@ -150,10 +116,10 @@ export const StorePage = () =>{
     const addToCloset = async () =>{
         try{
             let currentUserEmail = await getCurrEmail();
+            console.log("adding to closet: " + boughtItem.itemName);
             //creates a subcollection in User Information Document called Journal Entries
             await addDoc(collection(db, currentUserEmail, "User Information Document", "Moobie's Closet"),{
-                itemName: boughtItem.itemName,
-                itemImageSrc: boughtItem.image
+                itemName: boughtItem.itemName
             });
             console.log("item was added to the user's closet: " + boughtItem.itemName);
         }catch(error){
