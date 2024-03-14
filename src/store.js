@@ -2,11 +2,11 @@ import React, { useEffect, useState, useFocusEffect } from "react";
 import { View, Text, Button, Image, ScrollView } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, setDoc, addDoc, collection } from "@firebase/firestore";
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { storeImgs, styles } from "./styles.js";
+import { clothesImg, styles } from "./styles.js";
 
 
 
@@ -62,7 +62,7 @@ export const StorePage = () =>{
                     {/* maps through the headimgs instead of printing them all out here */}
                     {headImgs.map((img) =>(
                         <View key = {img.name}>
-                            <Image source = {img.image} style = {storeImgs.item}/>
+                            <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
@@ -79,7 +79,7 @@ export const StorePage = () =>{
                         <View style = {styles.container}>
                             <Text> This is the popup</Text>
                             <Text> {headAcc.itemName} </Text>
-                            <Image source = {headAcc.image} style = {storeImgs.item}/>
+                            <Image source = {headAcc.image} style = {clothesImg.store}/>
                             <Button
                                 title = "return to store page"
                                 onPress = {toggleItemPopup}
@@ -91,7 +91,6 @@ export const StorePage = () =>{
                                     console.log("headacc values" + headAcc.itemName + headAcc.imageSrc);
                                     handleBoughtItem(headAcc.itemName, headAcc.imageSrc);
                                     addToCloset();
-                                    console.log("test 2");
                                     toggleItemPopup();
                                 }}
                             />
@@ -114,7 +113,7 @@ export const StorePage = () =>{
                 {/* maps through the headimgs instead of printing them all out here */}
                     {bodyImgs.map((img) =>(
                         <View key = {img.name}>
-                            <Image source = {img.image} style = {storeImgs.item}/>
+                            <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
                             /> 
@@ -137,7 +136,7 @@ export const StorePage = () =>{
                 {/* maps through the headimgs instead of printing them all out here */}
                     {lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
-                            <Image source = {img.image} style = {storeImgs.item}/>
+                            <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
                             /> 
@@ -146,6 +145,20 @@ export const StorePage = () =>{
                 </View>
             </ScrollView>
         )
+    }
+
+    const addToCloset = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+            //creates a subcollection in User Information Document called Journal Entries
+            await addDoc(collection(db, currentUserEmail, "User Information Document", "Moobie's Closet"),{
+                itemName: boughtItem.itemName,
+                itemImageSrc: boughtItem.image
+            });
+            console.log("item was added to the user's closet: " + boughtItem.itemName);
+        }catch(error){
+            console.log("error " + error)
+        }
     }
 
     return(
