@@ -2,14 +2,13 @@ import React, { createRef } from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
-import { addDoc, collection} from '@firebase/firestore';
-import { db } from '../firebase/index.js';
+import { addDoc, collection, setDoc, doc} from '@firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { auth } from '../firebase/index.js';
+import { auth, db } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
-import { ProgressTracker } from "./progress";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const auth1 = auth;
 
@@ -32,13 +31,14 @@ export const CreateAccPage = ({navigation}) => {
     }
 
     //create collection for user in the firebase
+    //also adds a doc but it is empty
     const addUserToDb = async () =>{
         try{
             let currentUserEmail = await getCurrEmail();
-            await addDoc(collection(db, currentUserEmail),{
 
-            });
-            console.log("user was addded");
+            //creates the user collection with the current user email, then the document (User info doc), then adds a subcollection called Journal Entry
+            await addDoc(collection(db, currentUserEmail, 'User Information Document', 'EmptyDoc'), {});
+            console.log("user was addded to firecloud db");
         }catch(error){
             console.log("error " + error)
         }
