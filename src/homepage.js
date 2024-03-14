@@ -4,15 +4,23 @@ import { View, Text, Button, Image } from "react-native"
 import { homePageMoobie, styles } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
 
+    const setBody = async () =>{
+        const currHead = await AsyncStorage.getItem("moobie_head");
+        console.log(currHead);
+        handlePart("head", currHead);
+    }
+
     useFocusEffect(
         React.useCallback(()=>{
+            setBody();
             console.log("body part changed");
-        }, [bodyPart])
+        }, [])
     )
     
     return(
