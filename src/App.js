@@ -13,6 +13,7 @@ import { UserInfoProvider} from './userInfo.js';
 import { AccountSettingsPage, SettingsPage, AccountChangePassword } from './settings.js';
 import { StorePage, ViewItemPage } from './store.js';
 import { MoobieProvider } from './moobie.js';
+import { ClosetPage } from './closet.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -74,7 +75,7 @@ export default function App() {
             <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
 
             <Stack.Screen name = "Store Page" component = {StorePage}></Stack.Screen>
-            {/* <Stack.Screen name = "View Item Page" component = {ViewItemPage}></Stack.Screen> */}
+            <Stack.Screen name = "Closet Page" component = {ClosetPage}></Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
       </MoobieProvider>
