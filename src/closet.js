@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { View, Text, Button, Image } from "react-native";
-import { collection, addDoc, doc, getDocs, deleteDoc, getDoc} from "firebase/firestore"; 
+import { collection, setDoc, doc, getDocs, deleteDoc, getDoc, updateDoc} from "firebase/firestore"; 
 import { db } from "../firebase";
 import { useFocusEffect } from "@react-navigation/core";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
@@ -39,14 +39,32 @@ export const ClosetPage = () =>{
         }
     };
 
+    //Adds to the doc on what moobie is currently wearing
+    const addToMoobie = async (itemType, currItemName) =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+            await updateDoc(doc(db, currentUserEmail, "Moobie's Current Clothes"),{
+                [itemType]: currItemName
+            });
+            console.log("Moobie is wearing this: " + currItemName);
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
     //combines all img arrays so we can loop through everything at once
-    const allImgs = [...images.headImgs, ...images.bodyImgs, ...images.lowerBodyImgs]
+    const allImgs = [
+        ...images.defaultImgs,
+        ...images.headImgs,
+        ...images.bodyImgs,
+        ...images.lowerBodyImgs
+    ];
 
     return(
         <View style = {styles.container}>
             <Image source = {bodyPart.head} style = {closetPageMoobie.moobie_head}/>
             <Image source = {bodyPart.body} style = {closetPageMoobie.moobie_body}/>
-            <Image source = {bodyPart.feet} style = {closetPageMoobie.moobie_feet}/>
+            <Image source = {bodyPart.lowerBody} style = {closetPageMoobie.moobie_feet}/>
 
             {closet.map(item =>(
                 <View key = {item.itemName}>
@@ -64,11 +82,54 @@ export const ClosetPage = () =>{
                             {images.headImgs.map((currItem)=>{
                                 //if it is a head item then change the head to that item, else check if it's abody or lower body
                                 if(currItem.name == item.itemName){
+                                    //set the current mooobie head in the homepaage and everywhere else
                                     handlePart("head", currItem.image);
-                                    AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image))
+                                    console.log("What is this showing" + currItem.image);
+                                    //keep it in async so when the user leaves, the head will stay the same
+                                    AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
                                     console.log("this is a head item: " + currItem.name);
+                                    addToMoobie("head", currItem.name);
                                 }
                             })}
+                            {images.bodyImgs.map((currItem)=>{
+                                if(currItem.name == item.itemName){
+                                    //set the current mooobie head in the homepaage and everywhere else
+                                    handlePart("body", currItem.image);
+                                    //keep it in async so when the user leaves, the head will stay the same
+                                    AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
+                                    console.log("this is a body item: " + currItem.name);
+                                    addToMoobie("body", currItem.name);
+                                }
+                            })}
+                            {images.lowerBodyImgs.map((currItem)=>{
+                                if(currItem.name == item.itemName){
+                                    //set the current mooobie head in the homepaage and everywhere else
+                                    handlePart("lowerBody", currItem.image);
+                                    //keep it in async so when the user leaves, the head will stay the same
+                                    AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
+                                    console.log("this is a lower body item: " + currItem.name);
+                                    addToMoobie("lowerBody", currItem.name);
+                                }
+                            })}
+                            {images.defaultImgs.map((currItem)=>{
+                                if(currItem.name === item.itemName && item.itemName === "Default Head"){
+                                    handlePart("head", currItem.image);
+                                    AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
+                                    console.log("this is a head item: " + currItem.name);
+                                    addToMoobie("head", currItem.name);
+                                }else if(currItem.name === item.itemName && item.itemName === "Default Body"){
+                                    handlePart("body", currItem.image);
+                                    AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
+                                    console.log("this is a body item: " + currItem.name);
+                                    addToMoobie("body", currItem.name);
+                                }else if(currItem.name === item.itemName && item.itemName === "Default Lower Body"){
+                                    handlePart("lowerBody", currItem.image);
+                                    AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
+                                    console.log("this is a lower body item: " + currItem.name);
+                                    addToMoobie("lowerBody", currItem.name);
+                                }
+                            })}
+
                         }}
                     />
                 </View>

@@ -11,9 +11,16 @@ export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
 
     const setBody = async () =>{
-        const currHead = await AsyncStorage.getItem("moobie_head");
-        console.log(currHead);
-        handlePart("head", currHead);
+        const [currHead, currBody, currLowerBody] = await Promise.all([
+            AsyncStorage.getItem("moobie_head"),
+            AsyncStorage.getItem("moobie_body"),
+            AsyncStorage.getItem("moobie_lowerBody")
+        ])
+
+        console.log("This is the current head in async storage" + currHead);
+        handlePart(head, currHead);
+        handlePart(body, currBody);
+        handlePart(lowerBody, currLowerBody);
     }
 
     useFocusEffect(
@@ -30,7 +37,7 @@ export const HomePage = ({navigation}) =>{
             </Text>
             <Image source = {bodyPart.head} style = {homePageMoobie.moobie_head}/>
             <Image source = {bodyPart.body} style = {homePageMoobie.moobie_body}/>
-            <Image source = {bodyPart.feet} style = {homePageMoobie.moobie_feet}/>
+            <Image source = {bodyPart.lowerBody} style = {homePageMoobie.moobie_feet}/>
             <Button
                 title = "go to main journal page (temp)"
                 onPress = {() => navigation.navigate('Journal Home Page')}

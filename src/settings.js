@@ -18,8 +18,21 @@ export const SettingsPage = ({navigation}) =>{
         //set the status and token to empty strings to remove the users from the storage
         AsyncStorage.setItem("UserIsLoggedIn", "");
         AsyncStorage.setItem("token", "");
+        removeItemFromStorage('moobie_head');
+        removeItemFromStorage('moobie_body');
+        removeItemFromStorage('moobie_lowerBody');
         navigation.navigate('Login Page');
     }
+
+    // Remove item from AsyncStorage
+    const removeItemFromStorage = async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+            console.log(`Item with key ${key} removed from AsyncStorage.`);
+        } catch (error) {
+            console.error(`Error removing item with key ${key} from AsyncStorage:`, error);
+        }
+    };
 
     return(
         <View style = {styles.container}>

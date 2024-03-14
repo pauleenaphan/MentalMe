@@ -21,7 +21,7 @@ export const StorePage = () =>{
         image: '',
     })
 
-    const handleBoughtItem = (itemName, itemImg, itemPath)=>{
+    const handleBoughtItem = (itemName, itemImg)=>{
         setBoughtItem({
             itemName: itemName,
             image: itemImg,
@@ -80,34 +80,83 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                {/* maps through the headimgs instead of printing them all out here */}
+                    {/* maps through the headimgs instead of printing them all out here */}
                     {images.bodyImgs.map((img) =>(
                         <View key = {img.name}>
                             <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
+                                onPress = {()=>{
+                                    handleBoughtItem(img.name, img.image);
+                                    toggleItemPopup();
+                                }}
                             /> 
                         </View>
                     ))}
+
+                    <Modal isVisible = {isPopupVisible}>
+                        <View style = {styles.container}>
+                            <Text> This is the popup</Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
+                            <Button
+                                title = "return to store page"
+                                onPress = {toggleItemPopup}
+                            />
+                            <Button
+                                title = "Buy Item"
+                                onPress = {() =>{
+                                    console.log("user bought item: " + boughtItem.itemName);
+                                    addToCloset();
+                                    toggleItemPopup();
+                                }}
+                            />
+                        </View>
+                    </Modal>
                 </View>
             </ScrollView>
         )
     }
 
     //tab for shoe accessory items
-    const ShoeAccTab = ({navigation}) =>{
+    const ShoeAccTab = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                {/* maps through the headimgs instead of printing them all out here */}
+                    
+                    {/* maps through the headimgs instead of printing them all out here */}
                     {images.lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
                             <Image source = {img.image} style = {clothesImg.store}/>
                             <Button
                                 title = {img.name}
+                                onPress = {()=>{
+                                    handleBoughtItem(img.name, img.image);
+                                    toggleItemPopup();
+                                }}
                             /> 
                         </View>
                     ))}
+
+                    <Modal isVisible = {isPopupVisible}>
+                        <View style = {styles.container}>
+                            <Text> This is the popup</Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
+                            <Button
+                                title = "return to store page"
+                                onPress = {toggleItemPopup}
+                            />
+                            <Button
+                                title = "Buy Item"
+                                onPress = {() =>{
+                                    console.log("user bought item: " + boughtItem.itemName);
+                                    addToCloset();
+                                    toggleItemPopup();
+                                }}
+                            />
+                        </View>
+                    </Modal>
                 </View>
             </ScrollView>
         )
