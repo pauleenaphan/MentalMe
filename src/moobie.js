@@ -11,12 +11,13 @@ export const MoobieProvider = ({children}) =>{
     })
 
 
-    const handlePart = (part, imgFile) =>{
-        setBodyPart({
-            ...bodyPart,
+    //prev state will guarantee that the latest state will be set
+    const handlePart = (part, imgFile) => {
+        setBodyPart(prevState => ({
+            ...prevState,
             [part]: imgFile
-        })
-    }
+        }));
+    };
 
     return(
         <MoobieContext.Provider value = {{bodyPart, handlePart}}>
