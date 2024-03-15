@@ -81,9 +81,13 @@ export const CreateAccPage = ({navigation}) => {
                 lowerBody: "Default Lower Body"
             });
 
-            handlePart('head', require('../imgs/moobie_head/head1.png'))
-            handlePart('body', require('../imgs/moobie_body/body1.png'))
-            handlePart('lowerBody', require('../imgs/moobie_feet/feet1.png'))
+            handlePart('head', require('../imgs/moobie_head/head1.png'));
+            AsyncStorage.setItem("moobie_head", JSON.stringify(require('../imgs/moobie_head/head1.png')));
+            handlePart('body', require('../imgs/moobie_body/body1.png'));
+            AsyncStorage.setItem("moobie_body", JSON.stringify(require('../imgs/moobie_body/body1.png')));
+            handlePart('lowerBody', require('../imgs/moobie_feet/feet1.png'));
+            AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(require('../imgs/moobie_feet/feet1.png')));
+
 
             console.log("User has default Moobie");
         }catch(error){
@@ -168,15 +172,6 @@ export const LoginPage = ({navigation}) =>{
         }
     }
 
-    const getValueFromAsyncStorage = async (key) => {
-        try {
-            return await AsyncStorage.getItem(key);
-        } catch (error) {
-            console.error('Error retrieving data from AsyncStorage:', error);
-            return null;
-        }
-    };
-
     //set the current moobie for users that have logged in already
     const setCurrentMoobie = async () =>{
         try{
@@ -193,18 +188,25 @@ export const LoginPage = ({navigation}) =>{
                 ...images.bodyImgs,
                 ...images.lowerBodyImgs
             ];
+            console.log("moobie was wearing this: " + closetData.head)
+            console.log("This is the old body part: " + bodyPart.head)
 
             //Update moobie's model
-            // handlePart('head', allImgs.find(item => item.name === closetData.head).image);
-            // handlePart('body', allImgs.find(item => item.name === closetData.body).image);
-            // handlePart('lowerBody', allImgs.find(item => item.name === closetData.lowerBody).image);
-            console.log("this is the current body part: " + bodyPart.head);
-            console.log(await getValueFromAsyncStorage("moobie_head"));
-            console.log("this is the current value in our doc" + allImgs.find(item => item.name === closetData.head).image);
-            AsyncStorage.setItem("moobie_head", JSON.stringify(allImgs.find(item => item.name === closetData.head).image))
-            AsyncStorage.setItem("moobie_body", JSON.stringify(allImgs.find(item => item.name === closetData.body).image))
-            AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(allImgs.find(item => item.name === closetData.lowerBody).image))
-
+            
+            allImgs.map(item=>{
+                if(item.name == closetData.lowerBody){
+                    handlePart("lowerBody", item.image);
+                    AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(item.image));
+                }else if(item.name == closetData.body){
+                    handlePart("body", item.image);
+                    AsyncStorage.setItem("moobie_body", JSON.stringify(item.image));
+                }else if(item.name == closetData.head){
+                    console.log("this is itemname: ", item.name, "this is closet Data: ", closetData.head);
+                    handlePart("head", item.image);
+                    AsyncStorage.setItem("moobie_head", JSON.stringify(item.image));
+                    console.log("this is the new new", bodyPart.head);
+                }
+            })
 
 
         }catch(error) {
