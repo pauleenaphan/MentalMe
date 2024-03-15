@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { View, Text, Button, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { updatePassword, getAuth } from "@firebase/auth";
 
 import { styles } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
-import { updatePassword, getAuth } from "@firebase/auth";
+import { getMoobie } from "./moobie.js";
+
 
 //to get user information from the firecloud db
 const auth = getAuth();
