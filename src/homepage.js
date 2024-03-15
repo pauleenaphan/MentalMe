@@ -10,18 +10,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
 
-    const setBody = async () =>{
-        const [currHead, currBody, currLowerBody] = await Promise.all([
-            AsyncStorage.getItem("moobie_head"),
-            AsyncStorage.getItem("moobie_body"),
-            AsyncStorage.getItem("moobie_lowerBody")
-        ])
-
-        console.log("This is the current head in async storage" + currHead);
-        handlePart(head, currHead);
-        handlePart(body, currBody);
-        handlePart(lowerBody, currLowerBody);
-    }
+    const setBody = async () => {
+        try {
+            const [currHead, currBody, currLowerBody] = await Promise.all([
+                AsyncStorage.getItem("moobie_head"),
+                AsyncStorage.getItem("moobie_body"),
+                AsyncStorage.getItem("moobie_lowerBody")
+            ]);
+    
+            console.log("This is the current head in async storage: ", currHead);
+            handlePart("head", JSON.parse(currHead));
+            console.log("Current body head: ", bodyPart.head);
+    
+            handlePart("body", JSON.parse(currBody)); 
+            handlePart("lowerBody", JSON.parse(currLowerBody)); 
+        } catch (error) {
+            console.error("Error in setBody:", error);
+        }
+    };
 
     useFocusEffect(
         React.useCallback(()=>{
@@ -29,6 +35,10 @@ export const HomePage = ({navigation}) =>{
             console.log("body part changed");
         }, [])
     )
+    
+    useEffect(() => {
+        console.log("Updated body head: ", bodyPart.head);
+    }, [bodyPart.head]);
     
     return(
         <View style = {styles.container}>
