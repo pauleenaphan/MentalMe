@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { View, Text, Button, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { updatePassword, getAuth } from "@firebase/auth";
 
 import { styles } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
-import { updatePassword, getAuth } from "@firebase/auth";
+import { getMoobie } from "./moobie.js";
+
 
 //to get user information from the firecloud db
 const auth = getAuth();
@@ -18,8 +20,21 @@ export const SettingsPage = ({navigation}) =>{
         //set the status and token to empty strings to remove the users from the storage
         AsyncStorage.setItem("UserIsLoggedIn", "");
         AsyncStorage.setItem("token", "");
+        removeItemFromStorage('moobie_head');
+        removeItemFromStorage('moobie_body');
+        removeItemFromStorage('moobie_lowerBody');
         navigation.navigate('Login Page');
     }
+
+    // Remove item from AsyncStorage
+    const removeItemFromStorage = async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+            console.log(`Item with key ${key} removed from AsyncStorage.`);
+        } catch (error) {
+            console.error(`Error removing item with key ${key} from AsyncStorage:`, error);
+        }
+    };
 
     return(
         <View style = {styles.container}>
