@@ -2,12 +2,14 @@ import React, { createRef } from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { auth } from '../firebase/index.js';
+import { auth, db } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
-import { ProgressTracker } from "./progress";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMoobie } from './moobie.js';
+import { images } from './images.js';
 
 const auth1 = auth;
 
@@ -15,6 +17,7 @@ const auth1 = auth;
 export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
     const [confirmPass, setConfirmPass] = useState('');
+    const {bodyPart, handlePart} = getMoobie();
 
     //password should be at least 6 characters
     //firebase already checks if user exists
@@ -28,6 +31,71 @@ export const CreateAccPage = ({navigation}) => {
             return false;
         }
     }
+
+    //create collection for user in the firebase
+    //also adds a doc but it is empty
+    const addUserToDb = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+
+            //creates the user collection with the current user email, then the document (User info doc), then adds a subcollection called Journal Entry
+            await addDoc(collection(db, currentUserEmail, 'User Information Document', 'EmptyDoc'), {});
+            console.log("user was addded to firecloud db");
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
+    //gives user the free honeycomb ears 
+    const giveUserDefaultItems = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+            
+            const itemsToAdd = [
+                "HoneyComb Ears",
+                "Default Head",
+                "Default Body",
+                "Default Lower Body"
+            ];
+    
+            // Create and add each item to its own document
+            for (const itemName of itemsToAdd) {
+                await addDoc(collection(db, currentUserEmail, "User Information Document", "Moobie's Closet"), {
+                    itemName: itemName,
+                });
+            }
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
+    //gives user the default moobie doc in firebase db
+    const addDefaultMoobie = async () =>{
+        try{
+            let currentUserEmail = await getCurrEmail();
+
+            console.log("adding to closet: ");
+            await setDoc(doc(db, currentUserEmail, "Moobie's Current Clothes"),{
+                head: "Default Head",
+                body: "Default Body",
+                lowerBody: "Default Lower Body"
+            });
+
+            handlePart('head', require('../imgs/moobie_head/head1.png'));
+            AsyncStorage.setItem("moobie_head", JSON.stringify(require('../imgs/moobie_head/head1.png')));
+            handlePart('body', require('../imgs/moobie_body/body1.png'));
+            AsyncStorage.setItem("moobie_body", JSON.stringify(require('../imgs/moobie_body/body1.png')));
+            handlePart('lowerBody', require('../imgs/moobie_feet/feet1.png'));
+            AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(require('../imgs/moobie_feet/feet1.png')));
+
+
+            console.log("User has default Moobie");
+        }catch(error){
+            console.log("error " + error)
+        }
+    }
+
+
 
     //cchecks whether or not the confirm password matches the new user's password
     const checkConfirmPass = (text) =>{
@@ -66,6 +134,9 @@ export const CreateAccPage = ({navigation}) => {
                             AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                             AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                            addUserToDb();
+                            giveUserDefaultItems();
+                            addDefaultMoobie();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('account error');
@@ -87,7 +158,9 @@ export const CreateAccPage = ({navigation}) => {
 //Page where user can login
 export const LoginPage = ({navigation}) =>{
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {bodyPart, handlePart} = getMoobie();
 
+    //Logins the user
     const loginAcc = async () =>{
         try{
             await signInWithEmailAndPassword(auth, userEmail, userPassword);
@@ -96,6 +169,48 @@ export const LoginPage = ({navigation}) =>{
         }catch(error){
             console.log("error" + error);
             return false;
+        }
+    }
+
+    //set the current moobie for users that have logged in already
+    const setCurrentMoobie = async () =>{
+        try{
+            const currentUserEmail = await getCurrEmail();
+            const currClothesDoc = doc(collection(db, currentUserEmail), "Moobie's Current Clothes");
+            const clothesDoc = await getDoc(currClothesDoc);
+    
+            const closetData = clothesDoc.data();
+            console.log("this is the current closet ", closetData);
+
+            const allImgs = [
+                ...images.defaultImgs,
+                ...images.headImgs,
+                ...images.bodyImgs,
+                ...images.lowerBodyImgs
+            ];
+            console.log("moobie was wearing this: " + closetData.head)
+            console.log("This is the old body part: " + bodyPart.head)
+
+            //Update moobie's model
+            
+            allImgs.map(item=>{
+                if(item.name == closetData.lowerBody){
+                    handlePart("lowerBody", item.image);
+                    AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(item.image));
+                }else if(item.name == closetData.body){
+                    handlePart("body", item.image);
+                    AsyncStorage.setItem("moobie_body", JSON.stringify(item.image));
+                }else if(item.name == closetData.head){
+                    console.log("this is itemname: ", item.name, "this is closet Data: ", closetData.head);
+                    handlePart("head", item.image);
+                    AsyncStorage.setItem("moobie_head", JSON.stringify(item.image));
+                    console.log("this is the new new", bodyPart.head);
+                }
+            })
+
+
+        }catch(error) {
+            console.log("error " + error);
         }
     }
     
@@ -119,6 +234,7 @@ export const LoginPage = ({navigation}) =>{
                         AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                         AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                         AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                        setCurrentMoobie();
                         navigation.navigate('Home Page');
                     }else{
                         console.log('login info is not correct');
@@ -143,6 +259,7 @@ export const getCurrEmail = async () =>{
     }
 }
 
+//Returns the current user password
 export const getCurrPassword = async () =>{
     try{
         return await AsyncStorage.getItem("UserPassword");

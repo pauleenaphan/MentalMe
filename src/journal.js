@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
-import { collection, addDoc, doc, getDocs, deleteDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
 import { styles } from "./styles.js";
@@ -23,24 +23,26 @@ export const JournalHomePage = ({navigation}) =>{
     //shows all entries in journal
     useFocusEffect(
         React.useCallback(() => {
-            const getEntries = async () => {
-                try {
-                    const currentUserEmail = await getCurrEmail();
-                    const entries = await getDocs(collection(db, currentUserEmail));
-                    const entriesReceived = entries.docs.map(doc => ({
-                        id: doc.id, 
-                        title: doc.data().title, 
-                        description: doc.data().description,
-                        date: doc.data().date
-                    }));
-                    setEntries(entriesReceived);
-                } catch (error) {
-                    console.log("error getting entries", error);
-                }
-            };
             getEntries();
         }, [])
     );
+
+    const getEntries = async () => {
+        try {
+            const currentUserEmail = await getCurrEmail();
+            //gets entries from subcollection called Journal Entries
+            const entries = await getDocs(collection(db, currentUserEmail, "User Information Document", "Journal Entries"));
+            const entriesReceived = entries.docs.map(doc => ({
+                id: doc.id, 
+                title: doc.data().title, 
+                description: doc.data().description,
+                date: doc.data().date
+            }));
+            setEntries(entriesReceived);
+        } catch (error) {
+            console.log("error getting entries", error);
+        }
+    };
     
     return(
         <View style = {styles.container}>
@@ -95,11 +97,14 @@ export const AddJournalEntryPage = ({navigation}) =>{
     }
 
     //adds entry to journal
+    //should add the entry to an array and display the array, but what if the user logsout?
+    //can make the array asyncstorage and update it everytime
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
             let currentUserEmail = await getCurrEmail();
-            const entry = await addDoc(collection(db, currentUserEmail),{
+            //creates a subcollection in User Information Document called Journal Entries
+            const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
                 title: journalInfo.title.toString(),
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
