@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,3 +73,11 @@ export const clothesImg = StyleSheet.create({
   }
 })
 
+export const closetContainer = StyleSheet.create({
+  closet:{
+    left: 120,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 60
+  },
+})
