@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useFocusEffect } from "react";
-import { View, Text, Button, Image, ScrollView } from "react-native";
+import { View, Text, Button, Image, ScrollView, AlertIOS, Alert } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
@@ -8,8 +8,6 @@ import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
 import { clothesImg, styles } from "./styles.js";
 import { images } from "./images.js";
-
-
 
 const Tab = createBottomTabNavigator();
 
@@ -28,11 +26,24 @@ export const StorePage = () =>{
             image: itemImg,
         })
     }
-    //toggles the itempopup
+
+    //toggles the itempopup that the user wants to buy
     const toggleItemPopup = () =>{
         setPopup(!isPopupVisible);
     }
 
+    //shows the alert when the user is trying to buy an item they own already
+    const showAlert = () =>{
+        Alert.alert(
+            //title of alert, then caption
+            "You already own this item: ", boughtItem.itemName,
+            [
+                {text: "Back to Store Page", onPress: () => (console.log("user popup"))}
+            ]
+        )
+    }
+    
+    //tab for head accessories
     const HeadAccTab = () =>{
         return(
             <ScrollView>
@@ -68,6 +79,7 @@ export const StorePage = () =>{
                                         console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
                                         if(itemFound){
+                                            showAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
                                             addToCloset();
@@ -116,9 +128,20 @@ export const StorePage = () =>{
                             />
                             <Button
                                 title = "Buy Item"
-                                onPress = {() =>{
-                                    console.log("user bought item: " + boughtItem.itemName);
-                                    addToCloset();
+                                onPress = {async () =>{
+                                    try{
+                                        console.log("user wants this item: " + boughtItem.itemName);
+                                        const itemFound = await checkForItem();
+                                        if(itemFound){
+                                            showAlert();
+                                            console.log("user has this item already: ", boughtItem.itemName);
+                                        }else{
+                                            addToCloset();
+                                        }
+                                    }catch(error){
+                                        console.log("error: ", error);
+                                    }
+
                                     toggleItemPopup();
                                 }}
                             />
@@ -161,17 +184,19 @@ export const StorePage = () =>{
                             <Button
                                 title = "Buy Item"
                                 onPress = {async () =>{
-                                    console.log("user wants to buy this item: " + boughtItem.itemName);
                                     try{
+                                        console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
                                         if(itemFound){
-                                            console.log("user has this item already: ", boughtItem.itemName)
+                                            showAlert();
+                                            console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
                                             addToCloset();
                                         }
                                     }catch(error){
                                         console.log("error: ", error);
                                     }
+
                                     toggleItemPopup();
                                 }}
                             />
@@ -182,6 +207,7 @@ export const StorePage = () =>{
         )
     }
 
+    //adds new item to the user's closet
     const addToCloset = async () =>{
         try{
             let currentUserEmail = await getCurrEmail();
@@ -196,6 +222,7 @@ export const StorePage = () =>{
         }
     }
 
+    //checks to see if the user owns the item
     const checkForItem = async () =>{
         try {
             console.log("CHECK ITEM FUNCTION IS RUNNING")
