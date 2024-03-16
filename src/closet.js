@@ -6,7 +6,7 @@ import { useFocusEffect } from "@react-navigation/core";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 import { getCurrEmail } from "./account.js";
-import { styles, closetPageMoobie, clothesImg } from "./styles.js";
+import { styles, closetPageMoobie, clothesImg, closetContainer } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { images } from "./images.js";
 
@@ -67,13 +67,14 @@ export const ClosetPage = () =>{
             <Image source = {bodyPart.lowerBody} style = {closetPageMoobie.moobie_feet}/>
 
             {closet.map(item =>(
-                <View key = {item.itemName}>
+                <View key = {item.itemName} style = {closetContainer.closet}>
                     {allImgs.map((img)=>{
                         if(img.name === item.itemName){
                             return <Image source = {img.image} style = {clothesImg.closet}/>
                         }
                     })}
                     <Button
+                        //FUTURE TO DO: CHANGE MAP TO SOME OR A DIFFERENT ITERATION TO 
                         //when the user wants to change moobie's clothes it will loop through the item arr
                         title = {item.itemName}
                         onPress = {() =>{
