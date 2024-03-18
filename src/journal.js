@@ -147,7 +147,7 @@ export const ViewJournalEntry = ({route, navigation}) =>{
     const removeEntry = async () =>{
         try{
             const currentUserEmail = await getCurrEmail();
-            await deleteDoc(doc(db, currentUserEmail, entryId));
+            await deleteDoc(doc(db, currentUserEmail, "User Information Document", "Journal Entries", entryId));
             console.log('entry was successfully removed');
         }catch(error){
             console.log("error " + error)
@@ -170,7 +170,5 @@ export const ViewJournalEntry = ({route, navigation}) =>{
         </View>
     )
 }
-
-
     
 
