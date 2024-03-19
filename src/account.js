@@ -1,4 +1,4 @@
-import React, { createRef } from 'react'
+import React from 'react'
 import { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
@@ -107,13 +107,12 @@ export const CreateAccPage = ({navigation}) => {
             //creates a new doc for user currency and set it to 0
             console.log("created new user currency doc");
             await setDoc(doc(db, currentUserEmail, "User Currency Document"),{
-                honeyCoins: "0"
+                honeyCoins: 0,
             })
 
             //sets currency and adds it to the async storage
-            updateCurrency("0");
-            AsyncStorage.setItem("userCurrency", JSON.stringify(currency));
-            console.log("current currency amount:", currency);
+            updateCurrency(0);
+            AsyncStorage.setItem("userCurrency", JSON.stringify(0));
         }catch(error){
             console.log("error: " + error);
         }
@@ -246,9 +245,9 @@ export const LoginPage = ({navigation}) =>{
             console.log("honeycomb is a: ", typeof honeyCoins);
 
             //sets the current currency to our usestate and asyncstorage
-            console.log("User has this much coins: ", honeyCoins);
+            console.log("User has this much coins upon login: ", honeyCoins);
             updateCurrency(honeyCoins);
-            AsyncStorage.setItem("userCurrency", JSON.stringify(honeyCoins));
+            // AsyncStorage.setItem("userCurrency", JSON.stringify(honeyCoins));
 
         }catch(error){
             console.log("error: ", error);
