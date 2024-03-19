@@ -12,6 +12,13 @@ export const styles = StyleSheet.create({
   
 });
 
+export const honeyCoin = StyleSheet.create({
+  storePage:{
+    width: 40,
+    height: 40,
+  }
+});
+
 //style for the moobie model
 export const homePageMoobie = StyleSheet.create({
   moobie_head:{
@@ -83,3 +90,4 @@ export const closetContainer = StyleSheet.create({
     marginBottom: 60
   },
 })
+
