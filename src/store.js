@@ -8,6 +8,7 @@ import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
 import { clothesImg, styles } from "./styles.js";
 import { images } from "./images.js";
+import { getCurrency } from "./currency.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,13 +18,24 @@ export const StorePage = () =>{
     const [boughtItem, setBoughtItem] = useState({
         itemName: '',
         image: '',
+        price: '',
     })
     const [closet, setCloset] = useState([]);
+    const {currency, updateCurrency} = getCurrency();
 
-    const handleBoughtItem = (itemName, itemImg)=>{
+    //reloads the tab when currency amt has been changed
+    useEffect(()=>{
+        HeadAccTab();
+        BodyAccTab();
+        ShoeAccTab();
+        console.log("currency has been changed")
+    }, [currency])
+
+    const handleBoughtItem = (itemName, itemImg, itemPrice)=>{
         setBoughtItem({
             itemName: itemName,
             image: itemImg,
+            price: itemPrice
         })
     }
 
@@ -48,7 +60,14 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                    
+                    <Button
+                        title = "add currency (testing)"
+                        onPress = {() =>{
+                            updateCurrency(currency + 1);
+                        }}
+                    />
+                    {/* amount of coins that the user owns */}
+                    <Text> Honey Coins: {currency} </Text>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.headImgs.map((img) =>(
                         <View key = {img.name}>
@@ -56,16 +75,18 @@ export const StorePage = () =>{
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image);
+                                    handleBoughtItem(img.name, img.image, img.price);
                                     toggleItemPopup();
                                 }}
                             /> 
+                            {/* Shows the price of the item */}
+                            <Text> {img.price} </Text>
                         </View>
                     ))}
 
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
-                            <Text> This is the popup</Text>
+                            <Text> Price: {boughtItem.price} </Text>
                             <Text> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {clothesImg.store}/>
                             <Button
@@ -78,12 +99,14 @@ export const StorePage = () =>{
                                     try{
                                         console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
-                                        if(itemFound){
-                                            showAlert();
-                                            console.log("user has this item already: ", boughtItem.itemName);
-                                        }else{
-                                            addToCloset();
-                                        }
+                                        // if(itemFound){
+                                        //     showAlert();
+                                        //     console.log("user has this item already: ", boughtItem.itemName);
+                                        // }else{
+                                        //     addToCloset();
+                                        // }
+                                        canBuy();
+                                        console.log("This is the new user's balance: ", currency);
                                     }catch(error){
                                         console.log("error: ", error);
                                     }
@@ -103,6 +126,7 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
+                    <Text> Honey Coins: {currency} </Text>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.bodyImgs.map((img) =>(
                         <View key = {img.name}>
@@ -157,7 +181,7 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                    
+                    <Text> Honey Coins: {currency} </Text>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
@@ -254,6 +278,19 @@ export const StorePage = () =>{
             }
         } catch (error) {
             console.log("error getting entries", error);
+        }
+    }
+
+    //checks if the user has enough currency to buy a certain item
+    const canBuy = () =>{
+        //get the user's currency
+        console.log("this is the user's currency: ", currency);
+        //if the user's currency > item price, then allow the user to buy
+        if(currency >= boughtItem.price){
+            console.log("user has enough to buy this item: ", boughtItem.itemName);
+            updateCurrency(currency - boughtItem.price);
+        }else{
+            console.log("user does not have enough to buy this item");
         }
     }
 
