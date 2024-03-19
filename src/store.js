@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useFocusEffect } from "react";
+import React, { useEffect, useState} from "react";
 import { View, Text, Button, Image, ScrollView, AlertIOS, Alert } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
@@ -23,13 +25,24 @@ export const StorePage = () =>{
     const [closet, setCloset] = useState([]);
     const {currency, updateCurrency} = getCurrency();
 
-    //reloads the tab when currency amt has been changed
-    useEffect(()=>{
-        HeadAccTab();
-        BodyAccTab();
-        ShoeAccTab();
-        console.log("currency has been changed")
-    }, [currency])
+    useFocusEffect(
+        React.useCallback(()=>{
+            printValueInAsync();
+        }, [])
+    )
+
+    const printValueInAsync = async () =>{
+        try{
+            const curr = await AsyncStorage.getItem("userCurrency");
+            console.log("this is the currency value in async: ", curr);
+            const val = parseInt(JSON.parse(curr), 10); // Parse the JSON string before parsing it into an integer
+            console.log("this is val: ", val);
+            updateCurrency(val);
+        }catch(error){
+            console.log("error: ", error)
+        }
+    }
+
 
     const handleBoughtItem = (itemName, itemImg, itemPrice)=>{
         setBoughtItem({
@@ -45,12 +58,22 @@ export const StorePage = () =>{
     }
 
     //shows the alert when the user is trying to buy an item they own already
-    const showAlert = () =>{
+    const showItemOwnAlert = () =>{
         Alert.alert(
             //title of alert, then caption
             "You already own this item: ", boughtItem.itemName,
             [
-                {text: "Back to Store Page", onPress: () => (console.log("user popup"))}
+                {text: "Back to Store Page", onPress: () => (console.log("user popup: item owned"))}
+            ]
+        )
+    }
+
+    //show the alert when the user does not have enough coins to buy an item
+    const showInsufficientFundsAlert = () =>{
+        Alert.alert(
+            "You do not have enough honey coins for: ", boughtItem.itemName,
+            [
+                {text: "Back to Store Page", onPress: () => {console.log("user popup: not enough funds")}}
             ]
         )
     }
@@ -63,7 +86,8 @@ export const StorePage = () =>{
                     <Button
                         title = "add currency (testing)"
                         onPress = {() =>{
-                            updateCurrency(currency + 1);
+                            console.log(typeof currency);
+                            updateCurrency(parseInt(currency) + 1);
                         }}
                     />
                     {/* amount of coins that the user owns */}
@@ -96,17 +120,18 @@ export const StorePage = () =>{
                             <Button
                                 title = "Buy Item"
                                 onPress = {async () =>{
+                                    //first checks to see if the user owns the item already
+                                    //if user does not own the item then check if the user has enought to buy the item
                                     try{
                                         console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
-                                        // if(itemFound){
-                                        //     showAlert();
-                                        //     console.log("user has this item already: ", boughtItem.itemName);
-                                        // }else{
-                                        //     addToCloset();
-                                        // }
-                                        canBuy();
-                                        console.log("This is the new user's balance: ", currency);
+                                        if(itemFound){
+                                            showItemOwnAlert();
+                                            console.log("user has this item already: ", boughtItem.itemName);
+                                        }else{
+                                            addToCloset();
+                                            canBuy();
+                                        }
                                     }catch(error){
                                         console.log("error: ", error);
                                     }
@@ -285,12 +310,14 @@ export const StorePage = () =>{
     const canBuy = () =>{
         //get the user's currency
         console.log("this is the user's currency: ", currency);
+
         //if the user's currency > item price, then allow the user to buy
         if(currency >= boughtItem.price){
             console.log("user has enough to buy this item: ", boughtItem.itemName);
             updateCurrency(currency - boughtItem.price);
         }else{
             console.log("user does not have enough to buy this item");
+            showInsufficientFundsAlert();
         }
     }
 
