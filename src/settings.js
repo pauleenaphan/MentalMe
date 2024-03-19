@@ -23,6 +23,7 @@ export const SettingsPage = ({navigation}) =>{
         removeItemFromStorage('moobie_head');
         removeItemFromStorage('moobie_body');
         removeItemFromStorage('moobie_lowerBody');
+        removeItemFromStorage("userCurrency");
         navigation.navigate('Login Page');
     }
 
