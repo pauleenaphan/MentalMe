@@ -8,13 +8,22 @@ export const images = {
         {name: 'Detective Hat', image: require('../imgs/moobie_head/head2.png'), imageP: ('../imgs/moobie_head/head2.png'), price: '2'},
         {name: 'Wicked Glasses', image: require('../imgs/moobie_head/head3.png'), imageP: ('../imgs/moobie_head/head3.png'), price: '10'},
         {name: 'Shades', image: require('../imgs/moobie_head/head4.png'), imageP: ('../imgs/moobie_head/head4.png'), price: '5'},
-        {name: 'HoneyComb Ears', image: require('../imgs/moobie_head/head5.png'), imageP: ('../imgs/moobie_head/head4.png')}
+        {name: 'HoneyComb Ears', image: require('../imgs/moobie_head/head5.png'), imageP: ('../imgs/moobie_head/head4.png'), price: '0'}
     ],
     bodyImgs: [
-        {name: 'Gold Chain', image: require('../imgs/moobie_body/body2.png'), imageP: ('../imgs/moobie_body/body2.png')},
+        {name: 'Gold Chain', image: require('../imgs/moobie_body/body2.png'), imageP: ('../imgs/moobie_body/body2.png'), price: '0'},
+        {name: 'HILHIS Shirt', image: require('../imgs/moobie_body/body3.png'), imageP: ('../imgs/moobie_body/body3.png'), price: '0'},
+        {name: 'Glow Stick Fit', image: require('../imgs/moobie_body/body4.png'), imageP: ('../imgs/moobie_body/body4.png'), price: '0'},
+        {name: 'Frog Shirt', image: require('../imgs/moobie_body/body5.png'), imageP: ('../imgs/moobie_body/body5.png'), price: '0'},
+        {name: 'Cloud Shirt', image: require('../imgs/moobie_body/body6.png'), imageP: ('../imgs/moobie_body/body6.png'), price: '0'},
+        {name: 'Cactus Suit', image: require('../imgs/moobie_body/body7.png'), imageP: ('../imgs/moobie_body/body7.png'), price: '0'},
+        {name: 'Rubber Duck Float', image: require('../imgs/moobie_body/body8.png'), imageP: ('../imgs/moobie_body/body8.png'), price: '0'},
+        {name: 'Minion Overalls', image: require('../imgs/moobie_body/body9.png'), imageP: ('../imgs/moobie_body/body9.png'), price: '0'}
     ],
     lowerBodyImgs: [
-        {name: 'Pink Bunny Slippers', image: require('../imgs/moobie_feet/feet2.png'), imageP:('../imgs/moobie_feet/feet2.png')},
+        {name: 'Pink Bunny Slippers', image: require('../imgs/moobie_feet/feet2.png'), imageP:('../imgs/moobie_feet/feet2.png'), price: '0'},
+        {name: 'Pickle Board', image: require('../imgs/moobie_feet/feet3.png'), imageP:('../imgs/moobie_feet/feet3.png'), price: '0'},
+        {name: 'Melon Nikes', image: require('../imgs/moobie_feet/feet4.png'), imageP:('../imgs/moobie_feet/feet4.png'), price: '0'}
     ]
 
 };
