@@ -31,12 +31,13 @@ export const homePageMoobie = StyleSheet.create({
   moobie_feet:{
     position: 'absolute',
     width: 400,
-    height: 310,
-    bottom: 173,
+    height: 400,
+    bottom: 129,
     right: 22
   }
 })
 
+//style for moobie in the closet
 export const closetPageMoobie = StyleSheet.create({
   moobie_head:{
     position: 'absolute',
@@ -55,12 +56,13 @@ export const closetPageMoobie = StyleSheet.create({
   moobie_feet:{
     position: 'absolute',
     width: 400,
-    height: 310,
-    top: 185,
+    height: 400,
+    top: 141,
     right: 25
   }
 })
 
+//style for the clothe imgs
 export const clothesImg = StyleSheet.create({
   store:{
     width: 200,
