@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { clothesImg, styles } from "./styles.js";
+import { clothesImg, honeyCoin, styles } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
 
@@ -91,7 +91,11 @@ export const StorePage = () =>{
                         }}
                     />
                     {/* amount of coins that the user owns */}
-                    <Text> Honey Coins: {currency} </Text>
+                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
+                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                    </View>
+                    
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.headImgs.map((img) =>(
                         <View key = {img.name}>
@@ -110,7 +114,10 @@ export const StorePage = () =>{
 
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
-                            <Text> Price: {boughtItem.price} </Text>
+                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                            </View>
                             <Text> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {clothesImg.store}/>
                             <Button
@@ -129,8 +136,8 @@ export const StorePage = () =>{
                                             showItemOwnAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
-                                            addToCloset();
                                             canBuy();
+                                            addToCloset();
                                         }
                                     }catch(error){
                                         console.log("error: ", error);
@@ -151,7 +158,10 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                    <Text> Honey Coins: {currency} </Text>
+                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
+                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                    </View>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.bodyImgs.map((img) =>(
                         <View key = {img.name}>
@@ -159,7 +169,7 @@ export const StorePage = () =>{
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image);
+                                    handleBoughtItem(img.name, img.image, img.price);
                                     toggleItemPopup();
                                 }}
                             /> 
@@ -168,7 +178,10 @@ export const StorePage = () =>{
 
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
-                            <Text> This is the popup</Text>
+                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                            </View>
                             <Text> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {clothesImg.store}/>
                             <Button
@@ -185,6 +198,7 @@ export const StorePage = () =>{
                                             showItemOwnAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
+                                            canBuy();
                                             addToCloset();
                                         }
                                     }catch(error){
@@ -206,7 +220,10 @@ export const StorePage = () =>{
         return(
             <ScrollView>
                 <View style = {styles.container}>
-                    <Text> Honey Coins: {currency} </Text>
+                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
+                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                    </View>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
@@ -214,7 +231,7 @@ export const StorePage = () =>{
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image);
+                                    handleBoughtItem(img.name, img.image, img.price);
                                     toggleItemPopup();
                                 }}
                             /> 
@@ -223,7 +240,10 @@ export const StorePage = () =>{
 
                     <Modal isVisible = {isPopupVisible}>
                         <View style = {styles.container}>
-                            <Text> This is the popup</Text>
+                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                            </View>
                             <Text> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {clothesImg.store}/>
                             <Button
@@ -240,7 +260,9 @@ export const StorePage = () =>{
                                             showItemOwnAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
+                                            canBuy();
                                             addToCloset();
+                                            
                                         }
                                     }catch(error){
                                         console.log("error: ", error);
