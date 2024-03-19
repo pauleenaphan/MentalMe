@@ -182,7 +182,7 @@ export const StorePage = () =>{
                                         console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
                                         if(itemFound){
-                                            showAlert();
+                                            showItemOwnAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
                                             addToCloset();
@@ -237,7 +237,7 @@ export const StorePage = () =>{
                                         console.log("user wants this item: " + boughtItem.itemName);
                                         const itemFound = await checkForItem();
                                         if(itemFound){
-                                            showAlert();
+                                            showItemOwnAlert();
                                             console.log("user has this item already: ", boughtItem.itemName);
                                         }else{
                                             addToCloset();
