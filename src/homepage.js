@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { View, Text, Button, Image } from "react-native"
 
 import { homePageMoobie, styles } from "./styles.js";
@@ -18,12 +18,10 @@ export const HomePage = ({navigation}) =>{
                 AsyncStorage.getItem("moobie_lowerBody")
             ]);
     
-            console.log("This is the current head in async storage: ", currHead);
             handlePart("head", JSON.parse(currHead));
-            console.log("Current body head: ", bodyPart.head);
-    
             handlePart("body", JSON.parse(currBody)); 
             handlePart("lowerBody", JSON.parse(currLowerBody)); 
+
         } catch (error) {
             console.error("Error in setBody:", error);
         }
@@ -35,11 +33,7 @@ export const HomePage = ({navigation}) =>{
             console.log("body part changed");
         }, [])
     )
-    
-    useEffect(() => {
-        console.log("Updated body head: ", bodyPart.head);
-    }, [bodyPart.head]);
-    
+
     return(
         <View style = {styles.container}>
             <Text>
