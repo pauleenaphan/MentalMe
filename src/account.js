@@ -9,6 +9,7 @@ import { auth, db } from '../firebase/index.js';
 import { styles } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
 import { getMoobie } from './moobie.js';
+import { getCurrency } from './currency.js';
 import { images } from './images.js';
 
 const auth1 = auth;
@@ -18,6 +19,7 @@ export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
     const [confirmPass, setConfirmPass] = useState('');
     const {bodyPart, handlePart} = getMoobie();
+    const {currency, updateCurrency} = getCurrency();
 
     //password should be at least 6 characters
     //firebase already checks if user exists
@@ -51,6 +53,7 @@ export const CreateAccPage = ({navigation}) => {
         try{
             let currentUserEmail = await getCurrEmail();
             
+            //default items that every new user will get
             const itemsToAdd = [
                 "HoneyComb Ears",
                 "Default Head",
@@ -75,12 +78,14 @@ export const CreateAccPage = ({navigation}) => {
             let currentUserEmail = await getCurrEmail();
 
             console.log("adding to closet: ");
+            //adds the doc to the firebase db with moobie's default clothes
             await setDoc(doc(db, currentUserEmail, "Moobie's Current Clothes"),{
                 head: "Default Head",
                 body: "Default Body",
                 lowerBody: "Default Lower Body"
             });
 
+            //set the part then add it to the async storage
             handlePart('head', require('../imgs/moobie_head/head1.png'));
             AsyncStorage.setItem("moobie_head", JSON.stringify(require('../imgs/moobie_head/head1.png')));
             handlePart('body', require('../imgs/moobie_body/body1.png'));
@@ -88,16 +93,33 @@ export const CreateAccPage = ({navigation}) => {
             handlePart('lowerBody', require('../imgs/moobie_feet/feet1.png'));
             AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(require('../imgs/moobie_feet/feet1.png')));
 
-
             console.log("User has default Moobie");
         }catch(error){
-            console.log("error " + error)
+            console.log("error " + error);
         }
     }
 
+    //gives user their currency amount when creating an acc
+    const addDefaultCurrency = async () =>{
+        console.log("ADD DEFAULT CURRENCY FUNCTION IS RUNNING");
+        try{
+            let currentUserEmail = await getCurrEmail();
+            //creates a new doc for user currency and set it to 0
+            console.log("created new user currency doc");
+            await setDoc(doc(db, currentUserEmail, "User Currency Document"),{
+                honeyCoins: "0"
+            })
 
+            //sets currency and adds it to the async storage
+            updateCurrency("0");
+            AsyncStorage.setItem("userCurrency", JSON.stringify(currency));
+            console.log("current currency amount:", currency);
+        }catch(error){
+            console.log("error: " + error);
+        }
+    }
 
-    //cchecks whether or not the confirm password matches the new user's password
+    //checks whether or not the confirm password matches the new user's password
     const checkConfirmPass = (text) =>{
         const passwordStatus = text == userPassword;
         setConfirmPass(text);
@@ -126,7 +148,7 @@ export const CreateAccPage = ({navigation}) => {
         <Button
             title = "Submit (to create account)"
             onPress={
-                async()=>{
+                async () =>{
                     //if both new password matches then create the account
                     if(checkConfirmPass(confirmPass)){
                         if(await createAcc()){
@@ -137,6 +159,7 @@ export const CreateAccPage = ({navigation}) => {
                             addUserToDb();
                             giveUserDefaultItems();
                             addDefaultMoobie();
+                            addDefaultCurrency();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('account error');
@@ -159,6 +182,7 @@ export const CreateAccPage = ({navigation}) => {
 export const LoginPage = ({navigation}) =>{
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
     const {bodyPart, handlePart} = getMoobie();
+    const {currency, updateCurrency} = getCurrency();
 
     //Logins the user
     const loginAcc = async () =>{
@@ -192,7 +216,6 @@ export const LoginPage = ({navigation}) =>{
             console.log("This is the old body part: " + bodyPart.head)
 
             //Update moobie's model
-            
             allImgs.map(item=>{
                 if(item.name == closetData.lowerBody){
                     handlePart("lowerBody", item.image);
@@ -207,10 +230,28 @@ export const LoginPage = ({navigation}) =>{
                     console.log("this is the new new", bodyPart.head);
                 }
             })
-
-
         }catch(error) {
             console.log("error " + error);
+        }
+    }
+
+    //sets the user currency when they login 
+    const setUserCurrency = async () =>{
+        try{
+            console.log("SET USER CURRENCY FUNCTION IS RUNNING");
+            const currentUserEmail = await getCurrEmail();
+            const currencyDoc = await getDoc(doc(collection(db, currentUserEmail), "User Currency Document"));
+            const honeyCoins = currencyDoc.data().honeyCoins;
+
+            console.log("honeycomb is a: ", typeof honeyCoins);
+
+            //sets the current currency to our usestate and asyncstorage
+            console.log("User has this much coins: ", honeyCoins);
+            updateCurrency(honeyCoins);
+            AsyncStorage.setItem("userCurrency", JSON.stringify(honeyCoins));
+
+        }catch(error){
+            console.log("error: ", error);
         }
     }
     
@@ -235,6 +276,7 @@ export const LoginPage = ({navigation}) =>{
                         AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                         AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
                         setCurrentMoobie();
+                        setUserCurrency();
                         navigation.navigate('Home Page');
                     }else{
                         console.log('login info is not correct');
