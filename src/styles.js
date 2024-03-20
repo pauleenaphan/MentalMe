@@ -4,7 +4,6 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 10,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -12,6 +11,48 @@ export const styles = StyleSheet.create({
   
 });
 
+export const loginPage = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textInputContainer:{
+    alignItems: 'flex-start',
+    marginBottom: 30,
+    padding: 20,
+  },
+  textInput:{
+    fontSize: 20,
+    borderBottomWidth: 1,
+    width: 200,
+  },
+  textContainer:{
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    margin: 10,
+  },
+  title:{
+    fontSize: 30,
+    bottom: 30,
+  },
+  button:{
+    backgroundColor: 'lightgreen',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    marginTop: 20,
+    marginBottom: 15,
+  },
+  icon:{
+    marginLeft: -30,
+    marginBottom: 10
+  }
+  
+})
+
+//style for honey coins
 export const honeyCoin = StyleSheet.create({
   storePage:{
     width: 40,
