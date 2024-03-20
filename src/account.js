@@ -4,9 +4,11 @@ import { View, Text, TextInput, Button } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MaterialCommunityIcons, Feather, AntDesign, Fontisto } from '@expo/vector-icons'; //used for icons
+
 
 import { auth, db } from '../firebase/index.js';
-import { styles } from './styles.js'; 
+import { styles, loginPage } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
 import { getMoobie } from './moobie.js';
 import { getCurrency } from './currency.js';
@@ -18,6 +20,7 @@ const auth1 = auth;
 export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
     const [confirmPass, setConfirmPass] = useState('');
+    const [showPassword, setShowPassword] = useState('');
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
 
@@ -32,6 +35,10 @@ export const CreateAccPage = ({navigation}) => {
             console.log("error " + error);
             return false;
         }
+    }
+
+    const toggleShowPass = () =>{
+        setShowPassword(!showPassword);
     }
 
     //create collection for user in the firebase
@@ -127,52 +134,90 @@ export const CreateAccPage = ({navigation}) => {
 
     return(
     <View style = {styles.container}>
-        <Text>
+        <Text style = {loginPage.title}>
             Create Account
         </Text>
-        <TextInput 
-            placeholder = 'email'
-            //gets user email from textinput and set the value to email
-            onChangeText = {(text) => setUserEmail(text)}
-        />
+        <View style = {loginPage.textInputContainer}>
 
-        <TextInput
-            placeholder = "password"
-            onChangeText = {(text) => setUserPassword(text)}
-        />
-        <TextInput
-            placeholder = "confirm password"
-            onChangeText = {(text) => checkConfirmPass(text)}
-        />
-        <Button
-            title = "Submit (to create account)"
-            onPress={
-                async () =>{
-                    //if both new password matches then create the account
-                    if(checkConfirmPass(confirmPass)){
-                        if(await createAcc()){
-                            AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
-                            AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
-                            AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                            AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
-                            addUserToDb();
-                            giveUserDefaultItems();
-                            addDefaultMoobie();
-                            addDefaultCurrency();
-                            navigation.navigate('Home Page');
-                        }else{
-                            console.log('account error');
-                        }
-                    }else{
-                        console.log("passwords did not match");
-                    }
-                }}
-        />
+            <View style = {loginPage.textContainer}>
+                <Fontisto name="email" size={28} color="black"/>
+                <TextInput 
+                    style = {loginPage.textInput}
+                    placeholder = 'Email'
+                    //gets user email from textinput and set the value to email
+                    onChangeText = {(text) => setUserEmail(text)}
+                />
+            </View> 
+            
+            <View style = {loginPage.textContainer}>
+                <AntDesign name="lock1" size={30} color="black" />
+                <TextInput
+                    style = {loginPage.textInput}
+                    secureTextEntry = {!showPassword}
+                    value = {userPassword}
+                    placeholder = "Password"
+                    onChangeText = {(text) => setUserPassword(text)}
+                />
+                <Feather 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={23} 
+                    style={loginPage.icon} 
+                    onPress={toggleShowPass} 
+                /> 
+            </View>
 
-        <Button
-            title = "Login (go to login page)"
-            onPress = {() => navigation.navigate('Login Page')}
-        />
+            <View style = {loginPage.textContainer}>
+                <AntDesign name="lock1" size={30} color="black" />
+                <TextInput
+                    style = {loginPage.textInput}
+                    secureTextEntry = {!showPassword}
+                    value = {confirmPass}
+                    placeholder = "Confirm Password"
+                    onChangeText = {(text) => checkConfirmPass(text)}
+                />
+                <Feather 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={23} 
+                    style={loginPage.icon} 
+                    onPress={toggleShowPass} 
+                /> 
+            </View>
+
+        </View>
+        <View style = {{flexDirection:'row', alignItems:'center', justifyContent: 'space-between'}}>
+            <View style = {loginPage.button}>
+                <Button
+                    color = "black"
+                    title = "Sign Up"
+                    onPress={
+                        async () =>{
+                            //if both new password matches then create the account
+                            if(checkConfirmPass(confirmPass)){
+                                if(await createAcc()){
+                                    AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
+                                    AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                                    AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                                    addUserToDb();
+                                    giveUserDefaultItems();
+                                    addDefaultMoobie();
+                                    addDefaultCurrency();
+                                    navigation.navigate('Home Page');
+                                }else{
+                                    console.log('account error');
+                                }
+                            }else{
+                                console.log("passwords did not match");
+                            }
+                        }}
+                />
+            </View>
+            <Button
+                color = "black"
+                title = "Login"
+                onPress = {() => navigation.navigate('Login Page')}
+            />
+        </View>
     </View>
     );
 };
@@ -182,6 +227,7 @@ export const LoginPage = ({navigation}) =>{
     const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
+    const [showPassword, setShowPassword] = useState(false);
 
     //Logins the user
     const loginAcc = async () =>{
@@ -193,6 +239,10 @@ export const LoginPage = ({navigation}) =>{
             console.log("error" + error);
             return false;
         }
+    }
+
+    const toggleShowPass = () =>{
+        setShowPassword(!showPassword);
     }
 
     //set the current moobie for users that have logged in already
@@ -255,35 +305,59 @@ export const LoginPage = ({navigation}) =>{
     }
     
     return(
-        <View style={styles.container}>
-            <Text>
+        <View style={loginPage.container}>
+            <Text style = {loginPage.title}>
                 Login
             </Text>
-            <TextInput
-                placeholder = "email"
-                onChangeText = {(text) => setUserEmail(text)}
-            />
-            <TextInput
-                placeholder = "password"
-                onChangeText = {(text) => setUserPassword(text)}
-            />
+            <View style = {loginPage.textInputContainer}>
+                <View style = {loginPage.textContainer}>
+                    {/* User icons */}
+                    <Feather name="user" size={30} color="black" />
+                    <TextInput 
+                        style = {loginPage.textInput}
+                        placeholder = "Email"
+                        onChangeText = {(text) => setUserEmail(text)}
+                    />
+                </View>
+                <View style = {loginPage.textContainer}>
+                    <AntDesign name="lock1" size={30} color="black" />
+                    <TextInput
+                        style = {loginPage.textInput}
+                        secureTextEntry = {!showPassword}
+                        value = {userPassword}
+                        placeholder = "Password"
+                        onChangeText = {(text) => setUserPassword(text)}
+                    />
+                    {/* adds icon for show or hide the */}
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={loginPage.icon} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+            </View>
+            <View style = {loginPage.button}>
+                <Button
+                    color = 'black'
+                    title = "LOGIN"
+                    onPress={async () =>{
+                        if(await loginAcc()){
+                            AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
+                            AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
+                            AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                            setCurrentMoobie();
+                            setUserCurrency();
+                            navigation.navigate('Home Page');
+                        }else{
+                            console.log('login info is not correct');
+                        }
+                    }}
+                />
+            </View>
             <Button
-                title = "Login"
-                onPress={async () =>{
-                    if(await loginAcc()){
-                        AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
-                        AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
-                        AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                        setCurrentMoobie();
-                        setUserCurrency();
-                        navigation.navigate('Home Page');
-                    }else{
-                        console.log('login info is not correct');
-                    }
-                }}
-              />
-            <Button
-                title = "Create Account (go to create acc page)"
+                color = 'black'
+                title = "Create Account"
                 onPress = {() => navigation.navigate('Create Account Page')}
             />
         </View>
