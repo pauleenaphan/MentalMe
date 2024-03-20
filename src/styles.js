@@ -23,10 +23,15 @@ export const loginPage = StyleSheet.create({
     marginBottom: 30,
     padding: 20,
   },
-  textInput:{
+  textInputLogin:{
     fontSize: 20,
     borderBottomWidth: 1,
     width: 200,
+  },
+  textInputCreate:{
+    fontSize: 20,
+    borderBottomWidth: 1,
+    width: 250,
   },
   textContainer:{
     flexDirection: 'row', 
@@ -52,6 +57,33 @@ export const loginPage = StyleSheet.create({
   
 })
 
+export const homePage = StyleSheet.create({
+  iconBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  iconBar:{
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: 'lightgreen',
+    width: "100%",
+    padding: 20,
+    height: 80,
+  },
+  currency:{
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    marginTop: 70,
+    left: 0,
+    top: 0
+  }
+})
+
 //style for honey coins
 export const honeyCoin = StyleSheet.create({
   storePage:{
@@ -66,14 +98,14 @@ export const homePageMoobie = StyleSheet.create({
     position: 'absolute',
     width: 400,
     height: 400,
-    top: 125,
+    top: 220,
     left: -25
   },
   moobie_body:{
     position: 'absolute',
     width: 500,
     height: 400,
-    top: 172,
+    top: 265,
     right: -40
   },
   moobie_feet:{
