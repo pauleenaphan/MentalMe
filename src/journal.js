@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput, ScrollView } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -25,7 +25,11 @@ export const JournalHomePage = ({navigation}) =>{
     //shows all entries in journal
     useFocusEffect(
         React.useCallback(() => {
+            console.log('Showing new Entries');
             getEntries();
+            return () => {
+              // Cleanup logic (if any)
+            };
         }, [])
     );
 
@@ -47,7 +51,7 @@ export const JournalHomePage = ({navigation}) =>{
     };
     
     return(
-        <View style = {styles.container}>
+        <View>
             <View style = {{position: 'absolute', top: 0, left: 0, margin: 30}}>
                 <IconButton
                     onPress = {() => navigation.goBack()}
@@ -57,36 +61,40 @@ export const JournalHomePage = ({navigation}) =>{
                     color = "black"
                 />
             </View>
-            <View style = {journalPage.homePage}>
-                <Text style = {{fontSize: 40}}>
-                    Journal Entries
-                </Text>
-                <IconButton
-                    onPress = {() => navigation.navigate('Journal New Entry Page')}
-                    iconName = "add-box"
-                    iconComponent = {MaterialIcons}
-                    size = {50}
-                    color = "black"
-                />
-            </View>
-            {/* maps out the entries in our db  */}
-            {entries.map(entry =>(
-                <View key = {entry.id} style = {journalPage.entry}>
-                    <Button 
-                        title = {entry.title}
-                        onPress = {() =>{
-                            console.log(entry.title, entry.date, entry.description);
-                            navigation.navigate('Journal Entry Page', {
-                                entryId: entry.id,
-                                entryTitle: entry.title,
-                                entryDate: entry.date,
-                                entryDescription: entry.description
-                            });
-                        }}
+            <View style = {journalPage.homePageContainer}>
+                <View style = {journalPage.homePage}>
+                    <Text style = {{fontSize: 40}}>
+                        Journal Entries
+                    </Text>
+                    <IconButton
+                        onPress = {() => navigation.navigate('Journal New Entry Page')}
+                        iconName = "add-box"
+                        iconComponent = {MaterialIcons}
+                        size = {50}
+                        color = "black"
                     />
-                    <Text style = {{fontSize: 20}}> {entry.date} </Text>
                 </View>
-            ))}
+                <ScrollView showsVerticalScrollIndicator={false}>
+                {/* maps out the entries in our db  */}
+                {entries.map(entry =>(
+                    <View key = {entry.id} style = {journalPage.entry}>
+                        <Button 
+                            title = {entry.title}
+                            onPress = {() =>{
+                                console.log(entry.title, entry.date, entry.description);
+                                navigation.navigate('Journal Entry Page', {
+                                    entryId: entry.id,
+                                    entryTitle: entry.title,
+                                    entryDate: entry.date,
+                                    entryDescription: entry.description
+                                });
+                            }}
+                        />
+                        <Text style = {{fontSize: 20}}> {entry.date} </Text>
+                    </View>
+                ))}
+                </ScrollView>
+            </View>
         </View>
     )
 }
@@ -156,7 +164,7 @@ export const ViewJournalEntry = ({route, navigation}) =>{
     const removeEntry = async () =>{
         try{
             const currentUserEmail = await getCurrEmail();
-            await deleteDoc(doc(db, currentUserEmail, entryId));
+            await deleteDoc(doc(db, currentUserEmail, 'User Information Document', 'Journal Entries', entryId));
             console.log('entry was successfully removed');
         }catch(error){
             console.log("error " + error)
