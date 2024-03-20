@@ -3,9 +3,11 @@ import { View, Text, Button, TextInput } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { styles } from "./styles.js";
+import { backButton, journalPage, styles } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
+import { IconButton } from "./homepage.js";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 //Return's today's date
 function getDate(){
@@ -46,22 +48,30 @@ export const JournalHomePage = ({navigation}) =>{
     
     return(
         <View style = {styles.container}>
-            <Text>
-                Journal
-            </Text>
-            <Button
-                title = "Add new Entry"
-                onPress = {() => navigation.navigate('Journal New Entry Page')}
-            />
-            <Button
-                title = "trash can picture"
-            />
-            <Text>
-                Entries:
-            </Text>
+            <View style = {{position: 'absolute', top: 0, left: 0, margin: 30}}>
+                <IconButton
+                    onPress = {() => navigation.goBack()}
+                    iconName = "arrow-back-circle"
+                    iconComponent = {Ionicons}
+                    size = {50}
+                    color = "black"
+                />
+            </View>
+            <View style = {journalPage.homePage}>
+                <Text style = {{fontSize: 40}}>
+                    Journal Entries
+                </Text>
+                <IconButton
+                    onPress = {() => navigation.navigate('Journal New Entry Page')}
+                    iconName = "add-box"
+                    iconComponent = {MaterialIcons}
+                    size = {50}
+                    color = "black"
+                />
+            </View>
             {/* maps out the entries in our db  */}
             {entries.map(entry =>(
-                <View key = {entry.id}>
+                <View key = {entry.id} style = {journalPage.entry}>
                     <Button 
                         title = {entry.title}
                         onPress = {() =>{
@@ -72,10 +82,9 @@ export const JournalHomePage = ({navigation}) =>{
                                 entryDate: entry.date,
                                 entryDescription: entry.description
                             });
-
                         }}
-                    /> 
-                    <Text> {entry.date} </Text>
+                    />
+                    <Text style = {{fontSize: 20}}> {entry.date} </Text>
                 </View>
             ))}
         </View>
