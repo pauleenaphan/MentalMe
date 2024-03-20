@@ -5,17 +5,16 @@ const windowHeight = Dimensions.get('window').height;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   
 });
 
+//style for loginpage
 export const loginPage = StyleSheet.create({
   container:{
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -58,6 +57,7 @@ export const loginPage = StyleSheet.create({
   
 })
 
+//style for homepage
 export const homePage = StyleSheet.create({
   iconBarContainer: {
     position: 'absolute',
@@ -170,11 +170,17 @@ export const closetContainer = StyleSheet.create({
   },
 })
 
+//style for journal page
 export const journalPage = StyleSheet.create({
   homePage:{
     flexDirection: 'row',
     alignContent: 'center',
-    marginTop: -250
+  },
+  homePageContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 120,
+    marginBottom: 100,
   },
   entry:{
     flexDirection: 'row',
