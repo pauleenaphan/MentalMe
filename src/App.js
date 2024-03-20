@@ -53,19 +53,41 @@ export default function App() {
                 component = {LoginPage} 
                 //animation removes the screen to slide from left to right
                 //gesture disables the user to allow from moving to the previous screen on swipe
-                options = {{headerBackVisible: false, animation: 'none', gestureEnabled: false }}>
+                options = {{
+                  headerBackVisible: false, 
+                  animation: 'none', 
+                  gestureEnabled: false 
+                }}>
               </Stack.Screen>
               <Stack.Screen 
                 name = "Create Account Page" 
                 component = {CreateAccPage} 
-                options = {{headerBackVisible: false, animation: 'none', gestureEnabled: false}}>
+                options = {{
+                  headerBackVisible: false, 
+                  animation: 'none',
+                  gestureEnabled: false
+                }}>
               </Stack.Screen>
               <Stack.Screen 
                 name = "Loading Page" 
                 component = {LoadingPage}
-                options = {{headerBackVisible: true, animation: 'none', gestureEnabled: false}}>
+                options = {{
+                  headerBackVisible: true, 
+                  animation: 'none', 
+                  gestureEnabled: false
+                }}>
               </Stack.Screen>
-              <Stack.Screen name = "Home Page" component = {HomePage}></Stack.Screen>
+              <Stack.Screen 
+                name = "Home Page" 
+                component = {HomePage}
+                options = {{
+                  headerBackVisible: false, 
+                  animation: 'none', 
+                  gestureEnabled: false, 
+                  headerShown: false 
+                }}>
+              </Stack.Screen>
+
               <Stack.Screen name = "Settings Page" component = {SettingsPage}></Stack.Screen>
               <Stack.Screen name = "Account Settings Page" component = {AccountSettingsPage}></Stack.Screen>
               <Stack.Screen name = "Change Password Page" component = {AccountChangePassword}></Stack.Screen>
