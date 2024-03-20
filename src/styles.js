@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const windowHeight = Dimensions.get('window').height;
 
 
 export const styles = StyleSheet.create({
@@ -81,6 +82,11 @@ export const homePage = StyleSheet.create({
     marginTop: 70,
     left: 0,
     top: 0
+  },
+  background:{
+    flex: 1,
+    width: '100%',
+    height: '100%',
   }
 })
 
@@ -99,21 +105,21 @@ export const homePageMoobie = StyleSheet.create({
     width: 400,
     height: 400,
     top: 220,
-    left: -25
+    left: -25,
   },
   moobie_body:{
     position: 'absolute',
     width: 500,
     height: 400,
     top: 265,
-    right: -40
+    right: -40,
   },
   moobie_feet:{
     position: 'absolute',
     width: 400,
     height: 400,
     bottom: 129,
-    right: 22
+    right: 22,
   }
 })
 
@@ -164,3 +170,21 @@ export const closetContainer = StyleSheet.create({
   },
 })
 
+export const journalPage = StyleSheet.create({
+  homePage:{
+    flexDirection: 'row',
+    alignContent: 'center',
+    marginTop: -250
+  },
+  entry:{
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'lightgreen',
+    borderRadius: 10,
+    width: 320,
+    padding: 20,
+    marginTop: 15
+  }
+})
