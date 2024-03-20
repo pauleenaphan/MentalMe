@@ -99,7 +99,13 @@ export default function App() {
               <Stack.Screen name = "Account Settings Page" component = {AccountSettingsPage}></Stack.Screen>
               <Stack.Screen name = "Change Password Page" component = {AccountChangePassword}></Stack.Screen>
 
-              <Stack.Screen name = "Journal Home Page" component = {JournalHomePage}></Stack.Screen>
+              <Stack.Screen 
+                name = "Journal Home Page" 
+                component = {JournalHomePage}
+                options={() => ({
+                  headerShown: false
+                })}>
+              </Stack.Screen>
               <Stack.Screen name = "Journal New Entry Page" component = {AddJournalEntryPage}></Stack.Screen>
               <Stack.Screen name = "Journal Entry Page" component = {ViewJournalEntry}></Stack.Screen>
               
