@@ -44,7 +44,11 @@ export default function App() {
         <MoobieProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen name = "Cover Page">
+              <Stack.Screen 
+                name = "Cover Page"
+                options = {{
+                  headerShown: false,
+                }}>
                 {/* don't need component since we are passing down a child prop instead */}
                 {props => <CoverPage {...props} isLogged={isLogged} />}
               </Stack.Screen>
@@ -56,7 +60,8 @@ export default function App() {
                 options = {{
                   headerBackVisible: false, 
                   animation: 'none', 
-                  gestureEnabled: false 
+                  gestureEnabled: false,
+                  headerShown: false 
                 }}>
               </Stack.Screen>
               <Stack.Screen 
@@ -65,7 +70,8 @@ export default function App() {
                 options = {{
                   headerBackVisible: false, 
                   animation: 'none',
-                  gestureEnabled: false
+                  gestureEnabled: false,
+                  headerShown: false 
                 }}>
               </Stack.Screen>
               <Stack.Screen 
@@ -74,7 +80,8 @@ export default function App() {
                 options = {{
                   headerBackVisible: true, 
                   animation: 'none', 
-                  gestureEnabled: false
+                  gestureEnabled: false,
+                  headerShown: false 
                 }}>
               </Stack.Screen>
               <Stack.Screen 
