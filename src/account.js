@@ -142,7 +142,7 @@ export const CreateAccPage = ({navigation}) => {
             <View style = {loginPage.textContainer}>
                 <Fontisto name="email" size={28} color="black"/>
                 <TextInput 
-                    style = {loginPage.textInput}
+                    style = {loginPage.textInputCreate}
                     placeholder = 'Email'
                     //gets user email from textinput and set the value to email
                     onChangeText = {(text) => setUserEmail(text)}
@@ -152,7 +152,7 @@ export const CreateAccPage = ({navigation}) => {
             <View style = {loginPage.textContainer}>
                 <AntDesign name="lock1" size={30} color="black" />
                 <TextInput
-                    style = {loginPage.textInput}
+                    style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
                     value = {userPassword}
                     placeholder = "Password"
@@ -169,7 +169,7 @@ export const CreateAccPage = ({navigation}) => {
             <View style = {loginPage.textContainer}>
                 <AntDesign name="lock1" size={30} color="black" />
                 <TextInput
-                    style = {loginPage.textInput}
+                    style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
                     value = {confirmPass}
                     placeholder = "Confirm Password"
@@ -314,7 +314,7 @@ export const LoginPage = ({navigation}) =>{
                     {/* User icons */}
                     <Feather name="user" size={30} color="black" />
                     <TextInput 
-                        style = {loginPage.textInput}
+                        style = {loginPage.textInputLogin}
                         placeholder = "Email"
                         onChangeText = {(text) => setUserEmail(text)}
                     />
@@ -322,7 +322,7 @@ export const LoginPage = ({navigation}) =>{
                 <View style = {loginPage.textContainer}>
                     <AntDesign name="lock1" size={30} color="black" />
                     <TextInput
-                        style = {loginPage.textInput}
+                        style = {loginPage.textInputLogin}
                         secureTextEntry = {!showPassword}
                         value = {userPassword}
                         placeholder = "Password"
