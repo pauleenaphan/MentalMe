@@ -115,7 +115,7 @@ export default function App() {
                   gestureEnabled: false,
 
                 }}>
-                </Stack.Screen>
+              </Stack.Screen>
               <Stack.Screen 
                 name = "Journal Entry Page" 
                 component = {ViewJournalEntry}
@@ -124,11 +124,18 @@ export default function App() {
                   gestureEnabled: false,
 
                 }}>
-                </Stack.Screen>
+              </Stack.Screen>
               
               <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
 
-              <Stack.Screen name = "Store Page" component = {StorePage}></Stack.Screen>
+              <Stack.Screen 
+                name = "Store Page" 
+                component = {StorePage}
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false,
+                }}>
+              </Stack.Screen>
               <Stack.Screen name = "Closet Page" component = {ClosetPage}></Stack.Screen>
             </Stack.Navigator>
           </NavigationContainer>
