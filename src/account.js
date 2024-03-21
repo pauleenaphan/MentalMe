@@ -185,7 +185,7 @@ export const CreateAccPage = ({navigation}) => {
             </View>
 
         </View>
-        <View style = {{flexDirection:'row', alignItems:'center', justifyContent: 'space-between'}}>
+        <View style = {{flexDirection:'row', alignItems:'center', justifyContent: 'space-between', marginTop: -10}}>
             <View style = {loginPage.button}>
                 <Button
                     color = "white"
