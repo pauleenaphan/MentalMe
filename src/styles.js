@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const windowHeight = Dimensions.get('window').height;
-
+//#B6D3B3: used for background color of the pages
+//#568258: used for button colors
+//#81A282: used for journal entry 
 
 export const styles = StyleSheet.create({
   container: {
@@ -27,7 +29,7 @@ export const loginPage = StyleSheet.create({
   textInputLogin:{
     fontSize: 20,
     borderBottomWidth: 1,
-    width: 200,
+    width: 250,
   },
   textInputCreate:{
     fontSize: 20,
@@ -50,7 +52,6 @@ export const loginPage = StyleSheet.create({
     backgroundColor: '#568258',
     borderRadius: 15,
     paddingHorizontal: 15,
-    marginBottom: 15,
   },
   icon:{
     marginLeft: -30,
@@ -175,24 +176,90 @@ export const closetContainer = StyleSheet.create({
 //style for journal page
 export const journalPage = StyleSheet.create({
   homePage:{
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignContent: 'center',
+    justifyContent: 'center',
   },
   homePageContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 120,
+    marginTop: 130,
     marginBottom: 100,
+    
+  },
+  fullPageContainer:{
+    flex: 1,
+    backgroundColor: '#B6D3B3',
   },
   entry:{
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#86AB86',
     borderRadius: 10,
     width: 320,
     padding: 20,
     marginTop: 15
   }
 })
+
+export const entryPage = StyleSheet.create({
+  pageContainer:{
+    flex: 1,
+    backgroundColor: '#B6D3B3',
+  },
+  headerContainer:{
+    marginTop: 120, 
+    marginLeft: 40, 
+    marginRight: 40, 
+    marginBottom: 50
+  },
+  title:{
+    fontSize: 30, 
+    fontWeight: 'bold', 
+    maxWidth: '100%', 
+    textAlign: 'left'
+  },
+  description:{
+    marginLeft: 40, 
+    marginRight: 40, 
+    fontSize: 20, 
+    backgroundColor: '#81A282', 
+    height: 500, 
+    padding: 20
+  }
+})
+
+export const newEntryPage = StyleSheet.create({
+  pageContainer:{
+    flex: 1,
+    backgroundColor: '#B6D3B3',
+  },
+  titleDescContainer:{
+    alignItems: 'center', 
+    marginTop: 150, 
+    marginLeft: 40, 
+    marginRight: 40
+  },
+  title:{
+    fontSize: 30, 
+    maxWidth: '100%', 
+    marginBottom: 30,
+    fontWeight: 'bold'
+  },
+  descriptionContainer:{
+    height: 500, 
+    width: 300, 
+    padding: 20, 
+    borderWidth: 3, 
+    borderColor: '#568258', 
+    borderRadius: 10
+  },
+  description:{
+    flex: 1, 
+    fontSize: 20
+  }
+})
+
+
