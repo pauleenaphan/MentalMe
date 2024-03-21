@@ -133,14 +133,15 @@ export const CreateAccPage = ({navigation}) => {
     }
 
     return(
-    <View style = {styles.container}>
+    <View style = {loginPage.container}>
         <Text style = {loginPage.title}>
             Create Account
         </Text>
+        <Text> Sign up to get started! </Text>
         <View style = {loginPage.textInputContainer}>
 
             <View style = {loginPage.textContainer}>
-                <Fontisto name="email" size={28} color="black"/>
+                <Feather name = "user" size = {28} color = "black"/>
                 <TextInput 
                     style = {loginPage.textInputCreate}
                     placeholder = 'Email'
@@ -187,7 +188,7 @@ export const CreateAccPage = ({navigation}) => {
         <View style = {{flexDirection:'row', alignItems:'center', justifyContent: 'space-between'}}>
             <View style = {loginPage.button}>
                 <Button
-                    color = "black"
+                    color = "white"
                     title = "Sign Up"
                     onPress={
                         async () =>{
@@ -309,6 +310,7 @@ export const LoginPage = ({navigation}) =>{
             <Text style = {loginPage.title}>
                 Login
             </Text>
+            <Text> Welcome Back! </Text>
             <View style = {loginPage.textInputContainer}>
                 <View style = {loginPage.textContainer}>
                     {/* User icons */}
@@ -339,7 +341,7 @@ export const LoginPage = ({navigation}) =>{
             </View>
             <View style = {loginPage.button}>
                 <Button
-                    color = 'black'
+                    color = 'white'
                     title = "LOGIN"
                     onPress={async () =>{
                         if(await loginAcc()){
