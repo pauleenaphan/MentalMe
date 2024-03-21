@@ -17,6 +17,7 @@ export const loginPage = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#B6D3B3',
   },
   textInputContainer:{
     alignItems: 'flex-start',
@@ -41,13 +42,14 @@ export const loginPage = StyleSheet.create({
   },
   title:{
     fontSize: 30,
-    bottom: 30,
+    bottom: 15,
+    backgroundColor: '#B6D3B3',
+    fontWeight: 'bold',
   },
   button:{
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#568258',
     borderRadius: 15,
     paddingHorizontal: 15,
-    marginTop: 20,
     marginBottom: 15,
   },
   icon:{
