@@ -102,12 +102,29 @@ export default function App() {
               <Stack.Screen 
                 name = "Journal Home Page" 
                 component = {JournalHomePage}
-                options={() => ({
-                  headerShown: false
-                })}>
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false
+                }}>
               </Stack.Screen>
-              <Stack.Screen name = "Journal New Entry Page" component = {AddJournalEntryPage}></Stack.Screen>
-              <Stack.Screen name = "Journal Entry Page" component = {ViewJournalEntry}></Stack.Screen>
+              <Stack.Screen 
+                name = "Journal New Entry Page" 
+                component = {AddJournalEntryPage}
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false,
+
+                }}>
+                </Stack.Screen>
+              <Stack.Screen 
+                name = "Journal Entry Page" 
+                component = {ViewJournalEntry}
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false,
+
+                }}>
+                </Stack.Screen>
               
               <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
 
