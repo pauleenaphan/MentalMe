@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { clothesImg, honeyCoin, styles } from "./styles.js";
+import { clothesImg, honeyCoin, styles, storePage } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
 
@@ -81,34 +81,46 @@ export const StorePage = () =>{
     //tab for head accessories
     const HeadAccTab = () =>{
         return(
-            <ScrollView>
-                <View style = {styles.container}>
-                    <Button
-                        title = "add currency (testing)"
-                        onPress = {() =>{
-                            console.log(typeof currency);
-                            updateCurrency(parseInt(currency) + 1);
-                        }}
-                    />
-                    {/* amount of coins that the user owns */}
-                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+            <View style = {{flex: 1, alignItems: 'center',justifyContent: 'center', backgroundColor: "#B6D3B3"}}>
+                <Button
+                    title = "add currency (testing)"
+                    onPress = {() =>{
+                        console.log(typeof currency);
+                        updateCurrency(parseInt(currency) + 1);
+                    }}
+                />
+                {/* amount of coins that the user owns */}
+                <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <View style = {{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
                         <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
                     </View>
+                    <Text> Click on an item name to view and purchase the item! </Text>
+                </View>
                     
+
+                    
+                </View>
+                
+                <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.headImgs.map((img) =>(
-                        <View key = {img.name}>
-                            <Image source = {img.image} style = {clothesImg.store}/>
-                            <Button
-                                title = {img.name}
-                                onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image, img.price);
-                                    toggleItemPopup();
-                                }}
-                            /> 
-                            {/* Shows the price of the item */}
-                            <Text> {img.price} </Text>
+                        <View key = {img.name} style = {{flexDirection: 'row', backgroundColor: '#81A282', width: '100%', marginTop: 15, marginLeft: 10, marginRight: 10}}>
+                            <Image source = {img.image} style = {{width: 150, height: 200, marginBottom: -70, marginTop: -15}}/>
+                            <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <Button
+                                    color = "black"
+                                    title = {img.name}
+                                    onPress = {()=>{
+                                        handleBoughtItem(img.name, img.image, img.price);
+                                        toggleItemPopup();
+                                    }}
+                                /> 
+                                {/* Shows the price of the item */}
+                                <Text> {img.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                            </View>
                         </View>
                     ))}
 
@@ -119,7 +131,7 @@ export const StorePage = () =>{
                                 <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
                             </View>
                             <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
+                            <Image source = {boughtItem.image} style = {storePage.item}/>
                             <Button
                                 title = "return to store page"
                                 onPress = {toggleItemPopup}
@@ -148,8 +160,9 @@ export const StorePage = () =>{
                             />
                         </View>
                     </Modal>
-                </View>
-            </ScrollView>  
+                </ScrollView>
+            </View>
+
         )
     }
     
@@ -165,7 +178,7 @@ export const StorePage = () =>{
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.bodyImgs.map((img) =>(
                         <View key = {img.name}>
-                            <Image source = {img.image} style = {clothesImg.store}/>
+                            <Image source = {img.image} style = {storePage.item}/>
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
@@ -183,7 +196,7 @@ export const StorePage = () =>{
                                 <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
                             </View>
                             <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
+                            <Image source = {boughtItem.image} style = {storePage.item}/>
                             <Button
                                 title = "return to store page"
                                 onPress = {toggleItemPopup}
@@ -227,7 +240,7 @@ export const StorePage = () =>{
                     {/* maps through the headimgs instead of printing them all out here */}
                     {images.lowerBodyImgs.map((img) =>(
                         <View key = {img.name}>
-                            <Image source = {img.image} style = {clothesImg.store}/>
+                            <Image source = {img.image} style = {storePage.item}/>
                             <Button
                                 title = {img.name}
                                 onPress = {()=>{
@@ -245,7 +258,7 @@ export const StorePage = () =>{
                                 <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
                             </View>
                             <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {clothesImg.store}/>
+                            <Image source = {boughtItem.image} style = {storePage.item}/>
                             <Button
                                 title = "return to store page"
                                 onPress = {toggleItemPopup}
