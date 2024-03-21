@@ -21,7 +21,7 @@ export const images = {
         {name: 'Minion Overalls', image: require('../imgs/moobie_body/body9.png'), imageP: ('../imgs/moobie_body/body9.png'), price: '0'}
     ],
     lowerBodyImgs: [
-        {name: 'Pink Bunny Slippers', image: require('../imgs/moobie_feet/feet2.png'), imageP:('../imgs/moobie_feet/feet2.png'), price: '0'},
+        {name: 'Bunny Slippers', image: require('../imgs/moobie_feet/feet2.png'), imageP:('../imgs/moobie_feet/feet2.png'), price: '0'},
         {name: 'Pickle Board', image: require('../imgs/moobie_feet/feet3.png'), imageP:('../imgs/moobie_feet/feet3.png'), price: '0'},
         {name: 'Melon Nikes', image: require('../imgs/moobie_feet/feet4.png'), imageP:('../imgs/moobie_feet/feet4.png'), price: '0'}
     ]
