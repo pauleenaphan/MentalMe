@@ -5,12 +5,14 @@ import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
 import { clothesImg, honeyCoin, styles, storePage } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
+import { IconButton } from "./homepage.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -79,47 +81,60 @@ export const StorePage = () =>{
     }
     
     //tab for head accessories
-    const HeadAccTab = () =>{
+    const HeadAccTab = ({navigation}) =>{
         return(
-            <View style = {{flex: 1, alignItems: 'center',justifyContent: 'center', backgroundColor: "#B6D3B3"}}>
-                <Button
+            <View style = {storePage.pageContainer}>
+                {/* <Button
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
                         updateCurrency(parseInt(currency) + 1);
                     }}
-                />
+                /> */}
                 {/* amount of coins that the user owns */}
-                <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                <View style = {{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                    <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
-                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
-                    </View>
-                    <Text> Click on an item name to view and purchase the item! </Text>
+                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
+                    <IconButton
+                        onPress = {() => navigation.goBack()}
+                        iconName = "arrow-back"
+                        iconComponent = {Ionicons}
+                        size = {30}
+                        color = "black"
+                    />
                 </View>
-                    
-
-                    
+                <View style = {storePage.headingContainer}>
+                    <View style = {storePage.headingContainer2}>
+                        <View style = {storePage.currencyContainer}>
+                            <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
+                            <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
+                        </View>
+                        <Text> Click on an item name to view and purchase the item! </Text>
+                    </View>
                 </View>
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
+
                     {images.headImgs.map((img) =>(
-                        <View key = {img.name} style = {{flexDirection: 'row', backgroundColor: '#81A282', width: '100%', marginTop: 15, marginLeft: 10, marginRight: 10}}>
-                            <Image source = {img.image} style = {{width: 150, height: 200, marginBottom: -70, marginTop: -15}}/>
-                            <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                                <Button
-                                    color = "black"
-                                    title = {img.name}
-                                    onPress = {()=>{
-                                        handleBoughtItem(img.name, img.image, img.price);
-                                        toggleItemPopup();
-                                    }}
-                                /> 
+                        <View key = {img.name} style = {storePage.itemContainer}>
+                            <Image source = {img.image} style = {storePage.itemImgHead}/>
+                            <View style = {storePage.titlePriceContainer}>
+                                <View style = {storePage.titleOfItem}>
+                                    <Button
+                                        color = "black"
+                                        title = {img.name}
+                                        onPress = {()=>{
+                                            handleBoughtItem(img.name, img.image, img.price);
+                                            toggleItemPopup();
+                                        }}
+                                    /> 
+                                </View>
+                                    
                                 {/* Shows the price of the item */}
-                                <Text> {img.price} </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+                                <View style = {storePage.priceContainer}>
+                                    <Text style = {storePage.price}> {img.price} </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
+                                </View>
+                                
                             </View>
                         </View>
                     ))}
@@ -167,25 +182,54 @@ export const StorePage = () =>{
     }
     
     //tab for body accessory items
-    const BodyAccTab = () =>{
+    const BodyAccTab = ({navigation}) =>{
         return(
-            <ScrollView>
-                <View style = {styles.container}>
-                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
-                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+            <View style = {storePage.pageContainer}>
+                {/* amount of coins that the user owns */}
+                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
+                    <IconButton
+                        onPress = {() => navigation.navigate("Home Page")}
+                        iconName = "arrow-back"
+                        iconComponent = {Ionicons}
+                        size = {30}
+                        color = "black"
+                    />
+                </View>
+                <View style = {storePage.headingContainer}>
+                    <View style = {storePage.headingContainer2}>
+                        <View style = {storePage.currencyContainer}>
+                            <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
+                            <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
+                        </View>
+                        <Text> Click on an item name to view and purchase the item! </Text>
                     </View>
+                </View>
+                
+                <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
+
                     {images.bodyImgs.map((img) =>(
-                        <View key = {img.name}>
-                            <Image source = {img.image} style = {storePage.item}/>
-                            <Button
-                                title = {img.name}
-                                onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image, img.price);
-                                    toggleItemPopup();
-                                }}
-                            /> 
+                        <View key = {img.name} style = {storePage.itemContainer}>
+                            <Image source = {img.image} style = {storePage.itemImgBody}/>
+                            <View style = {storePage.titlePriceContainer}>
+                                <View style = {storePage.titleOfItem}>
+                                    <Button
+                                        color = "black"
+                                        title = {img.name}
+                                        onPress = {()=>{
+                                            handleBoughtItem(img.name, img.image, img.price);
+                                            toggleItemPopup();
+                                        }}
+                                    /> 
+                                </View>
+                                    
+                                {/* Shows the price of the item */}
+                                <View style = {storePage.priceContainer}>
+                                    <Text style = {storePage.price}> {img.price} </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
+                                </View>
+                                
+                            </View>
                         </View>
                     ))}
 
@@ -223,31 +267,60 @@ export const StorePage = () =>{
                             />
                         </View>
                     </Modal>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
         )
     }
 
     //tab for shoe accessory items
-    const ShoeAccTab = () =>{
+    const ShoeAccTab = ({navigation}) =>{
         return(
-            <ScrollView>
-                <View style = {styles.container}>
-                    <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style = {{fontSize: 20}}> Honey Coins: {currency} </Text>
-                        <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
+            <View style = {storePage.pageContainer}>
+                {/* amount of coins that the user owns */}
+                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
+                    <IconButton
+                        onPress = {() => navigation.navigate("Home Page")}
+                        iconName = "arrow-back"
+                        iconComponent = {Ionicons}
+                        size = {30}
+                        color = "black"
+                    />
+                </View>
+                <View style = {storePage.headingContainer}>
+                    <View style = {storePage.headingContainer2}>
+                        <View style = {storePage.currencyContainer}>
+                            <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
+                            <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
+                        </View>
+                        <Text> Click on an item name to view and purchase the item! </Text>
                     </View>
+                </View>
+                
+                <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
+
                     {images.lowerBodyImgs.map((img) =>(
-                        <View key = {img.name}>
-                            <Image source = {img.image} style = {storePage.item}/>
-                            <Button
-                                title = {img.name}
-                                onPress = {()=>{
-                                    handleBoughtItem(img.name, img.image, img.price);
-                                    toggleItemPopup();
-                                }}
-                            /> 
+                        <View key = {img.name} style = {storePage.itemContainer}>
+                            <Image source = {img.image} style = {storePage.itemImgLowerFeet}/>
+                            <View style = {storePage.titlePriceContainer}>
+                                <View style = {storePage.titleOfItem}>
+                                    <Button
+                                        color = "black"
+                                        title = {img.name}
+                                        onPress = {()=>{
+                                            handleBoughtItem(img.name, img.image, img.price);
+                                            toggleItemPopup();
+                                        }}
+                                    /> 
+                                </View>
+                                    
+                                {/* Shows the price of the item */}
+                                <View style = {storePage.priceContainer}>
+                                    <Text style = {storePage.price}> {img.price} </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
+                                </View>
+                                
+                            </View>
                         </View>
                     ))}
 
@@ -286,8 +359,8 @@ export const StorePage = () =>{
                             />
                         </View>
                     </Modal>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
         )
     }
 
@@ -358,10 +431,63 @@ export const StorePage = () =>{
 
     return(
         <Tab.Navigator>
-            <Tab.Screen name = "Head Tab" component = {HeadAccTab}/>
-            <Tab.Screen name = "Body Tab" component = {BodyAccTab}/>
-            <Tab.Screen name = "Shoe Tab" component = {ShoeAccTab}/> 
+            <Tab.Screen 
+                name = "Moobie's Shop: Head Accessories"
+                component = {HeadAccTab}
+                options = {{
+                    headerStyle:{
+                        backgroundColor: '#568258',
+                    },
+                    tabBarLabel: 'Head',
+                    // tabBarIcon: ()=>{
+                    //     return <FontAwesome6 name="redhat" size={24} color="black" />
+                    // },
+                    tabBarStyle:{
+                        backgroundColor: '#568258',
+                        paddingTop: 30,
+                    },
+                    tabBarLabelStyle:{
+                        color: 'black',
+                        fontSize: 16
+                    },
+                }}
+            />
+            <Tab.Screen 
+                component = {BodyAccTab}
+                name = "Moobie's Shop: Body Accessories"
+                options = {{
+                    headerStyle:{
+                        backgroundColor: '#568258',
+                    },
+                    tabBarLabel: 'Body',
+                    tabBarStyle:{
+                        backgroundColor: '#568258',
+                        paddingTop: 30,
+                    },
+                    tabBarLabelStyle:{
+                        color: 'black',
+                        fontSize: 16
+                    },
+                }}
+            />
+            <Tab.Screen 
+                name = "Moobie's Shop: Lower Body Tab" 
+                component = {ShoeAccTab}
+                options = {{
+                    headerStyle:{
+                        backgroundColor: '#568258',
+                    },
+                    tabBarLabel: 'Lower Body',
+                    tabBarStyle:{
+                        backgroundColor: '#568258',
+                        paddingTop: 30,
+                    },
+                    tabBarLabelStyle:{
+                        color: 'black',
+                        fontSize: 16
+                    },
+                }}
+            /> 
         </Tab.Navigator>
     );
 };
-
