@@ -160,13 +160,6 @@ export const clothesImg = StyleSheet.create({
   }
 })
 
-export const storePage = StyleSheet.create({
-  item:{
-    width: 200,
-    height: 200
-  }
-})
-
 export const closetContainer = StyleSheet.create({
   closet:{
     left: 120,
@@ -265,4 +258,93 @@ export const newEntryPage = StyleSheet.create({
   }
 })
 
-
+export const storePage = StyleSheet.create({
+  pageContainer:{
+    flex: 1, 
+    alignItems: 'center',
+    justifyContent: 'center', 
+    backgroundColor: "#B6D3B3"
+  },
+  //container for the honeycoin amt and description
+  headingContainer:{
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  headingContainer2:{
+    flexDirection: 'column', 
+    justifyContent: 'center', 
+    alignItems: 'center'
+  },
+  currencyContainer:{
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: 10
+  },
+  honeyCoinTitle:{
+    fontSize: 20, 
+    marginTop: 10, 
+    fontWeight: 'bold'
+  },
+  honeyCoinTitleImg:{
+    width: 40, 
+    height: 40, 
+    marginLeft: -10, 
+    marginTop: 3
+  },
+  itemContainer:{
+    flexDirection: 'row', 
+    marginTop: 15, 
+    marginLeft: 6, 
+    marginRight: 8, 
+    alignItems: 'center',
+    borderWidth: 2, 
+    borderRadius: 10
+  },
+  itemImgHead:{
+    width: 150, 
+    height: 150, 
+    marginTop: 25, 
+    marginBottom: -25
+  },
+  itemImgBody:{
+    width: 150, 
+    height: 150, 
+    marginTop: -30
+  },
+  itemImgLowerFeet:{
+    width: 150, 
+    height: 150, 
+    marginTop: -70
+  },
+  titlePriceContainer:{
+    flexDirection: 'row',
+    backgroundColor: '#DBE9D9', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    width: '62%', height: '100%', 
+    borderTopRightRadius: 10, 
+    borderBottomRightRadius: 10, 
+    borderLeftWidth: 2
+  },
+  titleOfItem:{
+    margin: 10
+  },
+  priceContainer:{
+    alignItems: 'center', 
+    flexDirection: 'row', 
+    justifyContent: 'center'
+  },
+  price:{
+    fontSize: 20
+  },
+  //img of honey coin nenxt to the price 
+  priceCoin:{
+    width: 50, 
+    height: 50, 
+    marginTop: -10, 
+    marginLeft: -10
+  }
+})
