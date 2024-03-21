@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, TextInput, ScrollView } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, Button, TextInput, ScrollView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { backButton, journalPage, styles } from "./styles.js";
+import { backButton, journalPage, entryPage, styles, newEntryPage } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
+import { Background } from "@react-navigation/elements";
+
 
 //Return's today's date
 function getDate(){
@@ -51,34 +53,40 @@ export const JournalHomePage = ({navigation}) =>{
     };
     
     return(
-        <View>
-            <View style = {{position: 'absolute', top: 0, left: 0, margin: 30}}>
+        <View style = {journalPage.fullPageContainer}>
+            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
                 <IconButton
                     onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back-circle"
+                    iconName = "arrow-back"
                     iconComponent = {Ionicons}
-                    size = {50}
+                    size = {30}
                     color = "black"
                 />
             </View>
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
-                    <Text style = {{fontSize: 40}}>
+                    <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: "space-around" }}>
+                       <Text style = {{fontSize: 40, fontWeight: 'bold'}}>
                         Journal Entries
-                    </Text>
-                    <IconButton
-                        onPress = {() => navigation.navigate('Journal New Entry Page')}
-                        iconName = "add-box"
-                        iconComponent = {MaterialIcons}
-                        size = {50}
-                        color = "black"
-                    />
+                        </Text>
+                        <IconButton
+                            onPress = {() => navigation.navigate('Journal New Entry Page')}
+                            iconName = "pencil-plus-outline"
+                            iconComponent = {MaterialCommunityIcons}
+                            size = {40}
+                            color = "black"
+                            // try this color #848D84
+                        /> 
+                    </View>
+                    
+                    <Text> View your entry by clicking on the journal entry name! </Text>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
                 {/* maps out the entries in our db  */}
                 {entries.map(entry =>(
                     <View key = {entry.id} style = {journalPage.entry}>
                         <Button 
+                            color = "black"
                             title = {entry.title}
                             onPress = {() =>{
                                 console.log(entry.title, entry.date, entry.description);
@@ -90,7 +98,7 @@ export const JournalHomePage = ({navigation}) =>{
                                 });
                             }}
                         />
-                        <Text style = {{fontSize: 20}}> {entry.date} </Text>
+                        <Text style = {{fontSize: 20, color: 'black'}}> {entry.date} </Text>
                     </View>
                 ))}
                 </ScrollView>
@@ -101,6 +109,11 @@ export const JournalHomePage = ({navigation}) =>{
 
 //Adds journal entry
 export const AddJournalEntryPage = ({navigation}) =>{
+    const handlePressOutside = () => {
+        //brings the keyboard down
+        Keyboard.dismiss(); 
+    };
+
     const[journalInfo, setJournalInfo] = useState({
         title: '',
         description: ''
@@ -113,9 +126,8 @@ export const AddJournalEntryPage = ({navigation}) =>{
         })
     }
 
+
     //adds entry to journal
-    //should add the entry to an array and display the array, but what if the user logsout?
-    //can make the array asyncstorage and update it everytime
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
@@ -132,28 +144,50 @@ export const AddJournalEntryPage = ({navigation}) =>{
         }
     }
     
-    return(
-        <View style = {styles.container}>
-            <TextInput
-                placeholder = "Log Title"
-                onChangeText = {(text) => handleInfo('title', text)}
-            />
-            <TextInput
-                placeholder = "Log Description"
-                onChangeText = {(text) => handleInfo('description', text)}
-            />
-            <Button
-                title = "submit log"
-                onPress={()=>{
-                    addEntry();
-                    navigation.navigate('Journal Home Page');
-                }}
-            />
-            <Button
-                title = "print user email"
-            />
-        </View>
-    )
+    return (
+        //touchablewithoutfeedback allows us to pick up screen touches without showing any visuals that the screen was touched
+        //when the screen is touched anywhere that is not a textinput we call the function to put the keyboard down
+        <TouchableWithoutFeedback onPress={handlePressOutside}>
+            <View style={newEntryPage.pageContainer}>
+                <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
+                    <IconButton
+                        onPress={() => navigation.goBack()}
+                        iconName="arrow-back"
+                        iconComponent={Ionicons}
+                        size={30}
+                        color="black"
+                    />
+                </View>
+                <View style={newEntryPage.titleDescContainer}>
+                    <TextInput
+                        style = {newEntryPage.title}
+                        placeholder="Enter your entry title"
+                        onChangeText={(text) => handleInfo('title', text)}
+                    />
+                    <View style={newEntryPage.descriptionContainer}>
+                        <TextInput
+                            style = {newEntryPage.description}
+                            placeholder="Enter your entry description"
+                            onChangeText={(text) => handleInfo('description', text)}
+                            multiline={true}
+                        />
+                    </View>
+                </View>
+                <View style={{alignSelf: 'center', marginTop: 50}}>
+                    <IconButton
+                        onPress={()=>{
+                            addEntry();
+                            navigation.goBack();
+                        }}
+                        iconName="check"
+                        iconComponent={Feather}
+                        size={30}
+                        color="black"
+                    />
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    );
 }
 
 //Shows the journal entry in the page
@@ -173,17 +207,35 @@ export const ViewJournalEntry = ({route, navigation}) =>{
 
     return(
         //Prints the journal entry that the user pressed on 
-        <View style = {styles.container}>
-            <Text> {entryTitle} </Text>
-            <Text> {entryDate} </Text>
-            <Text> {entryDescription} </Text>
-            <Button
-                title = "Remove Entry"
-                onPress={()=>{
-                    removeEntry();
-                    navigation.navigate('Journal Home Page');
-                }}
-            />
+        <View style = {entryPage.pageContainer}>
+            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
+                <IconButton
+                    onPress = {() => navigation.goBack()}
+                    iconName = "arrow-back"
+                    iconComponent = {Ionicons}
+                    size = {30}
+                    color = "black"
+                />
+            </View>
+            <View style = {entryPage.headerContainer}>
+                <Text style = {entryPage.title} numberOfLines={2}>{entryTitle}</Text>
+                <Text style = {{fontSize: 20}}> {entryDate} </Text>
+            </View>      
+            <ScrollView style = {{maxHeight: 500}}>
+                <Text style = {entryPage.description}> {entryDescription} </Text>
+            </ScrollView>
+            <View style = {{bottom: -40, alignSelf: 'center'}}>
+                <IconButton
+                    onPress={()=>{
+                        removeEntry();
+                        navigation.navigate('Journal Home Page');
+                    }}
+                    iconName = "trash"
+                    iconComponent = {Ionicons}
+                    size = {30}
+                    color = "black"
+                />
+            </View>
         </View>
     )
 }
