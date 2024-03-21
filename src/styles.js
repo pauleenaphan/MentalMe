@@ -72,7 +72,7 @@ export const homePage = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-around',
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#568258',
     width: "100%",
     padding: 20,
     height: 80,
@@ -153,12 +153,15 @@ export const closetPageMoobie = StyleSheet.create({
 
 //style for the clothe imgs
 export const clothesImg = StyleSheet.create({
-  store:{
-    width: 200,
-    height: 200
-  },
   closet:{
     position: 'absolute',
+    width: 200,
+    height: 200
+  }
+})
+
+export const storePage = StyleSheet.create({
+  item:{
     width: 200,
     height: 200
   }
