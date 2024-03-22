@@ -9,7 +9,7 @@ import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { clothesImg, honeyCoin, styles, storePage } from "./styles.js";
+import { clothesImg, honeyCoin, styles, storePage, storePopup } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
 import { IconButton } from "./homepage.js";
@@ -139,39 +139,48 @@ export const StorePage = () =>{
                         </View>
                     ))}
 
-                    <Modal isVisible = {isPopupVisible}>
-                        <View style = {styles.container}>
-                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
-                            </View>
-                            <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {storePage.item}/>
-                            <Button
-                                title = "return to store page"
-                                onPress = {toggleItemPopup}
-                            />
-                            <Button
-                                title = "Buy Item"
-                                onPress = {async () =>{
-                                    //first checks to see if the user owns the item already
-                                    //if user does not own the item then check if the user has enought to buy the item
-                                    try{
-                                        console.log("user wants this item: " + boughtItem.itemName);
-                                        const itemFound = await checkForItem();
-                                        if(itemFound){
-                                            showItemOwnAlert();
-                                            console.log("user has this item already: ", boughtItem.itemName);
-                                        }else{
-                                            canBuy();
-                                            addToCloset();
-                                        }
-                                    }catch(error){
-                                        console.log("error: ", error);
-                                    }
+                    <Modal 
+                        isVisible = {isPopupVisible}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
 
-                                    toggleItemPopup();
-                                }}
+                    >
+                        <View style = {storePopup.popupContainer}>
+                            <View style = {storePopup.priceContainer}>
+                                <Text style = {storePopup.priceTitle}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {storePopup.honeyCoinImg}/>
+                            </View>
+                            <Text style = {storePopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePopup.headItemImg}/>
+                            <View style = {storePopup.buyBtn}>
+                                <Button
+                                    color = 'white'
+                                    title = "Buy Item"
+                                    onPress = {async () =>{
+                                        //first checks to see if the user owns the item already
+                                        //if user does not own the item then check if the user has enought to buy the item
+                                        try{
+                                            console.log("user wants this item: " + boughtItem.itemName);
+                                            const itemFound = await checkForItem();
+                                            if(itemFound){
+                                                showItemOwnAlert();
+                                                console.log("user has this item already: ", boughtItem.itemName);
+                                            }else{
+                                                canBuy();
+                                                addToCloset();
+                                            }
+                                        }catch(error){
+                                            console.log("error: ", error);
+                                        }
+
+                                        toggleItemPopup();
+                                    }}
+                                />
+                            </View>
+                            <Button
+                                color = 'black'
+                                title = "Return to store page"
+                                onPress = {toggleItemPopup}
                             />
                         </View>
                     </Modal>
@@ -233,37 +242,48 @@ export const StorePage = () =>{
                         </View>
                     ))}
 
-                    <Modal isVisible = {isPopupVisible}>
-                        <View style = {styles.container}>
-                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
-                            </View>
-                            <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {storePage.item}/>
-                            <Button
-                                title = "return to store page"
-                                onPress = {toggleItemPopup}
-                            />
-                            <Button
-                                title = "Buy Item"
-                                onPress = {async () =>{
-                                    try{
-                                        console.log("user wants this item: " + boughtItem.itemName);
-                                        const itemFound = await checkForItem();
-                                        if(itemFound){
-                                            showItemOwnAlert();
-                                            console.log("user has this item already: ", boughtItem.itemName);
-                                        }else{
-                                            canBuy();
-                                            addToCloset();
-                                        }
-                                    }catch(error){
-                                        console.log("error: ", error);
-                                    }
+                    <Modal 
+                        isVisible = {isPopupVisible}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
 
-                                    toggleItemPopup();
-                                }}
+                    >
+                        <View style = {storePopup.popupContainer}>
+                            <View style = {storePopup.priceContainer}>
+                                <Text style = {storePopup.priceTitle}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {storePopup.honeyCoinImg}/>
+                            </View>
+                            <Text style = {storePopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePopup.bodyItemImg}/>
+                            <View style = {storePopup.buyBtn}>
+                                <Button
+                                    color = 'white'
+                                    title = "Buy Item"
+                                    onPress = {async () =>{
+                                        //first checks to see if the user owns the item already
+                                        //if user does not own the item then check if the user has enought to buy the item
+                                        try{
+                                            console.log("user wants this item: " + boughtItem.itemName);
+                                            const itemFound = await checkForItem();
+                                            if(itemFound){
+                                                showItemOwnAlert();
+                                                console.log("user has this item already: ", boughtItem.itemName);
+                                            }else{
+                                                canBuy();
+                                                addToCloset();
+                                            }
+                                        }catch(error){
+                                            console.log("error: ", error);
+                                        }
+
+                                        toggleItemPopup();
+                                    }}
+                                />
+                            </View>
+                            <Button
+                                color = 'black'
+                                title = "Return to store page"
+                                onPress = {toggleItemPopup}
                             />
                         </View>
                     </Modal>
@@ -324,38 +344,48 @@ export const StorePage = () =>{
                         </View>
                     ))}
 
-                    <Modal isVisible = {isPopupVisible}>
-                        <View style = {styles.container}>
-                            <View style = {{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style = {{fontSize: 20}}> Price: {boughtItem.price} </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {honeyCoin.storePage}/>
-                            </View>
-                            <Text> {boughtItem.itemName} </Text>
-                            <Image source = {boughtItem.image} style = {storePage.item}/>
-                            <Button
-                                title = "return to store page"
-                                onPress = {toggleItemPopup}
-                            />
-                            <Button
-                                title = "Buy Item"
-                                onPress = {async () =>{
-                                    try{
-                                        console.log("user wants this item: " + boughtItem.itemName);
-                                        const itemFound = await checkForItem();
-                                        if(itemFound){
-                                            showItemOwnAlert();
-                                            console.log("user has this item already: ", boughtItem.itemName);
-                                        }else{
-                                            canBuy();
-                                            addToCloset();
-                                            
-                                        }
-                                    }catch(error){
-                                        console.log("error: ", error);
-                                    }
+                    <Modal 
+                        isVisible = {isPopupVisible}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
 
-                                    toggleItemPopup();
-                                }}
+                    >
+                        <View style = {storePopup.popupContainer}>
+                            <View style = {storePopup.priceContainer}>
+                                <Text style = {storePopup.priceTitle}> Price: {boughtItem.price} </Text>
+                                <Image source = {require("../imgs/honeycoin.png")} style = {storePopup.honeyCoinImg}/>
+                            </View>
+                            <Text style = {storePopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePopup.lowerBodyItemImg}/>
+                            <View style = {storePopup.buyBtn}>
+                                <Button
+                                    color = 'white'
+                                    title = "Buy Item"
+                                    onPress = {async () =>{
+                                        //first checks to see if the user owns the item already
+                                        //if user does not own the item then check if the user has enought to buy the item
+                                        try{
+                                            console.log("user wants this item: " + boughtItem.itemName);
+                                            const itemFound = await checkForItem();
+                                            if(itemFound){
+                                                showItemOwnAlert();
+                                                console.log("user has this item already: ", boughtItem.itemName);
+                                            }else{
+                                                canBuy();
+                                                addToCloset();
+                                            }
+                                        }catch(error){
+                                            console.log("error: ", error);
+                                        }
+
+                                        toggleItemPopup();
+                                    }}
+                                />
+                            </View>
+                            <Button
+                                color = 'black'
+                                title = "Return to store page"
+                                onPress = {toggleItemPopup}
                             />
                         </View>
                     </Modal>

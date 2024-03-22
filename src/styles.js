@@ -394,5 +394,60 @@ export const storePage = StyleSheet.create({
     height: 50, 
     marginTop: -10, 
     marginLeft: -10
+  },
+})
+
+export const storePopup = StyleSheet.create({
+  popupContainer:{
+    backgroundColor: '#8DB98B', 
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    maxHeight: '70%', 
+    borderRadius: 10, 
+    borderWidth: 5, 
+    borderColor: 'white'
+  },
+  //container for price and img
+  priceContainer:{
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  priceTitle:{
+    fontSize: 25
+  },
+  honeyCoinImg:{
+    width: 60, 
+    height: 60, 
+    marginTop: -7, 
+    marginLeft: -8
+  },
+  itemName:{
+    fontSize: 35, 
+    fontWeight: 'bold', 
+    marginBottom: 10
+  },
+  headItemImg:{
+    width: 300, 
+    height: 300
+  },
+  bodyItemImg:{
+    width: 300,
+    height: 300,
+    backgroundColor: 'yellow',
+    paddingTop: -90,
+  },
+  lowerBodyItemImg:{
+    width: 300,
+    height: 300,
+    marginTop: -90
+  },
+  buyBtn:{
+    backgroundColor: "#568258", 
+    marginTop: -40,
+    paddingLeft: 15, 
+    paddingRight: 15, 
+    borderRadius: 10
   }
 })
