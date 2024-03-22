@@ -9,6 +9,7 @@ import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
 import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
 import { Background } from "@react-navigation/elements";
+import { disableErrorHandling } from "expo";
 
 
 //Return's today's date
@@ -66,9 +67,35 @@ export const JournalHomePage = ({navigation}) =>{
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
                     <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: "space-around" }}>
-                       <Text style = {{fontSize: 40, fontWeight: 'bold'}}>
-                        Journal Entries
+                       <Text style = {journalPage.title}>
+                            Journal Entries
                         </Text>
+                    </View>
+                    <Text> View your entry by clicking on the journal entry name! </Text>
+                </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {/* maps out the entries in our db  */}
+                    {entries.map(entry =>(
+                        <View key = {entry.id} style = {journalPage.entry}>
+                            <Button 
+                                color = "black"
+                                title = {entry.title}
+                                onPress = {() =>{
+                                    console.log(entry.title, entry.date, entry.description);
+                                    navigation.navigate('Journal Entry Page', {
+                                        entryId: entry.id,
+                                        entryTitle: entry.title,
+                                        entryDate: entry.date,
+                                        entryDescription: entry.description
+                                    });
+                                }}
+                            />
+                            <Text style = {journalPage.entryDate}> {entry.date} </Text>
+                        </View>
+                    ))}
+                </ScrollView>
+                <View style = {journalPage.addEntryBtnBoxContainer}>
+                    <View style = {journalPage.addEntryContainer}>
                         <IconButton
                             onPress = {() => navigation.navigate('Journal New Entry Page')}
                             iconName = "pencil-plus-outline"
@@ -77,31 +104,9 @@ export const JournalHomePage = ({navigation}) =>{
                             color = "black"
                             // try this color #848D84
                         /> 
+                        <Text style = {journalPage.addEntryText}> Add new entry </Text>
                     </View>
-                    
-                    <Text> View your entry by clicking on the journal entry name! </Text>
                 </View>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                {/* maps out the entries in our db  */}
-                {entries.map(entry =>(
-                    <View key = {entry.id} style = {journalPage.entry}>
-                        <Button 
-                            color = "black"
-                            title = {entry.title}
-                            onPress = {() =>{
-                                console.log(entry.title, entry.date, entry.description);
-                                navigation.navigate('Journal Entry Page', {
-                                    entryId: entry.id,
-                                    entryTitle: entry.title,
-                                    entryDate: entry.date,
-                                    entryDescription: entry.description
-                                });
-                            }}
-                        />
-                        <Text style = {{fontSize: 20, color: 'black'}}> {entry.date} </Text>
-                    </View>
-                ))}
-                </ScrollView>
             </View>
         </View>
     )
@@ -161,13 +166,14 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 <View style={newEntryPage.titleDescContainer}>
                     <TextInput
                         style = {newEntryPage.title}
-                        placeholder="Enter your entry title"
+                        placeholder="Entry Title"
                         onChangeText={(text) => handleInfo('title', text)}
                     />
+                    <Text style = {{marginBottom: 10}}> {getDate().toString()} </Text>
                     <View style={newEntryPage.descriptionContainer}>
                         <TextInput
                             style = {newEntryPage.description}
-                            placeholder="Enter your entry description"
+                            placeholder="Write your thoughts down"
                             onChangeText={(text) => handleInfo('description', text)}
                             multiline={true}
                         />
@@ -217,13 +223,13 @@ export const ViewJournalEntry = ({route, navigation}) =>{
                     color = "black"
                 />
             </View>
+            <Text style = {entryPage.entryDate}> {entryDate} </Text>
             <View style = {entryPage.headerContainer}>
                 <Text style = {entryPage.title} numberOfLines={2}>{entryTitle}</Text>
-                <Text style = {{fontSize: 20}}> {entryDate} </Text>
             </View>      
-            <ScrollView style = {{maxHeight: 500}}>
-                <Text style = {entryPage.description}> {entryDescription} </Text>
-            </ScrollView>
+            {/* <ScrollView style = {{maxHeight: 500}}> */}
+            <Text style = {entryPage.description}> {entryDescription} </Text>  
+            {/* </ScrollView> */}
             <View style = {{bottom: -40, alignSelf: 'center'}}>
                 <IconButton
                     onPress={()=>{

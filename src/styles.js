@@ -171,22 +171,30 @@ export const closetContainer = StyleSheet.create({
 
 //style for journal page
 export const journalPage = StyleSheet.create({
+  //container for the journal entry title and caption
   homePage:{
     flexDirection: 'column',
     alignContent: 'center',
     justifyContent: 'center',
   },
+  //container for the whole page excluding the back button
   homePageContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 130,
-    marginBottom: 100,
-    
+    marginTop: 100,
+    marginBottom: 40
   },
+  //container for the whole page
   fullPageContainer:{
     flex: 1,
     backgroundColor: '#B6D3B3',
   },
+  //for the title Journal Entries
+  title:{
+    fontSize: 40, 
+    fontWeight: 'bold'
+  },
+  //each entry that is being displayed
   entry:{
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -196,7 +204,34 @@ export const journalPage = StyleSheet.create({
     borderRadius: 10,
     width: 320,
     padding: 20,
-    marginTop: 15
+    marginTop: 15,
+  },
+  entryDate:{
+    fontSize: 20, 
+    color: 'black'
+  },
+  addEntryBtnBoxContainer:{
+    flexDirection: 'row', 
+    justifyContent: 'flex-end', 
+    width: '90%', 
+    top: 630,
+    position: 'absolute'
+  },
+  addEntryContainer:{
+    marginTop: 20, 
+    paddingTop: 10, 
+    paddingBottom: 10, 
+    paddingLeft: 15, 
+    paddingRight: 15, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    backgroundColor: '#568258', 
+    borderRadius: 10,
+  },
+  addEntryText:{
+    color: 'black', 
+    fontSize: 15, 
+    fontWeight: 'bold'
   }
 })
 
@@ -211,19 +246,32 @@ export const entryPage = StyleSheet.create({
     marginRight: 40, 
     marginBottom: 50
   },
+  //title of the entry
   title:{
     fontSize: 30, 
     fontWeight: 'bold', 
     maxWidth: '100%', 
     textAlign: 'left'
   },
+  entryDate:{
+    fontSize: 20, 
+    textAlign: 'center', 
+    top: 57, 
+    marginLeft: '25%', 
+    width: '50%'
+  },
+  //entry description
   description:{
     marginLeft: 40, 
     marginRight: 40, 
     fontSize: 20, 
     backgroundColor: '#81A282', 
     height: 500, 
-    padding: 20
+    padding: 10,
+    borderWidth: 10,
+    borderRadius: 10,
+    borderColor: '#568258',
+    overflow: 'hidden'
   }
 })
 
@@ -240,17 +288,17 @@ export const newEntryPage = StyleSheet.create({
   },
   title:{
     fontSize: 30, 
-    maxWidth: '100%', 
-    marginBottom: 30,
-    fontWeight: 'bold'
+    width: '100%', 
+    marginBottom: 15,
+    fontWeight: 'bold',
+    borderRadius: 10,
+    textAlign: 'center'
   },
   descriptionContainer:{
     height: 500, 
-    width: 300, 
+    width: '100%', 
     padding: 20, 
-    borderWidth: 3, 
-    borderColor: '#568258', 
-    borderRadius: 10
+    borderTopWidth: 1,
   },
   description:{
     flex: 1, 
