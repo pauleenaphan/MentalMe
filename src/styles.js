@@ -502,13 +502,14 @@ export const storePopup = StyleSheet.create({
   bodyItemImg:{
     width: 300,
     height: 300,
-    backgroundColor: 'yellow',
-    paddingTop: -90,
+    marginTop: -100,
+    marginBottom: 60
   },
   lowerBodyItemImg:{
     width: 300,
     height: 300,
-    marginTop: -90
+    marginTop: -120,
+    marginBottom: 90
   },
   buyBtn:{
     backgroundColor: "#568258", 
