@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Button, Image } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { styles, progressPage } from "./styles";
@@ -424,9 +424,6 @@ export const ProgressTracker = () => {
     return(
         <View style={progressPage.fullPageContainer}>
             <Text style={progressPage.title}>Weekly Progress</Text>
-            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
-            <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button>
-            <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
             <View style={progressPage.rowOfCheckboxes}>
                 <View style={progressPage.checkboxContainer}>
                     <Image
@@ -479,15 +476,38 @@ export const ProgressTracker = () => {
                 </View>
             </View>
             <Text style={progressPage.title}>All-Time Stats</Text>
-            <View style={progressPage.statContainer}>
+            <View style={progressPage.rowOfCheckboxes}>
+                <View style={progressPage.statContainer}>
+                    <Image
+                        style={progressPage.statBox}
+                        source={require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.statNumber}>{dailyLogins}</Text>
+                    <Text style={progressPage.statLabel}>Total Daily Logins</Text>
+                </View>
+                <View style={progressPage.statContainer}>
+                    <Image
+                        style={progressPage.statBox}
+                        source={require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.statNumber}>{consecutiveDLs}</Text>
+                    <Text style={progressPage.statLabel}>Consecutive Logins</Text>
+                </View>
+            </View>
+            <View style={[progressPage.statContainer, {marginTop: -50}]}>
                 <Image
                     style={progressPage.statBox}
                     source={require("../imgs/squareCheckbox.png")}
                 />
+                <Text style={progressPage.statNumber}>{longestStreak}</Text>
+                <Text style={progressPage.statLabel}>Longest Login Streak</Text>
             </View>
-            {<Text>Total Daily Logins: {dailyLogins}</Text>}
+            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
+            <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button>
+            <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
+            {/* {<Text>Total Daily Logins: {dailyLogins}</Text>}
             {<Text>Consecutive Logins: {consecutiveDLs}</Text>}
-            {<Text>Longest Streak: {longestStreak}</Text>}
+            {<Text>Longest Streak: {longestStreak}</Text>} */}
             {/* <Text>Weekly Logins:</Text>
             {<Text>Sunday: {weeklyLogins.SundayLogin ? "✅" : "❌"}</Text>}
             {<Text>Monday: {weeklyLogins.MondayLogin ? "✅" : "❌"}</Text>}

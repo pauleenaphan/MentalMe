@@ -329,6 +329,7 @@ export const progressPage = StyleSheet.create({
     marginTop: 5,
     width: 40,
     height: 40,
+    fontWeight: 'bold',
     textAlign: 'center'
   },
   weeklyCheckbox:{
@@ -345,14 +346,30 @@ export const progressPage = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
-    marginRight: 10,
-    marginLeft: 5,
+    marginRight: 50,
+    marginLeft: 25,
     marginTop: 3
   },
   statBox:{
-    width: 200,
-    height: 200,
-    resizeMode: 'contain'
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    position: 'relative'
+  },
+  statLabel:{
+    width: 115,
+    height: 100,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  statNumber:{
+    fontSize: 30,
+    width: 110,
+    height: 150,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: -30,
+    position: 'absolute'
   }
 })
 
