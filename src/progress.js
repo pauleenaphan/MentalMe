@@ -493,15 +493,23 @@ export const ProgressTracker = () => {
                     <Text style={progressPage.statNumber}>{consecutiveDLs}</Text>
                     <Text style={progressPage.statLabel}>Consecutive Logins</Text>
                 </View>
+                <View style={progressPage.statContainer}>
+                    <Image
+                        style={progressPage.statBox}
+                        source={require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.statNumber}>{longestStreak}</Text>
+                    <Text style={progressPage.statLabel}>Longest Login Streak</Text>
+                </View>
             </View>
-            <View style={[progressPage.statContainer, {marginTop: -50}]}>
+            {/* <View style={[progressPage.statContainer, {marginTop: -50}]}>
                 <Image
                     style={progressPage.statBox}
                     source={require("../imgs/squareCheckbox.png")}
                 />
                 <Text style={progressPage.statNumber}>{longestStreak}</Text>
                 <Text style={progressPage.statLabel}>Longest Login Streak</Text>
-            </View>
+            </View> */}
             {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
             <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button>
             <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}

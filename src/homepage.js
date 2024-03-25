@@ -8,6 +8,8 @@ import { homePageMoobie, styles, homePage } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
 
+import { ProgressTracker } from "./progress.js";
+
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
@@ -29,6 +31,13 @@ export const HomePage = ({navigation}) =>{
             console.error("Error in setBody:", error);
         }
     };
+
+    const setProgress = () => {
+        useEffect(() => {
+            console.log("Progress set.")
+            // finish this later zzzzzzz
+        }, []);
+    }
 
     useFocusEffect(
         React.useCallback(()=>{
