@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { styles } from "./styles";
+import { styles, progressPage } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { collection, addDoc, doc, getDocs, setDoc } from "firebase/firestore"; 
@@ -422,22 +422,80 @@ export const ProgressTracker = () => {
     };
 
     return(
-        <View style={styles.container}>
-            <Text>Progress Tracker</Text>
-            <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
+        <View style={progressPage.fullPageContainer}>
+            <Text style={progressPage.title}>Weekly Progress</Text>
+            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
             <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button>
-            <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button>
+            <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
+            <View style={progressPage.rowOfCheckboxes}>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.SundayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Sun</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.MondayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Mon</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.TuesdayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Tue</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.WednesdayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Wed</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.ThursdayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Thu</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.FridayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Fri</Text>
+                </View>
+                <View style={progressPage.checkboxContainer}>
+                    <Image
+                        style={progressPage.weeklyCheckbox}
+                        source={weeklyLogins.SundayLogin ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                    />
+                    <Text style={progressPage.checkboxLabel}>Sat</Text>
+                </View>
+            </View>
+            <Text style={progressPage.title}>All-Time Stats</Text>
+            <View style={progressPage.statContainer}>
+                <Image
+                    style={progressPage.statBox}
+                    source={require("../imgs/squareCheckbox.png")}
+                />
+            </View>
             {<Text>Total Daily Logins: {dailyLogins}</Text>}
             {<Text>Consecutive Logins: {consecutiveDLs}</Text>}
             {<Text>Longest Streak: {longestStreak}</Text>}
-            <Text>Weekly Logins:</Text>
+            {/* <Text>Weekly Logins:</Text>
             {<Text>Sunday: {weeklyLogins.SundayLogin ? "✅" : "❌"}</Text>}
             {<Text>Monday: {weeklyLogins.MondayLogin ? "✅" : "❌"}</Text>}
             {<Text>Tuesday: {weeklyLogins.TuesdayLogin ? "✅" : "❌"}</Text>}
             {<Text>Wednesday: {weeklyLogins.WednesdayLogin ? "✅" : "❌"}</Text>}
             {<Text>Thursday: {weeklyLogins.ThursdayLogin ? "✅" : "❌"}</Text>}
             {<Text>Friday: {weeklyLogins.FridayLogin ? "✅" : "❌"}</Text>}
-            {<Text>Saturday: {weeklyLogins.SaturdayLogin ? "✅" : "❌"}</Text>}
+            {<Text>Saturday: {weeklyLogins.SaturdayLogin ? "✅" : "❌"}</Text>} */}
         </View>
     );
 };

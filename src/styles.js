@@ -9,8 +9,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  
+  }
 });
 
 //style for loginpage
@@ -303,6 +302,57 @@ export const newEntryPage = StyleSheet.create({
   description:{
     flex: 1, 
     fontSize: 20
+  }
+})
+
+export const progressPage = StyleSheet.create({
+  fullPageContainer:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#B6D3B3'
+  },
+  title:{
+    fontSize: 30,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline'
+  },
+  checkboxContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    marginRight: 10,
+    marginLeft: 5,
+    marginTop: 3
+  },
+  checkboxLabel:{
+    marginTop: 5,
+    width: 40,
+    height: 40,
+    textAlign: 'center'
+  },
+  weeklyCheckbox:{
+    width: 40,
+    height: 40,
+    resizeMode: 'contain'
+  },
+  rowOfCheckboxes:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center'
+  },
+  statContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    marginRight: 10,
+    marginLeft: 5,
+    marginTop: 3
+  },
+  statBox:{
+    width: 200,
+    height: 200,
+    resizeMode: 'contain'
   }
 })
 
