@@ -125,8 +125,12 @@ export const homePageMoobie = StyleSheet.create({
   }
 })
 
-//style for moobie in the closet
-export const closetPageMoobie = StyleSheet.create({
+//style for the closet page
+export const closetPage = StyleSheet.create({
+  //style for moobie's model
+  pageContainer:{
+
+  },
   moobie_head:{
     position: 'absolute',
     width: 400,
@@ -146,27 +150,28 @@ export const closetPageMoobie = StyleSheet.create({
     width: 400,
     height: 400,
     top: 141,
-    right: 25
-  }
-})
-
-//style for the clothe imgs
-export const clothesImg = StyleSheet.create({
-  closet:{
-    position: 'absolute',
+    right: 25,
+  },
+  //style for the imgs of the clothes
+  clothesImg:{
     width: 200,
     height: 200
+  },
+  //container for the clothes and text
+  clothesContainer:{
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5
+  },
+  closetContainer:{
+    flexDirection: 'row',
+    backgroundColor: 'purple',
   }
 })
 
-export const closetContainer = StyleSheet.create({
-  closet:{
-    left: 120,
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: 60
-  },
-})
+
+
 
 //style for journal page
 export const journalPage = StyleSheet.create({
