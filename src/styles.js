@@ -129,23 +129,38 @@ export const homePageMoobie = StyleSheet.create({
 export const closetPage = StyleSheet.create({
   //style for moobie's model
   pageContainer:{
-
+    flex: 1, 
+    backgroundColor: '#B6D3B3'
   },
-  moobie_head:{
+  //for the header and caption
+  headerContainer:{
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    top: 80
+  },
+  headerTitle:{
+    fontWeight: 'bold', 
+    fontSize: 35
+  },
+  moobieContainer:{
+    height: 500, 
+    marginTop: 70
+  },
+  moobieHead:{
     position: 'absolute',
     width: 400,
     height: 400,
     top: -10,
     left: -25
   },
-  moobie_body:{
+  moobieBody:{
     position: 'absolute',
     width: 500,
     height: 400,
     top: 38,
     right: -40
   },
-  moobie_feet:{
+  moobieFeet:{
     position: 'absolute',
     width: 400,
     height: 400,
@@ -154,24 +169,32 @@ export const closetPage = StyleSheet.create({
   },
   //style for the imgs of the clothes
   clothesImg:{
-    width: 200,
-    height: 200
+    width: 200, 
+    height: 180, 
+    backgroundColor:'#DBE9D9', 
+    borderTopLeftRadius: 10, 
+    borderTopRightRadius: 10
   },
   //container for the clothes and text
   clothesContainer:{
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 5
+    backgroundColor: '#568258', 
+    borderRadius: 10, 
+    marginTop: 30, 
+    marginLeft: 10, 
+    marginRight: 10, 
+    marginBottom: 20, 
+    alignItems: 'center', 
+    justifyContent: 'center'
   },
+  //container for closet display
   closetContainer:{
-    flexDirection: 'row',
-    backgroundColor: 'purple',
+    flexDirection: 'row', 
+    backgroundColor: '#81A282', 
+    alignItems: 'flex-end', 
+    borderTopWidth: 5, 
+    borderTopColor: '#568258'
   }
 })
-
-
-
 
 //style for journal page
 export const journalPage = StyleSheet.create({

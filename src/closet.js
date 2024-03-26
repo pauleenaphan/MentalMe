@@ -4,15 +4,17 @@ import { collection, setDoc, doc, getDocs, deleteDoc, getDoc, updateDoc} from "f
 import { db } from "../firebase";
 import { useFocusEffect } from "@react-navigation/core";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
 
 import { getCurrEmail } from "./account.js";
-import { styles, closetPage, closetContainer } from "./styles.js";
+import { styles, closetPage, closetContainer, storePage } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { images } from "./images.js";
+import { IconButton } from "./homepage.js";
 
 
 
-export const ClosetPage = () =>{
+export const ClosetPage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
     const [closet, setCloset] = useState([]);
 
@@ -61,29 +63,39 @@ export const ClosetPage = () =>{
     ];
 
     return(
-        // <View style = {closetPage.pageContainer}>
-        <View style = {{flex: 1}}>
+        <View style = {closetPage.pageContainer}>
+            <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30, marginBottom: 100}}>
+                <IconButton
+                    onPress={() => navigation.goBack()}
+                    iconName="arrow-back"
+                    iconComponent={Ionicons}
+                    size = {30}
+                    color="black"
+                />
+            </View>
+            <View style = {closetPage.headerContainer}>
+                <Text style = {closetPage.headerTitle}> Moobie's Closet </Text>
+                <Text> I wanna look like i'm made of honeycoins! </Text>
+            </View>
+            
             {/* Displays Moobie in the closet */}
-            <View style = {{height: 500, backgroundColor: '#B6D3B3'}}>
-                <Image source = {bodyPart.head} style = {closetPage.moobie_head}/>
-                <Image source = {bodyPart.body} style = {closetPage.moobie_body}/>
-                <Image source = {bodyPart.lowerBody} style = {closetPage.moobie_feet}/>
+            <View style = {closetPage.moobieContainer}>
+                <Image source = {bodyPart.head} style = {closetPage.moobieHead}/>
+                <Image source = {bodyPart.body} style = {closetPage.moobieBody}/>
+                <Image source = {bodyPart.lowerBody} style = {closetPage.moobieFeet}/>
             </View>
 
             <View style = {{flex: 1}}>
                 <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ width: `${200 * 7}px`, justifyContent: 'flex-end' }}
+                bounces = {false}
                 >
-                    {/* <View style = {closetPage.closetContainer}> */}
-                    <View style = {{flexDirection: 'row', backgroundColor: '#81A282', alignItems: 'flex-end', }}>
+                    <View style = {closetPage.closetContainer}>
                         {/* Maps through the closet in order to display all the clothes the user has bought */}
                         {closet.map(item =>(
-                            // <View key = {item.itemName} style = {closetPage.clothesContainer}>
-                            <View key = {item.itemName} style = {{backgroundColor: '#568258', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: 40, marginLeft: 5, marginRight: 5, marginBottom: 40, alignItems: 'center', justifyContent: 'center'}}>
+                            <View key = {item.itemName} style = {closetPage.clothesContainer}>
                                 {allImgs.map((img)=>{
                                     if(img.name === item.itemName){
-                                        // return <Image source = {img.image} style = {closetPage.clothesImg}/>
-                                        return <Image source = {img.image} style = {{width: 200, height: 200, backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10 }}/>
+                                        return <Image source = {img.image} style = {closetPage.clothesImg}/>
                                     }
                                 })}
                                 <Button
@@ -153,6 +165,5 @@ export const ClosetPage = () =>{
                 </ScrollView>
             </View>
         </View>
-
     );
 };
