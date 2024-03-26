@@ -136,7 +136,15 @@ export default function App() {
                   gestureEnabled: false,
                 }}>
               </Stack.Screen>
-              <Stack.Screen name = "Closet Page" component = {ClosetPage}></Stack.Screen>
+              <Stack.Screen 
+                name = "Closet Page" 
+                component = {ClosetPage}
+                options = {{
+                  headerShown: false,
+                  gestureEnabled: false,
+                }}>
+
+                </Stack.Screen>
             </Stack.Navigator>
           </NavigationContainer>
         </MoobieProvider>
