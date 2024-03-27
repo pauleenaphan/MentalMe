@@ -99,7 +99,6 @@ export default function App() {
                 component = {SettingsPage}
                 options = {{
                   headerBackVisible: false, 
-                  animation: 'none', 
                   gestureEnabled: false, 
                   headerShown: false 
                 }}>
@@ -109,7 +108,6 @@ export default function App() {
                 component = {AccountSettingsPage}
                 options = {{
                   headerBackVisible: false, 
-                  animation: 'none', 
                   gestureEnabled: false, 
                   headerShown: false 
                 }}>
@@ -119,7 +117,6 @@ export default function App() {
                   component = {AccountChangePassword}
                   options = {{
                     headerBackVisible: false, 
-                    animation: 'none', 
                     gestureEnabled: false, 
                     headerShown: false 
                   }}>
