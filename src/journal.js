@@ -245,7 +245,5 @@ export const ViewJournalEntry = ({route, navigation}) =>{
         </View>
     )
 }
-
-
     
 
