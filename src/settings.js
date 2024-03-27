@@ -2,7 +2,9 @@ import React, {useEffect, useState} from "react";
 import { View, Text, Button, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
+import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
 
+import { IconButton } from "./homepage.js";
 import { styles } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
@@ -38,21 +40,60 @@ export const SettingsPage = ({navigation}) =>{
     };
 
     return(
-        <View style = {styles.container}>
-            <Text> Settings </Text>
-            <Button
-                title = "Account Information"
-                onPress = {()=>{
-                    navigation.navigate('Account Settings Page');
-                }}
-            />
-            <Button
-                title = "Log Out"
-                onPress = {() => {
-                    logOut();
-                    navigation.navigate('Login Page');
-                }}
-            />
+        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
+                <IconButton
+                    onPress = {() => navigation.goBack()}
+                    iconName = "arrow-back"
+                    iconComponent = {Ionicons}
+                    size = {30}
+                    color = "black"
+                />
+            </View>
+
+            <View style = {{flex: 1, marginTop: 100}}>
+                <Text style = {{fontSize: 40, fontWeight: 'bold', marginBottom: 50, textAlign: 'center'}}> Settings </Text> 
+            
+                <View>
+                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> In App </Text>
+                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                        <Button
+                            color = "black"
+                            title = "Sound"
+                        />
+                        <Button 
+                            color = "black"
+                            title = "Notification"
+                        />
+                        
+                    </View>
+
+                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Account </Text>
+
+                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                        <Button
+                            color = "black"
+                            title = "Account Information"
+                            onPress = {()=>{
+                                navigation.navigate('Account Settings Page');
+                            }}
+                        />
+                    </View>
+                </View>
+                
+                
+                <View style = {{backgroundColor: '#568258', borderRadius: 10, paddingTop: 10, paddingBottom: 10, marginTop: 10, marginLeft: 30, marginRight: 30}}>
+                    <Button
+                        
+                        color = "white"
+                        title = "Log Out"
+                        onPress = {() => {
+                            logOut();
+                            navigation.navigate('Login Page');
+                        }}
+                    />
+                </View>
+            </View>
         </View>
     );
 };
@@ -74,26 +115,48 @@ export const AccountSettingsPage = ({navigation}) =>{
     
 
     return (
-        <View style = {styles.container}>
-            <Text> Email </Text>
-            <Text> {userEmail} </Text>
-            <Text> Password </Text>
-            <Button 
-                title = "Change Password"
-                onPress = {()=>{
-                    navigation.navigate('Change Password Page');
-                }}
-            />
+        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
+                <IconButton
+                    onPress = {() => navigation.goBack()}
+                    iconName = "arrow-back"
+                    iconComponent = {Ionicons}
+                    size = {30}
+                    color = "black"
+                />
+            </View>
+            <View style = {{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: -300}}>
+                <Text style = {{fontWeight: 'bold', fontSize: 30, marginBottom: 50}}> Account Information </Text>
+                <View>
+                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Email </Text>
+                    <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail} </Text> 
+
+                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Password </Text>
+                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                        <Button 
+                            color = "black"
+                            title = "Change Password"
+                            onPress = {()=>{
+                                navigation.navigate('Change Password Page');
+                            }}
+                        />
+                    </View>
+                    
+                </View>
+                
+            </View>
+            
         </View>
     ) 
 }
 
 //changes the user password
-export const AccountChangePassword = () => {
+export const AccountChangePassword = ({navigation}) => {
     const {userPassword, setUserPassword} = getUserInfo();
     const [currentPass, setCurrentPass] = useState('');
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
+    const [showPassword, setShowPassword] = useState('');
 
     const user = auth.currentUser;
 
@@ -107,6 +170,10 @@ export const AccountChangePassword = () => {
         };
         returnPassword();
     }, [userPassword]);
+
+    const toggleShowPass = () =>{
+        setShowPassword(!showPassword);
+    }
 
     //checks if the user enter their current password correctly
     const checkOldPassword = (text) => {
@@ -142,34 +209,86 @@ export const AccountChangePassword = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text> Change Password </Text>
-            <TextInput
-                placeholder = "current password"
-                // sets to the user input of the old password
-                onChangeText = {(text) => setCurrentPass(text)}
-            />
-            <TextInput
-                placeholder = "new password"
-                onChangeText={(text) => checkNewPassword(text)}
-            />
-            <TextInput
-                placeholder = "confirm new password"
-                onChangeText = {(text) => checkConfirmPassword(text)}
-            />
-            <Button
-                title="Confirm Password Change"
-                onPress={() => {
-                    //then we check the old password based on the user input
-                    //also check the new password from user input to see if it is different from the old one
-                    if (checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)) {
-                        changePassword();
-                        console.log("password has been changed");
-                    }else{
-                        console.log("password has not been changed");
-                    }
-                }}
-            />
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
+                <IconButton
+                    onPress = {() => navigation.goBack()}
+                    iconName = "arrow-back"
+                    iconComponent = {Ionicons}
+                    size = {30}
+                    color = "black"
+                />
+            </View>
+            <View style = {{alignItems: 'center'}}>
+                <Text style = {{fontWeight: 'bold', fontSize: 35, marginBottom: 20}}> Change Password </Text>
+                <View style = {{alignItems: 'flex-start'}}>
+                    <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <TextInput
+                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                            placeholder = "Current Password"
+                            secureTextEntry = {!showPassword}
+                            value = {currentPass}
+                            // sets to the user input of the old password
+                            onChangeText = {(text) => setCurrentPass(text)}
+                        />
+                        <Feather 
+                            name={showPassword ? 'eye-off' : 'eye'} 
+                            size={23} 
+                            style={{ marginLeft: -20}} 
+                            onPress={toggleShowPass} 
+                        /> 
+                    </View>
+                    <View  style = {{flexDirection: 'row', alignItems: 'center', width: 200 }}>
+                        <TextInput
+                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                            placeholder = "New password"
+                            secureTextEntry = {!showPassword}
+                            value = {newPass}
+                            onChangeText={(text) => checkNewPassword(text)}
+                        />
+                        <Feather 
+                            name={showPassword ? 'eye-off' : 'eye'} 
+                            size={23} 
+                            style={{ marginLeft: -20}} 
+                            onPress={toggleShowPass} 
+                        /> 
+                    </View>
+                    <View  style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <TextInput
+                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                            placeholder = "Confirm new password"
+                            secureTextEntry = {!showPassword}
+                            value = {confirmPass}
+                            onChangeText = {(text) => checkConfirmPassword(text)}
+                        />
+                        <Feather 
+                            name={showPassword ? 'eye-off' : 'eye'} 
+                            size={23} 
+                            style={{marginLeft: -20}} 
+                            onPress={toggleShowPass} 
+                        /> 
+                    </View>
+                </View>
+                
+                <View style = {{backgroundColor: '#568258', borderRadius: 10, marginTop: 20, padding: 10}}>
+                    <Button
+                        color = "white"
+                        title="Confirm Password Change"
+                        onPress={() => {
+                            //then we check the old password based on the user input
+                            //also check the new password from user input to see if it is different from the old one
+                            if (checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)) {
+                                changePassword();
+                                console.log("password has been changed");
+                            }else{
+                                console.log("password has not been changed");
+                            }
+                        }}
+                    />
+                </View>
+                
+            </View>
+           
         </View>
     )
 }
