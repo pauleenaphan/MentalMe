@@ -95,9 +95,35 @@ export default function App() {
                 }}>
               </Stack.Screen>
 
-              <Stack.Screen name = "Settings Page" component = {SettingsPage}></Stack.Screen>
-              <Stack.Screen name = "Account Settings Page" component = {AccountSettingsPage}></Stack.Screen>
-              <Stack.Screen name = "Change Password Page" component = {AccountChangePassword}></Stack.Screen>
+              <Stack.Screen name = "Settings Page" 
+                component = {SettingsPage}
+                options = {{
+                  headerBackVisible: false, 
+                  animation: 'none', 
+                  gestureEnabled: false, 
+                  headerShown: false 
+                }}>
+              </Stack.Screen>
+              <Stack.Screen 
+                name = "Account Settings Page" 
+                component = {AccountSettingsPage}
+                options = {{
+                  headerBackVisible: false, 
+                  animation: 'none', 
+                  gestureEnabled: false, 
+                  headerShown: false 
+                }}>
+              </Stack.Screen>
+              <Stack.Screen 
+                name = "Change Password Page" 
+                  component = {AccountChangePassword}
+                  options = {{
+                    headerBackVisible: false, 
+                    animation: 'none', 
+                    gestureEnabled: false, 
+                    headerShown: false 
+                  }}>
+                </Stack.Screen>
 
               <Stack.Screen 
                 name = "Journal Home Page" 
@@ -143,7 +169,6 @@ export default function App() {
                   headerShown: false,
                   gestureEnabled: false,
                 }}>
-
                 </Stack.Screen>
             </Stack.Navigator>
           </NavigationContainer>
