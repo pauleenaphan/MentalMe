@@ -10,12 +10,21 @@ import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
 import FastImage from 'react-native-fast-image' //this wasn't working maybe try it later
 
-import { ProgressTracker } from "./progress.js";
+import { DailyIncrement, ConsecutiveDL, updateWeeklyLogins } from "./progress.js";
+import { useDailyLogins } from './dailyLoginsContext';
+import { useConsecutiveLogins } from './consecutiveLoginsContext';
+import { useLongestStreak } from "./longestStreakContext.js";
+import { useWeeklyLogins } from "./weeklyLoginsContext.js";
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
+
+    const { dailyLogins, setDailyLogins } = useDailyLogins();
+    const { consecutiveDLs, setConsecutiveDLs } = useConsecutiveLogins();
+    const { longestStreak, setLongestStreak } = useLongestStreak();
+    const { weeklyLogins, setWeeklyLogins } = useWeeklyLogins();
 
     const setBody = async () => {
         try {
@@ -34,18 +43,68 @@ export const HomePage = ({navigation}) =>{
         }
     };
 
-    const setProgress = () => {
-        useEffect(() => {
-            console.log("Progress set.")
-            // finish this later zzzzzzz
-        }, []);
-    }
+    const handleDailyIncrement = async (dailyLogins, setDailyLogins) => {
+        try {
+            await DailyIncrement(
+                dailyLogins,
+                setDailyLogins,
+                consecutiveDLs,
+                setConsecutiveDLs,
+                longestStreak,
+                setLongestStreak,
+                weeklyLogins,
+                setWeeklyLogins
+            );
+            console.log("Daily incrementation successful");
+        } catch (error) {
+            console.log("Error with daily incrementation: " + error);
+        }
+    };
+
+    const handleConsecutiveLogins = async (setConsecutiveDLs, setLongestStreak) => {
+        try {
+            await ConsecutiveDL(
+                dailyLogins,
+                setDailyLogins,
+                consecutiveDLs,
+                setConsecutiveDLs,
+                longestStreak,
+                setLongestStreak,
+                weeklyLogins,
+                setWeeklyLogins
+            );
+            console.log("Consecutive incrementation successful");
+        } catch (error) {
+            console.log("Error with consecutive incrementation: " + error);
+        }
+    };
+
+    const handleWeeklyLogins = async (setWeeklyLogins) => {
+        try {
+            await updateWeeklyLogins(
+                dailyLogins,
+                setDailyLogins,
+                consecutiveDLs,
+                setConsecutiveDLs,
+                longestStreak,
+                setLongestStreak,
+                weeklyLogins,
+                setWeeklyLogins
+            );
+            console.log("Weekly Logins incrementation successful");
+        } catch (error) {
+            console.log("Error with weekly logins incrementation: " + error);
+        }
+    };
 
     useFocusEffect(
         React.useCallback(()=>{
             setBody();
             console.log("body part changed");
-        }, [])
+            handleDailyIncrement(dailyLogins, setDailyLogins);
+            handleConsecutiveLogins(setConsecutiveDLs, setLongestStreak);
+            handleWeeklyLogins(setWeeklyLogins);
+        }, [dailyLogins])
     )
 
     return(

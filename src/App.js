@@ -15,6 +15,10 @@ import { StorePage, ViewItemPage } from './store.js';
 import { MoobieProvider } from './moobie.js';
 import { UserCurrencyProvider } from './currency.js';
 import { ClosetPage } from './closet.js';
+import { DailyLoginsProvider } from './dailyLoginsContext.js';
+import { ConsecutiveLoginsProvider } from './consecutiveLoginsContext.js';
+import { LongestStreakProvider } from './longestStreakContext.js';
+import { WeeklyLoginsProvider } from './weeklyLoginsContext.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -40,137 +44,145 @@ export default function App() {
 
   return (
     <UserInfoProvider>
-      <UserCurrencyProvider>
-        <MoobieProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen 
-                name = "Cover Page"
-                options = {{
-                  headerShown: false,
-                }}>
-                {/* don't need component since we are passing down a child prop instead */}
-                {props => <CoverPage {...props} isLogged={isLogged} />}
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Login Page" 
-                component = {LoginPage} 
-                //animation removes the screen to slide from left to right
-                //gesture disables the user to allow from moving to the previous screen on swipe
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none', 
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Create Account Page" 
-                component = {CreateAccPage} 
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none',
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Loading Page" 
-                component = {LoadingPage}
-                options = {{
-                  headerBackVisible: true, 
-                  animation: 'none', 
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Home Page" 
-                component = {HomePage}
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none', 
-                  gestureEnabled: false, 
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
+      <DailyLoginsProvider>
+        <ConsecutiveLoginsProvider>
+          <LongestStreakProvider>
+            <WeeklyLoginsProvider>
+              <UserCurrencyProvider>
+                <MoobieProvider>
+                  <NavigationContainer>
+                    <Stack.Navigator>
+                      <Stack.Screen 
+                        name = "Cover Page"
+                        options = {{
+                          headerShown: false,
+                        }}>
+                        {/* don't need component since we are passing down a child prop instead */}
+                        {props => <CoverPage {...props} isLogged={isLogged} />}
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Login Page" 
+                        component = {LoginPage} 
+                        //animation removes the screen to slide from left to right
+                        //gesture disables the user to allow from moving to the previous screen on swipe
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none', 
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Create Account Page" 
+                        component = {CreateAccPage} 
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none',
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Loading Page" 
+                        component = {LoadingPage}
+                        options = {{
+                          headerBackVisible: true, 
+                          animation: 'none', 
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Home Page" 
+                        component = {HomePage}
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none', 
+                          gestureEnabled: false, 
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
 
-              <Stack.Screen name = "Settings Page" 
-                component = {SettingsPage}
-                options = {{
-                  headerBackVisible: false, 
-                  gestureEnabled: false, 
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Account Settings Page" 
-                component = {AccountSettingsPage}
-                options = {{
-                  headerBackVisible: false, 
-                  gestureEnabled: false, 
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Change Password Page" 
-                  component = {AccountChangePassword}
-                  options = {{
-                    headerBackVisible: false, 
-                    gestureEnabled: false, 
-                    headerShown: false 
-                  }}>
-                </Stack.Screen>
+                      <Stack.Screen name = "Settings Page" 
+                        component = {SettingsPage}
+                        options = {{
+                          headerBackVisible: false, 
+                          gestureEnabled: false, 
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Account Settings Page" 
+                        component = {AccountSettingsPage}
+                        options = {{
+                          headerBackVisible: false, 
+                          gestureEnabled: false, 
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Change Password Page" 
+                          component = {AccountChangePassword}
+                          options = {{
+                            headerBackVisible: false, 
+                            gestureEnabled: false, 
+                            headerShown: false 
+                          }}>
+                        </Stack.Screen>
 
-              <Stack.Screen 
-                name = "Journal Home Page" 
-                component = {JournalHomePage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Journal New Entry Page" 
-                component = {AddJournalEntryPage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
+                      <Stack.Screen 
+                        name = "Journal Home Page" 
+                        component = {JournalHomePage}
+                        options={{
+                          headerShown: false,
+                          gestureEnabled: false
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Journal New Entry Page" 
+                        component = {AddJournalEntryPage}
+                        options={{
+                          headerShown: false,
+                          gestureEnabled: false,
 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Journal Entry Page" 
-                component = {ViewJournalEntry}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Journal Entry Page" 
+                        component = {ViewJournalEntry}
+                        options={{
+                          headerShown: false,
+                          gestureEnabled: false,
 
-                }}>
-              </Stack.Screen>
-              
-              <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
+                        }}>
+                      </Stack.Screen>
+                      
+                      <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
 
-              <Stack.Screen 
-                name = "Store Page" 
-                component = {StorePage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Closet Page" 
-                component = {ClosetPage}
-                options = {{
-                  headerShown: false,
-                  gestureEnabled: false,
-                }}>
-                </Stack.Screen>
-            </Stack.Navigator>
-          </NavigationContainer>
-        </MoobieProvider>
-      </UserCurrencyProvider>
+                      <Stack.Screen 
+                        name = "Store Page" 
+                        component = {StorePage}
+                        options={{
+                          headerShown: false,
+                          gestureEnabled: false,
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Closet Page" 
+                        component = {ClosetPage}
+                        options = {{
+                          headerShown: false,
+                          gestureEnabled: false,
+                        }}>
+                        </Stack.Screen>
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </MoobieProvider>
+              </UserCurrencyProvider>
+            </WeeklyLoginsProvider>
+          </LongestStreakProvider>
+        </ConsecutiveLoginsProvider>
+      </DailyLoginsProvider>        
     </UserInfoProvider>
   );
 }
