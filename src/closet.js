@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import { View, Text, Button, Image, ScrollView } from "react-native";
+import { View, Text, Button, ScrollView } from "react-native";
+import { Image } from 'expo-image';
 import { collection, setDoc, doc, getDocs, deleteDoc, getDoc, updateDoc} from "firebase/firestore"; 
 import { db } from "../firebase";
 import { useFocusEffect } from "@react-navigation/core";

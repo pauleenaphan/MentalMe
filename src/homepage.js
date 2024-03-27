@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, Button, Image, TouchableOpacity, ImageBackground } from "react-native"
+import { View, Text, Button, TouchableOpacity, ImageBackground } from "react-native";
+import { Image } from 'expo-image'; //makes the imgs load faster
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,6 +8,7 @@ import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vec
 import { homePageMoobie, styles, homePage } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
+import FastImage from 'react-native-fast-image' //this wasn't working maybe try it later
 
 import { ProgressTracker } from "./progress.js";
 

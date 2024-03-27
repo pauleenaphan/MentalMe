@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from "react";
-import { View, Text, Button, Image, ScrollView, AlertIOS, Alert } from "react-native";
+import { View, Text, Button, ScrollView, AlertIOS, Alert } from "react-native";
+import { Image } from 'expo-image';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
