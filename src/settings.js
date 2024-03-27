@@ -5,7 +5,7 @@ import { updatePassword, getAuth } from "@firebase/auth";
 import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
 
 import { IconButton } from "./homepage.js";
-import { styles } from "./styles.js";
+import { styles, settingsPage } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
 import { getMoobie } from "./moobie.js";
@@ -40,7 +40,7 @@ export const SettingsPage = ({navigation}) =>{
     };
 
     return(
-        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+        <View style = {settingsPage.pageContainer}>
             <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
                 <IconButton
                     onPress = {() => navigation.goBack()}
@@ -51,12 +51,12 @@ export const SettingsPage = ({navigation}) =>{
                 />
             </View>
 
-            <View style = {{flex: 1, marginTop: 100}}>
-                <Text style = {{fontSize: 40, fontWeight: 'bold', marginBottom: 50, textAlign: 'center'}}> Settings </Text> 
+            <View style = {settingsPage.bodyContainer}>
+                <Text style = {settingsPage.settingsTitle}> Settings </Text> 
             
                 <View>
-                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> In App </Text>
-                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                    <Text style = {settingsPage.inAppTitle}> In App </Text>
+                    <View style = {settingsPage.optionsContainer}>
                         <Button
                             color = "black"
                             title = "Sound"
@@ -65,12 +65,11 @@ export const SettingsPage = ({navigation}) =>{
                             color = "black"
                             title = "Notification"
                         />
-                        
                     </View>
 
-                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Account </Text>
+                    <Text style = {settingsPage.accountTitle}> Account </Text>
 
-                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                    <View style = {settingsPage.optionsContainer}>
                         <Button
                             color = "black"
                             title = "Account Information"
@@ -82,9 +81,8 @@ export const SettingsPage = ({navigation}) =>{
                 </View>
                 
                 
-                <View style = {{backgroundColor: '#568258', borderRadius: 10, paddingTop: 10, paddingBottom: 10, marginTop: 10, marginLeft: 30, marginRight: 30}}>
+                <View style = {settingsPage.logOutBtn}>
                     <Button
-                        
                         color = "white"
                         title = "Log Out"
                         onPress = {() => {

@@ -492,6 +492,7 @@ export const storePage = StyleSheet.create({
   },
 })
 
+//style for the storepop
 export const storePopup = StyleSheet.create({
   popupContainer:{
     backgroundColor: '#8DB98B', 
@@ -546,4 +547,54 @@ export const storePopup = StyleSheet.create({
     paddingRight: 15, 
     borderRadius: 10
   }
+})
+
+//style for the settings page
+export const settingsPage = StyleSheet.create({
+  pageContainer:{
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: '#B6D3B3'
+  },
+  //container for the whole page excluding the back button
+  bodyContainer:{
+    flex: 1, 
+    marginTop: 100
+  },
+  settingsTitle:{
+    fontSize: 40, 
+    fontWeight: 'bold', 
+    marginBottom: 50, 
+    textAlign: 'center'
+  },
+  inAppTitle:{
+    fontWeight: 'bold', 
+    fontSize: 25
+  },
+  accountTitle:{
+    fontWeight: 'bold', 
+    fontSize: 25
+  },
+  logOutBtn:{
+    backgroundColor: '#568258', 
+    borderRadius: 10, 
+    paddingTop: 10, 
+    paddingBottom: 10, 
+    marginTop: 10, 
+    marginLeft: 30, 
+    marginRight: 30
+  },
+  //container for the settings options under each header
+  optionsContainer:{
+    backgroundColor: '#81A282',  
+    marginLeft: 10, 
+    marginRight: 10, 
+    marginTop: 10, 
+    marginBottom: 50,
+    width: 300, 
+    borderRadius: 10, 
+    alignItems: 'flex-start', 
+    padding: 10
+  },
 })
