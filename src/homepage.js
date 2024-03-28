@@ -11,10 +11,10 @@ import { getCurrency } from "./currency.js";
 import FastImage from 'react-native-fast-image' //this wasn't working maybe try it later
 
 import { DailyIncrement, ConsecutiveDL, updateWeeklyLogins } from "./progress.js";
-import { useDailyLogins } from './dailyLoginsContext';
-import { useConsecutiveLogins } from './consecutiveLoginsContext';
-import { useLongestStreak } from "./longestStreakContext.js";
-import { useWeeklyLogins } from "./weeklyLoginsContext.js";
+import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
+import { useConsecutiveLogins } from './progress_files/consecutiveLoginsContext.js';
+import { useLongestStreak } from "./progress_files/longestStreakContext.js";
+import { useWeeklyLogins } from "./progress_files/weeklyLoginsContext.js";
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
@@ -111,33 +111,31 @@ export const HomePage = ({navigation}) =>{
         // trying to get the background to work but its not working
         <ImageBackground 
             source = {require("../imgs/backgrounds/background1.png")} 
-            style = {homePage.background}
-            resizeMode = "cover"
-            >
+            style = {homePage.background}>
             <View style = {styles.container}>
                 <Image source = {bodyPart.head} style = {homePageMoobie.moobie_head}/>
                 <Image source = {bodyPart.body} style = {homePageMoobie.moobie_body}/>
                 <Image source = {bodyPart.lowerBody} style = {homePageMoobie.moobie_feet}/>
-
-                <View style = {homePage.currency}>
-                    <Image 
-                        source = {require("../imgs/honeycoin.png")}
-                        style = {{width: 60, height: 50}}
-                    />
-                    <Text style = {{fontSize: 30, marginTop: 10}}>{currency}</Text>
+                <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: -830, paddingRight: 20, paddingLeft: 10, paddingTop:100, paddingBottom: 20}}>
+                    <View style = {{alignItems: 'center', flexDirection: 'row'}}>
+                        <Image 
+                            source = {require("../imgs/honeycoin.png")}
+                            style = {{width: 60, height: 50}}
+                        />
+                        <Text style = {{fontSize: 30, marginTop: 10}}>{currency}</Text>
+                    </View>
+                    {/* Positions the setting icon */}
+                    <View style = {{}}>
+                        <IconButton
+                            onPress = {() => navigation.navigate("Settings Page")}
+                            iconName = "settings"
+                            iconComponent = {Feather}
+                            size = {40}
+                            color = "black"
+                        />
+                    </View>
                 </View>
                 
-                
-                {/* Positions the setting icon */}
-                <View style = {{ position: 'absolute', top: 0, right: 0, paddingTop: 80, paddingRight: 10 }}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Settings Page")}
-                        iconName = "settings"
-                        iconComponent = {Feather}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 
                 {/* All icons on the bottom bar */}
                 <View style = {homePage.iconBarContainer}>
@@ -160,16 +158,19 @@ export const HomePage = ({navigation}) =>{
                             onPress = {() => navigation.navigate("Store Page")}
                             iconName = "store"
                             iconComponent = {FontAwesome5}
-                            size = {30}
+                            size = {28}
                             color = "black"
                         />
-                        <IconButton
-                            onPress = {() => navigation.navigate("Closet Page")}
-                            iconName = "hanger"
-                            iconComponent = {MaterialCommunityIcons}
-                            size = {30}
-                            color = "black"
-                        />
+                        <View style = {{marginTop: -5}}>
+                            <IconButton
+                                onPress = {() => navigation.navigate("Closet Page")}
+                                iconName = "hanger"
+                                iconComponent = {MaterialCommunityIcons}
+                                size = {38}
+                                color = "black"
+                            />
+                        </View>
+                        
                     </View>
                 </View>
             </View>
