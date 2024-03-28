@@ -15,10 +15,10 @@ import { StorePage, ViewItemPage } from './store.js';
 import { MoobieProvider } from './moobie.js';
 import { UserCurrencyProvider } from './currency.js';
 import { ClosetPage } from './closet.js';
-import { DailyLoginsProvider } from './dailyLoginsContext.js';
-import { ConsecutiveLoginsProvider } from './consecutiveLoginsContext.js';
-import { LongestStreakProvider } from './longestStreakContext.js';
-import { WeeklyLoginsProvider } from './weeklyLoginsContext.js';
+import { DailyLoginsProvider } from './progress_files/dailyLoginsContext.js';
+import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsContext.js';
+import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
+import { WeeklyLoginsProvider } from './progress_files/weeklyLoginsContext.js';
 
 
 const Stack = createNativeStackNavigator();
