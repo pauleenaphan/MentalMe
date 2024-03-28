@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
 import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
-
+import { Modal } from "react-native";
 import { IconButton } from "./homepage.js";
 import { styles, settingsPage } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
 import { getMoobie } from "./moobie.js";
+import { connectFirestoreEmulator } from "firebase/firestore";
 
 
 //to get user information from the firecloud db
@@ -155,7 +156,6 @@ export const AccountChangePassword = ({navigation}) => {
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [showPassword, setShowPassword] = useState('');
-
     const user = auth.currentUser;
 
     useEffect(() => {
@@ -171,6 +171,45 @@ export const AccountChangePassword = ({navigation}) => {
 
     const toggleShowPass = () =>{
         setShowPassword(!showPassword);
+    }
+
+    //alert when passwords dont match
+    const unmatchPassAlert = () =>{
+        Alert.alert(
+            "Invalid Passwords", "Your new passwords do not match",
+            [
+                {text: "Back to Page", onPress: () =>(console.log("user passwords dont match"))}
+            ]
+        )
+    }
+
+    //alerts when old password is not correct
+    const invalidOldPass = () =>{
+        Alert.alert(
+            "Invalid Password", "Your old password is not correct",
+            [
+                {text: "Back to Page", onPress: ()=>(console.log("user old password is not correct"))}
+            ]
+        )
+    }
+
+    const invalidNewPass = () =>{
+        Alert.alert(
+            "Invalid New Password", "Your new password cannot be the same as your old one",
+            [
+                {text: "Back to Page"}
+            ]
+        )
+    }
+
+    //alerts when password is changed
+    const validNewPass = () =>{
+        Alert.alert(
+            "Your password has been changed", "",
+            [
+                {text: "Back to Page"}
+            ]
+        )
     }
 
     //checks if the user enter their current password correctly
@@ -273,18 +312,23 @@ export const AccountChangePassword = ({navigation}) => {
                         color = "white"
                         title="Confirm Password Change"
                         onPress={() => {
-                            //then we check the old password based on the user input
-                            //also check the new password from user input to see if it is different from the old one
-                            if (checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)) {
+                            //check if the old password is the user's current password
+                            //check if the new password is not the same as the old password
+                            //check that both new passwords are the same
+                            //changes password is all of these pass, else send out the alert
+                            if(!checkOldPassword(currentPass)){
+                                invalidOldPass();
+                            }else if(!checkNewPassword(newPass)){
+                                invalidNewPass();
+                            }else if(!checkConfirmPassword(confirmPass)){
+                                unmatchPassAlert();
+                            }else if(checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)){
                                 changePassword();
-                                console.log("password has been changed");
-                            }else{
-                                console.log("password has not been changed");
+                                validNewPass();
                             }
                         }}
                     />
                 </View>
-                
             </View>
            
         </View>
