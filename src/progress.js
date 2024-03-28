@@ -9,10 +9,10 @@ import { collection, addDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
 
-import { useDailyLogins } from './dailyLoginsContext';
-import { useConsecutiveLogins } from './consecutiveLoginsContext';
-import { useLongestStreak } from "./longestStreakContext.js";
-import { useWeeklyLogins } from "./weeklyLoginsContext.js";
+import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
+import { useConsecutiveLogins } from './progress_files/consecutiveLoginsContext.js';
+import { useLongestStreak } from "./progress_files/longestStreakContext.js";
+import { useWeeklyLogins } from "./progress_files/weeklyLoginsContext.js";
 
 export const useDailyLoginsState = () => {
     const [dailyLogins, setDailyLogins] = useState();
