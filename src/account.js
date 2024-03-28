@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,6 +24,46 @@ export const CreateAccPage = ({navigation}) => {
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
 
+    //alert for when user is trying to create an account with an email that has an account already
+    const emailExistAlert = () =>{
+        Alert.alert(
+            "Account Exist", "This email already has an account Please try logging in",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user has an account already")}}
+            ]
+        )
+    }
+
+    //alert for when users enters a email that is not valid
+    const emailInvalidAlert = () =>{
+        Alert.alert(
+            "Invalid Email", "Please enter a valid email",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user enter invalid email")}}
+            ]
+        )
+    }
+
+    //alert when password is not at least 6 characters
+    const shortPassAlert = () =>{
+        Alert.alert(
+            "Invalid Password", "Your password must be more than 6 characters",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user has entered an invalid password")}}
+            ]
+        )
+    }
+
+    //alert when passwords dont match
+    const unmatchPassAlert = () =>{
+        Alert.alert(
+            "Invalid Passwords", "Your passwords do not match",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>(console.log("user passwords dont match"))}
+            ]
+        )
+    }
+
     //password should be at least 6 characters
     //firebase already checks if user exists
     const createAcc = async () =>{
@@ -32,7 +72,14 @@ export const CreateAccPage = ({navigation}) => {
             console.log("success creating new account");
             return true;
         }catch(error){
-            console.log("error " + error);
+            console.log("error " + error.code);
+            if(error.code === "auth/invalid-email"){
+                emailInvalidAlert();
+            }else if(error.code === "auth/email-already-in-use"){
+                emailExistAlert();
+            }else if(error.code === "auth/weak-password"){
+                shortPassAlert();
+            }
             return false;
         }
     }
@@ -51,6 +98,7 @@ export const CreateAccPage = ({navigation}) => {
             await addDoc(collection(db, currentUserEmail, 'User Information Document', 'EmptyDoc'), {});
             console.log("user was addded to firecloud db");
         }catch(error){
+
             console.log("error " + error)
         }
     }
@@ -208,6 +256,7 @@ export const CreateAccPage = ({navigation}) => {
                                     console.log('account error');
                                 }
                             }else{
+                                unmatchPassAlert();
                                 console.log("passwords did not match");
                             }
                         }}
@@ -230,6 +279,15 @@ export const LoginPage = ({navigation}) =>{
     const {currency, updateCurrency} = getCurrency();
     const [showPassword, setShowPassword] = useState(false);
 
+    const showLoginFailAlert = ()=>{
+        Alert.alert(
+            "Invalid Login", "Your email or password is incorrect",
+            [
+                {text: "Back to Login Page", onPress: () =>(console.log("user has failed login"))}
+            ]
+        )
+    }
+
     //Logins the user
     const loginAcc = async () =>{
         try{
@@ -237,6 +295,7 @@ export const LoginPage = ({navigation}) =>{
             console.log("successfully logged in")
             return true;
         }catch(error){
+            showLoginFailAlert();
             console.log("error" + error);
             return false;
         }
