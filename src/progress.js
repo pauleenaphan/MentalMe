@@ -332,132 +332,132 @@ export const ProgressTracker = () => {
     // }
 
     // // Clear the daily logins for testing purposes
-    // const clearDailyLogins = async () => {
-    //     try {
-    //         await AsyncStorage.setItem('DailyLogins', JSON.stringify(0));
-    //         setDailyLogins(0);
-    //         setConsecutiveDLs(0);
+    const clearDailyLogins = async () => {
+        try {
+            await AsyncStorage.setItem('DailyLogins', JSON.stringify(0));
+            setDailyLogins(0);
+            setConsecutiveDLs(0);
 
-    //         // Comment these lines out if you want to clear without clearing the longest streak.
-    //         await AsyncStorage.setItem('longestStreak', JSON.stringify(0));
-    //         setLongestStreak(0);
+            // Comment these lines out if you want to clear without clearing the longest streak.
+            await AsyncStorage.setItem('longestStreak', JSON.stringify(0));
+            setLongestStreak(0);
 
-    //         let serializedWeeklyLogins = {
-    //             SundayLogin: false,
-    //             MondayLogin: false,
-    //             TuesdayLogin: false,
-    //             WednesdayLogin: false,
-    //             ThursdayLogin: false,
-    //             FridayLogin: false,
-    //             SaturdayLogin: false
-    //         }
-    //         await AsyncStorage.setItem("weeklyLogins", JSON.stringify(serializedWeeklyLogins));
-    //         setWeeklyLogins(serializedWeeklyLogins);
-    //         console.log('DailyLogins and WeeklyLogins cleared successfully.');
-    //         // DailyIncrement();
-    //     } catch (error) {
-    //         console.log('Error clearing DailyLogins:', error);
-    //     }
-    // };
-
-    // // Trick logic that it's a new day
-    // const TrickToYesterday = async () => {
-    //     try { 
-    //         const yesterday = new Date();
-    //         yesterday.setDate(yesterday.getDate() - 1);
-    //         await AsyncStorage.setItem("LatestDate", yesterday.toLocaleDateString());
-    //         console.log("Trick Date: " + yesterday);
-    //     } catch(error) {
-    //         console.log("Error with tricking: " + error);
-    //     }
-    // }
+            let serializedWeeklyLogins = {
+                SundayLogin: false,
+                MondayLogin: false,
+                TuesdayLogin: false,
+                WednesdayLogin: false,
+                ThursdayLogin: false,
+                FridayLogin: false,
+                SaturdayLogin: false
+            }
+            await AsyncStorage.setItem("weeklyLogins", JSON.stringify(serializedWeeklyLogins));
+            setWeeklyLogins(serializedWeeklyLogins);
+            console.log('DailyLogins and WeeklyLogins cleared successfully.');
+            // DailyIncrement();
+        } catch (error) {
+            console.log('Error clearing DailyLogins:', error);
+        }
+    };
 
     // // Trick logic that it's a new day
-    // const TrickToTomorrow = async () => {
-    //     try { 
-    //         const tomorrow = new Date();
-    //         tomorrow.setDate(tomorrow.getDate() + 1);
-    //         await AsyncStorage.setItem("LatestDate", tomorrow.toLocaleDateString());
-    //         console.log("Trick Date: " + tomorrow);
-    //     } catch(error) {
-    //         console.log("Error with tricking: " + error);
-    //     }
-    // }
+    const TrickToYesterday = async () => {
+        try { 
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            await AsyncStorage.setItem("LatestDate", yesterday.toLocaleDateString());
+            console.log("Trick Date: " + yesterday);
+        } catch(error) {
+            console.log("Error with tricking: " + error);
+        }
+    }
+
+    // // Trick logic that it's a new day
+    const TrickToTomorrow = async () => {
+        try { 
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            await AsyncStorage.setItem("LatestDate", tomorrow.toLocaleDateString());
+            console.log("Trick Date: " + tomorrow);
+        } catch(error) {
+            console.log("Error with tricking: " + error);
+        }
+    }
 
     // // Same as DailyIncrement except it includes the TrickToYesterday Function
     // // and this only applies manually, not on StartUp
-    // const TestDailyIncrementYesterday = async () => {
-    //     try {
-    //         setDailyLogins(parseInt(await AsyncStorage.getItem("DailyLogins"), 10));
-    //         let dailyLogs = parseInt(await AsyncStorage.getItem("DailyLogins"), 10);
-    //         TrickToYesterday();
-    //         updateWeeklyLogins();
-    //         let storedDate = await AsyncStorage.getItem("LatestDate");
-    //         let currentDate = new Date().toLocaleDateString();
-    //         console.log("Stored Date: " + storedDate)
-    //         console.log("Current Date: " + currentDate)
-    //         console.log("Initial Daily Logins: " + dailyLogs);
-    //         if (dailyLogs === 0) { // if it's their first day, create a counter in firebase and increment by 1
-    //             addPersonalCounter();
-    //             console.log("Incrementing by 1 from 0...");
-    //             let newDL = await Counter();
-    //             setDailyLogins(newDL);
-    //         } else if (dailyLogs === null) { // null check
-    //             console.log(dailyLogs);
-    //         } else if (storedDate === currentDate) { // if already incremented in the day, return the previous amount
-    //             console.log("Daily done today already.");
-    //             let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
-    //             setDailyLogins(DL);
-    //             counterCheck();
-    //             console.log("Same daily logs: " + dailyLogs);
-    //         } else { // new day incrementation
-    //             console.log("Incrementing by 1...");
-    //             await Counter();
-    //             await AsyncStorage.setItem("LatestDate", currentDate);
-    //             ConsecutiveDL();
-    //             console.log("TDIY WeeklyLogins: " + weeklyLogins);
-    //         };
-    //     } catch (error) {
-    //         console.log("DailyIncrement Error: " + error);
-    //     };
-    // };
+    const TestDailyIncrementYesterday = async () => {
+        try {
+            setDailyLogins(parseInt(await AsyncStorage.getItem("DailyLogins"), 10));
+            let dailyLogs = parseInt(await AsyncStorage.getItem("DailyLogins"), 10);
+            TrickToYesterday();
+            updateWeeklyLogins();
+            let storedDate = await AsyncStorage.getItem("LatestDate");
+            let currentDate = new Date().toLocaleDateString();
+            console.log("Stored Date: " + storedDate)
+            console.log("Current Date: " + currentDate)
+            console.log("Initial Daily Logins: " + dailyLogs);
+            if (dailyLogs === 0) { // if it's their first day, create a counter in firebase and increment by 1
+                addPersonalCounter();
+                console.log("Incrementing by 1 from 0...");
+                let newDL = await Counter();
+                setDailyLogins(newDL);
+            } else if (dailyLogs === null) { // null check
+                console.log(dailyLogs);
+            } else if (storedDate === currentDate) { // if already incremented in the day, return the previous amount
+                console.log("Daily done today already.");
+                let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
+                setDailyLogins(DL);
+                counterCheck();
+                console.log("Same daily logs: " + dailyLogs);
+            } else { // new day incrementation
+                console.log("Incrementing by 1...");
+                await Counter();
+                await AsyncStorage.setItem("LatestDate", currentDate);
+                ConsecutiveDL();
+                console.log("TDIY WeeklyLogins: " + weeklyLogins);
+            };
+        } catch (error) {
+            console.log("DailyIncrement Error: " + error);
+        };
+    };
 
     // // Same as DailyIncrement except it includes the TrickToTomorrow Function
     // // and this only applies manually, not on StartUp
-    // const TestDailyIncrementTomorrow = async () => {
-    //     try {
-    //         setDailyLogins(parseInt(await AsyncStorage.getItem("DailyLogins"), 10));
-    //         let dailyLogs = parseInt(await AsyncStorage.getItem("DailyLogins"), 10);
-    //         TrickToTomorrow();
-    //         updateWeeklyLogins();
-    //         let storedDate = await AsyncStorage.getItem("LatestDate");
-    //         let currentDate = new Date().toLocaleDateString();
-    //         console.log("Stored Date: " + storedDate)
-    //         console.log("Current Date: " + currentDate)
-    //         console.log("Initial Daily Logins: " + dailyLogs);
-    //         if (dailyLogs === 0) { // if it's their first day, create a counter in firebase and increment by 1
-    //             addPersonalCounter();
-    //             console.log("Incrementing by 1 from 0...");
-    //             let newDL = await Counter();
-    //             setDailyLogins(newDL);
-    //         } else if (dailyLogs === null) { // null check
-    //             console.log(dailyLogs);
-    //         } else if (storedDate === currentDate) { // if already incremented in the day, return the previous amount
-    //             console.log("Daily done today already.");
-    //             let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
-    //             setDailyLogins(DL);
-    //             counterCheck();
-    //             console.log("Same daily logs: " + dailyLogs);
-    //         } else { // new day incrementation
-    //             console.log("Incrementing by 1...");
-    //             await Counter();
-    //             await AsyncStorage.setItem("LatestDate", currentDate);
-    //             ConsecutiveDL();
-    //         };
-    //     } catch (error) {
-    //         console.log("DailyIncrement Error: " + error);
-    //     };
-    // };
+    const TestDailyIncrementTomorrow = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
+        try {
+            let dailyLogs = parseInt(await AsyncStorage.getItem("DailyLogins"), 10);
+            let storedDate = await AsyncStorage.getItem("LatestDate");
+            let currentDate = new Date().toLocaleDateString();
+            TrickToTomorrow();
+            console.log("Stored Date: " + storedDate)
+            console.log("Current Date: " + currentDate)
+            console.log("Initial Daily Logins: " + dailyLogs);
+            if (dailyLogs === 0 || dailyLogs === null) { // if it's their first day, create a counter in firebase and increment by 1
+                setDailyLogins(0);
+                await addPersonalCounter(setDailyLogins, setConsecutiveDLs, setLongestStreak, setWeeklyLogins);
+                console.log("Incrementing by 1 from 0...");
+                let newDL = await Counter();
+                setDailyLogins(newDL);
+            } else if (dailyLogs === null) { // null check
+                console.log(dailyLogs);
+            } else if (storedDate === currentDate) { // if already incremented in the day, return the previous amount
+                console.log("Daily done today already.");
+                let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
+                setDailyLogins(DL);
+                counterCheck(setLongestStreak);
+                console.log("Same daily logs: " + dailyLogs);
+            } else { // new day incrementation
+                console.log("Incrementing by 1...");
+                await Counter(setDailyLogins);
+                await AsyncStorage.setItem("LatestDate", currentDate);
+                ConsecutiveDL(setConsecutiveDLs, setLongestStreak);
+                updateWeeklyLogins(setWeeklyLogins);
+            };
+        } catch (error) {
+            console.log("DailyIncrement Error: " + error);
+        };
+    };
 
     return(
         <View style={progressPage.fullPageContainer}>
@@ -548,9 +548,9 @@ export const ProgressTracker = () => {
                 <Text style={progressPage.statNumber}>{longestStreak}</Text>
                 <Text style={progressPage.statLabel}>Longest Login Streak</Text>
             </View> */}
-            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button>
+            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button> */}
             <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button>
-            <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
+            {/* <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
             {/* {<Text>Total Daily Logins: {dailyLogins}</Text>}
             {<Text>Consecutive Logins: {consecutiveDLs}</Text>}
             {<Text>Longest Streak: {longestStreak}</Text>} */}
@@ -569,10 +569,6 @@ export const ProgressTracker = () => {
 // If the user has logged in today, just set the daily logins to already stored value
 // Else, increment by 1
 export const DailyIncrement = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
-    // const [dailyLogins, setDailyLogins] = useDailyLogins();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveLogins();
-    // const [longestStreak, setLongestStreak] = useLongestStreak();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLogins();
     try {
         // setDailyLogins(parseInt(await AsyncStorage.getItem("DailyLogins"), 10));
         // setConsecutiveDLs(await AsyncStorage.getItem("ConsecutiveDLs"));
@@ -584,9 +580,9 @@ export const DailyIncrement = async (dailyLogins, setDailyLogins, consecutiveDLs
         console.log("Initial Daily Logins: " + dailyLogs);
         if (dailyLogs === 0 || dailyLogs === null) { // if it's their first day, create a counter in firebase and increment by 1
             setDailyLogins(0);
-            await addPersonalCounter(setDailyLogins, setConsecutiveDLs, setLongestStreak, setWeeklyLogins);
+            await addPersonalCounter(setConsecutiveDLs, setLongestStreak, setWeeklyLogins);
             console.log("Incrementing by 1 from 0...");
-            let newDL = await Counter();
+            let newDL = await Counter(setDailyLogins);
             setDailyLogins(newDL);
         } else if (dailyLogs === null) { // null check
             console.log(dailyLogs);
@@ -594,7 +590,7 @@ export const DailyIncrement = async (dailyLogins, setDailyLogins, consecutiveDLs
             console.log("Daily done today already.");
             let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
             setDailyLogins(DL);
-            counterCheck();
+            counterCheck(setLongestStreak);
             console.log("Same daily logs: " + dailyLogs);
         } else { // new day incrementation
             console.log("Incrementing by 1...");
@@ -609,10 +605,6 @@ export const DailyIncrement = async (dailyLogins, setDailyLogins, consecutiveDLs
 };
 
 export const addPersonalCounter = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
-    // const [dailyLogins, setDailyLogins] = useDailyLoginsState();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveDLsState();
-    // const [longestStreak, setLongestStreak] = useLongestStreakState();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLoginsState();
     try {
         const email = await getCurrEmail();
         let currentUser = email;
@@ -620,16 +612,18 @@ export const addPersonalCounter = async (dailyLogins, setDailyLogins, consecutiv
         let lastLogin = await AsyncStorage.getItem("LatestDate");
         let consecutiveDLs = parseInt(await AsyncStorage.getItem("ConsecutiveDLs"), 10);
         let longestStreak = parseInt(await AsyncStorage.getItem("longestStreak"), 10);
-        await AsyncStorage.setItem("ConsecutiveDLs", JSON.stringify(1));
+        await AsyncStorage.setItem("ConsecutiveDLs", JSON.stringify(0));
+        await AsyncStorage.setItem("longestStreak", JSON.stringify(0));
         let serializedWeeklyLogins = await AsyncStorage.getItem("weeklyLogins");
         await AsyncStorage.setItem("weeklyLogins", serializedWeeklyLogins);
-        setConsecutiveDLs(1);
-        if (longestStreak < 1 || longestStreak === null) {
-            await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
-            setLongestStreak(1);
-        } else {
-            console.log("LS Already Made.");
-        }
+        setConsecutiveDLs(0);
+        setLongestStreak(0);
+        // if (longestStreak < 1 || longestStreak === null) {
+        //     await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
+        //     setLongestStreak(0);
+        // } else {
+        //     console.log("LS Already Made.");
+        // }
         await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
             userDL: firstDL.toString(),
             userLastLogin: lastLogin.toString(),
@@ -645,10 +639,6 @@ export const addPersonalCounter = async (dailyLogins, setDailyLogins, consecutiv
 
 // Function to increment "DailyLogins"
 export const Counter = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
-    // const [dailyLogins, setDailyLogins] = useDailyLoginsState();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveDLsState();
-    // const [longestStreak, setLongestStreak] = useLongestStreakState();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLoginsState();
     try {
         // Retrieve the item from the AsyncStorage
         let DL = parseInt(await AsyncStorage.getItem('DailyLogins'), 10);
@@ -674,10 +664,6 @@ export const Counter = async (dailyLogins, setDailyLogins, consecutiveDLs, setCo
 
 // Update Database with new Daily Logins and Time
 export const counterCheck = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
-    // const [dailyLogins, setDailyLogins] = useDailyLoginsState();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveDLsState();
-    // const [longestStreak, setLongestStreak] = useLongestStreakState();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLoginsState();
     try {
         const email = await getCurrEmail();
         let currentUser = email;
@@ -686,13 +672,13 @@ export const counterCheck = async (dailyLogins, setDailyLogins, consecutiveDLs, 
         let consecutiveDLs = parseInt(await AsyncStorage.getItem("ConsecutiveDLs"), 10);
         let longestStreak = parseInt(await AsyncStorage.getItem("longestStreak"), 10);
         let serializedWeeklyLogins = JSON.stringify(await AsyncStorage.getItem("weeklyLogins"));
-        if (longestStreak < 1 || longestStreak === null) {
-            await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
-            setLongestStreak(1);
-            console.log("Longest Streak set to 1.");
-        } else {
-            console.log("LS Already Made.");
-        }
+        // if (longestStreak < 1 || longestStreak === null) {
+        //     await AsyncStorage.setItem("longestStreak", JSON.stringify(1))
+        //     setLongestStreak(1);
+        //     console.log("Longest Streak set to 1.");
+        // } else {
+        //     console.log("LS Already Made.");
+        // }
         await setDoc(doc(db, currentUser, "DailyLoginDoc"), {
             userDL: currentDL.toString(),
             userLastLogin: lastLogin.toString(),
@@ -708,10 +694,6 @@ export const counterCheck = async (dailyLogins, setDailyLogins, consecutiveDLs, 
 }
 
 export const ConsecutiveDL = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => {
-    // const [dailyLogins, setDailyLogins] = useDailyLoginsState();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveDLsState();
-    // const [longestStreak, setLongestStreak] = useLongestStreakState();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLoginsState();
     try {
         const email = await getCurrEmail();
         let currentUser = email;
@@ -749,10 +731,6 @@ export const ConsecutiveDL = async (dailyLogins, setDailyLogins, consecutiveDLs,
 };
 
 export const updateWeeklyLogins = async (dailyLogins, setDailyLogins, consecutiveDLs, setConsecutiveDLs, longestStreak, setLongestStreak, weeklyLogins, setWeeklyLogins) => { 
-    // const [dailyLogins, setDailyLogins] = useDailyLoginsState();
-    // const [consecutiveDLs, setConsecutiveDLs] = useConsecutiveDLsState();
-    // const [longestStreak, setLongestStreak] = useLongestStreakState();
-    // const [weeklyLogins, setWeeklyLogins] = useWeeklyLoginsState();
     try {
         const email = await getCurrEmail();
         let currentUser = email;
