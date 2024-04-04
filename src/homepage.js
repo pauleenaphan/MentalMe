@@ -26,6 +26,7 @@ export const HomePage = ({navigation}) =>{
     const { longestStreak, setLongestStreak } = useLongestStreak();
     const { weeklyLogins, setWeeklyLogins } = useWeeklyLogins();
 
+    //load moobie on the homepage
     const setBody = async () => {
         try {
             const [currHead, currBody, currLowerBody] = await Promise.all([
@@ -108,14 +109,20 @@ export const HomePage = ({navigation}) =>{
     )
 
     return(
-        // trying to get the background to work but its not working
         <ImageBackground 
             source = {require("../imgs/backgrounds/background1.png")} 
             style = {homePage.background}>
+                
             <View style = {styles.container}>
-                <Image source = {bodyPart.head} style = {homePageMoobie.moobie_head}/>
-                <Image source = {bodyPart.body} style = {homePageMoobie.moobie_body}/>
-                <Image source = {bodyPart.lowerBody} style = {homePageMoobie.moobie_feet}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Chat Page')} activeOpacity={0.9}>
+                    <View style = {{}}>
+                        <Image source = {bodyPart.head} style = {{height: 400, width: 400, marginTop: -550, left: 18}}/>
+                        <Image source = {bodyPart.body} style = {{height: 400, width: 500, marginTop: -353}}/>
+                        <Image source = {bodyPart.lowerBody} style = {{height: 400, width: 400, marginTop: -297, left: 35}}/>
+                    </View>
+                    
+                </TouchableOpacity>
+                
                 <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: -830, paddingRight: 20, paddingLeft: 10, paddingTop:100, paddingBottom: 20}}>
                     <View style = {{alignItems: 'center', flexDirection: 'row'}}>
                         <Image 
@@ -178,8 +185,7 @@ export const HomePage = ({navigation}) =>{
     );
 };
 
-
-
+//used to created a new icon from the expo vector icons
 export const IconButton = ({ onPress, iconName, iconComponent: IconComponent, size, color }) => {
     return (
       <TouchableOpacity onPress={onPress}>
