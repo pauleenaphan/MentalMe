@@ -67,7 +67,7 @@ export const ClosetPage = ({navigation}) =>{
         <View style = {closetPage.pageContainer}>
             <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30, marginBottom: 100}}>
                 <IconButton
-                    onPress={() => navigation.goBack()}
+                    onPress={() => navigation.navigate("Home Page")}
                     iconName="arrow-back"
                     iconComponent={Ionicons}
                     size = {30}

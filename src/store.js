@@ -95,7 +95,7 @@ export const StorePage = () =>{
                 {/* amount of coins that the user owns */}
                 <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
                     <IconButton
-                        onPress = {() => navigation.goBack()}
+                        onPress = {() => navigation.navigate("Home Page")}
                         iconName = "arrow-back"
                         iconComponent = {Ionicons}
                         size = {30}
