@@ -19,6 +19,7 @@ import { DailyLoginsProvider } from './progress_files/dailyLoginsContext.js';
 import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsContext.js';
 import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
 import { WeeklyLoginsProvider } from './progress_files/weeklyLoginsContext.js';
+import { ChatPage } from './chat.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -101,6 +102,11 @@ export default function App() {
                           gestureEnabled: false, 
                           headerShown: false 
                         }}>
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name = "Chat Page"
+                        component = {ChatPage}
+                      >
                       </Stack.Screen>
 
                       <Stack.Screen name = "Settings Page" 
