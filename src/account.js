@@ -173,6 +173,26 @@ export const CreateAccPage = ({navigation}) => {
         }
     }
 
+    const setUserStatus = async () => {
+        console.log("SET USER STATUS FUNCTIONNNNNN ");
+        try {
+            let currentUserEmail = await getCurrEmail();
+            // console.log("current user emailLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ", currentUserEmail)
+            await setDoc(doc(db, currentUserEmail, "User Status"), {
+                status: "true"
+            })
+            await setDoc(doc(db, currentUserEmail, "Username"), {
+                name: "name"
+            })
+            // AsyncStorage.setItem("newUserStatus", JSON.stringify(true));
+            console.log("User Status Document has been created");
+        } catch (error) {
+            console.error("Error setting user status:", error);
+        }
+
+
+    };
+
     //checks whether or not the confirm password matches the new user's password
     const checkConfirmPass = (text) =>{
         const passwordStatus = text == userPassword;
@@ -251,6 +271,7 @@ export const CreateAccPage = ({navigation}) => {
                                     giveUserDefaultItems();
                                     addDefaultMoobie();
                                     addDefaultCurrency();
+                                    setUserStatus();
                                     navigation.navigate('Home Page');
                                 }else{
                                     console.log('account error');
