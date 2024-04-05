@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Button } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { setDoc, doc, getDoc} from '@firebase/firestore';
+
+import { db } from '../firebase/index.js';
 import { getUserInfo } from './userInfo';
+import { getCurrEmail } from './account';
 
 export const ChatPage = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
-    const [newUserStatus, setNewUserStatus] = useState(true);
-    const [prevChoice, setPrevChoice] = useState('');
-    const [userInputHolder, setUserInputHolder] = useState('');
+    const [newUserStatus, setNewUserStatus] = useState('true'); //used to track whether or not the user is new
     const {userName, setUserName} = getUserInfo();
 
+    //generates a unique id so there is no conflict
     const generateMessageId = () => Math.round(Math.random() * 1000000);
 
     const initializeChat = (displayText) => {
         return [{
+            //info about the message being sent
             _id: generateMessageId(),
             text: displayText,
             createdAt: new Date(),
+            //describes who sent the message
             user: {
                 _id: 2,
                 name: 'Moobie',
@@ -25,23 +31,73 @@ export const ChatPage = ({ navigation }) => {
         }];
     };
 
-    useEffect(() => {
-        console.log("NEW USER STATUS: ", newUserStatus);
-        if (newUserStatus) {
-            const text = "Hi! I'm Moobie, your very own personal mental health buddy! My goal is to help you on your journey to improving your mental health! Before we begin, what should I call you, friend?";
-            setMessages(initializeChat(text));
+    //checks the user status in the firebase
+    const checkStatus = async () => {
+        try {
+            let currentUserEmail = await getCurrEmail();
+            //console.log("Current User Email:", currentUserEmail); 
+            const userStatus = await getDoc(doc(db, currentUserEmail, "User Status"));
+            //console.log("User Status Data:", userStatus.data().status); 
+            setNewUserStatus(userStatus.data().status);
+            return userStatus.data().status; //returns true or false
+        } catch (error) {
+            console.error("Error getting user status:", error);
+            return false;
         }
-    }, []);
+    };
 
+    //used to get the user status and name, so both values updates correctly
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    const status = await checkStatus();
+                    //console.log("User Status:", status);
+                    setNewUserStatus(status);
+
+                    let currentUserEmail = await getCurrEmail();
+                    const username = await getDoc(doc(db, currentUserEmail, "Username"));
+                    //console.log(username.data().name);
+                    setUserName(username.data().name);
+                } catch (error) {
+                    console.error("Error fetching user status:", error);
+                }
+            };
+    
+            fetchData();
+        }, [])
+    );
+    
+    //checks whether or not the user is new so we can display the correct chat prompt
+    useFocusEffect(
+        React.useCallback(() => {
+            // if (newUserStatus == 'true') {
+            //     console.log("check status is TRUEEE");
+            // }
+            console.log("NEW USER STATUS: ", newUserStatus);
+            if (newUserStatus == 'true' || newUserStatus == true) {
+                const text = "Hi! I'm Moobie, your very own personal mental health buddy! My goal is to help you on your journey to improving your mental health! Before we begin, what should I call you, friend?";
+                setMessages(initializeChat(text));
+            } else if (newUserStatus === 'false' || newUserStatus === false) {
+                //message for returning users
+                const text = "Hi " + userName + ", I hope your day is going good! What can I help you with today";
+                setMessages(initializeChat(text));
+            }
+        }, [newUserStatus, userName])
+    );
+
+    //this function will handle the user input based on what they press for the options
     const handleUserInput = (newMessages = []) => {
         const userMessage = newMessages[0];
         
-        // Check if the message is triggered by a button press
+        //check if the message is triggered by a button press
         if (userMessage.buttonPressed) {
-            // Handle button press without adding it to the chat messages
+            //handle button press without adding it to the chat messages
             const botResponse = getBotResponse(userMessage.text);
+            //loops through the response array because in our responses some of the text options can be in the form of an array to send two msgs in a row
             if (Array.isArray(botResponse)) {
                 botResponse.forEach(message => {
+                    //adds on to the previous message
                     setMessages(previousMessages =>
                         GiftedChat.append(previousMessages, [
                             {
@@ -52,6 +108,7 @@ export const ChatPage = ({ navigation }) => {
                     );
                 });
             } else {
+                //if the msg is not in the form of an array then just add that single msg to the chat "from Moobie"
                 setMessages(previousMessages =>
                     GiftedChat.append(previousMessages, [
                         {
@@ -67,10 +124,10 @@ export const ChatPage = ({ navigation }) => {
                     ])
                 );
             }
-            return; // Exit the function after handling the button press
+            return; 
         }
     
-        // If the message is not triggered by a button press, add it to the chat messages
+        //if the message is not triggered by a button press, add it to the chat messages
         setMessages(previousMessages =>
             GiftedChat.append(previousMessages, [
                 {
@@ -81,40 +138,10 @@ export const ChatPage = ({ navigation }) => {
                 }
             ])
         );
-        
-        const botResponse = getBotResponse(userMessage.text);
-        if (Array.isArray(botResponse)) {
-            botResponse.forEach(message => {
-                setMessages(previousMessages =>
-                    GiftedChat.append(previousMessages, [
-                        {
-                            _id: generateMessageId(),
-                            ...message
-                        }
-                    ])
-                );
-            });
-        } else {
-            setMessages(previousMessages =>
-                GiftedChat.append(previousMessages, [
-                    {
-                        _id: generateMessageId(),
-                        text: botResponse,
-                        createdAt: new Date(),
-                        user: {
-                            _id: 2,
-                            name: 'Moobie',
-                            avatar: require('../imgs/moobie_head/head1.png'),
-                        },
-                    }
-                ])
-            );
-        }
     };
-    
-    
 
     const getBotResponse = (userInput) => {
+        //Moobie responses and the button options
         const responses = {
             //journal options
             'Journaling': ["Journaling is the main feature of this app! You will be able to write about your thoughts and feelings daily here! \n Got any questions about journaling?"],
@@ -148,33 +175,56 @@ export const ChatPage = ({ navigation }) => {
             'Account Information': ["You can find all of your account information in the settings! Here, Moobie can take you to the settings if you would like!"],
             'Take me to the settings page': ["Moobie will take you there!"],
         };
-        const journalKeywords = ["journaling", "journal", "write", "entry"]
-        const dailyLogKeywords = ["daily logs", "logs", "progress", "check in"]
-        const moobieKeywords = ["moobie", "honey"] 
-        const storeKeywords = ["honey coins", "store", "shop", "clothes", "closet", "currency", "buy", "dress up"]
-        const accountKeywords = ["account", "settings", "password", "email", "change"]
+        
+        {/* Key words are being called when even when the user presses on a button option. We only want these keywords to activate when the user manually
+            types in the bar. Currently not working */}
+    
+        // const journalKeywords = ["journaling", "journal", "write", "entry"]
+        // const dailyLogKeywords = ["daily logs", "logs", "progress", "check in"]
+        // const moobieKeywords = ["moobie", "honey"] 
+        // const storeKeywords = ["honey coins", "store", "shop", "clothes", "closet", "currency", "buy", "dress up"]
+        // const accountKeywords = ["account", "settings", "password", "email", "change"]
 
-        setUserInputHolder(userInput);
         let response;
-        if(newUserStatus) {
+        //if this is a new user then prompt the dialogue where Moobie will ask for the user's name
+        if(newUserStatus == 'true') {
             setUserName(userInput);
-            setNewUserStatus(false);
+            //console.log("user name has been set ", userInput);
+            setNewUserStatus('false');
             response = ["Nice to meet you " + userInput + ". To start, let me introduce a few things I can do for you! On our homepage you can journal, check your daily logs, buy clothes, and dress me up! Which feature would you like to learn more about?"];
-        }else if(journalKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
-            response = responses['Journaling'];
-        }else if(dailyLogKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
-            response = responses['Daily Logs'];
-        }else if(moobieKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
-            response = responses['Moobie'];
-        }else if(storeKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
-            response = responses['Shop'];
-        }else if(accountKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
-            response = responses['Account Information'];
+            
+            //set status to false, so the introductory message won't play again
+            (async () => {
+                try {
+                    console.log("this status is being assigned");
+                    let currentUserEmail = await getCurrEmail();
+                    await setDoc(doc(db, currentUserEmail,'User Status'),{
+                        status: false
+                    });
+                    await setDoc(doc(db, currentUserEmail, 'Username'), {
+                        name: userInput
+                    })
+                } catch(error) {
+                    console.log("error", error);
+                }
+            })();
         }
+        // }else if(journalKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
+        //     response = responses['Journaling'];
+        // }else if(dailyLogKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
+        //     response = responses['Daily Logs'];
+        // }else if(moobieKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
+        //     response = responses['Moobie'];
+        // }else if(storeKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
+        //     response = responses['Shop'];
+        // }else if(accountKeywords.some(keyword => userInput.toLowerCase().includes(keyword))){
+        //     response = responses['Account Information'];
+        // }
         else{
             response = responses[userInput];
         }
         
+        //if the response is an array map thru and return everything
         if (response && Array.isArray(response)) {
             return response.map((text, index) => ({
                 _id: generateMessageId(),
@@ -193,14 +243,14 @@ export const ChatPage = ({ navigation }) => {
         }
     };
 
+    //this will create the buttons that Moobie offers as options
     const renderBubble = (props) => {
         const { currentMessage } = props;
         
         let buttons = null;
-        // console.log("Hi! I'm Moobie", currentMessage.text);
         if(currentMessage.user._id === 2) {
             //Main menu page with the options for journaling, progress, shop, and closet
-            if(currentMessage.text.includes("Nice to meet you") || currentMessage.text.includes("What can Moobie help you with?")) {
+            if(currentMessage.text.includes("Nice to meet you") || currentMessage.text.includes("help you with")) {
                 buttons = (
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap'}}>
                         <Button title="Journaling" onPress={() => handleButtonPress("Journaling")} />
@@ -211,7 +261,7 @@ export const ChatPage = ({ navigation }) => {
                     </View>
                 );
             //journal options
-            }else if(currentMessage.text.toLowerCase().includes("journaling") || userInputHolder.includes("journal")){
+            }else if(currentMessage.text.toLowerCase().includes("journaling")){
                 if(currentMessage.text.toLowerCase().includes("navigate")){
                     buttons = (
                         <View>
@@ -299,7 +349,7 @@ export const ChatPage = ({ navigation }) => {
             ])
         );
     
-        //handles all of the button actions
+        //handles all of the button actions for navigation
         //checks for the specific navigation button or regular choice button
         if(buttonTitle === "Take me to the journal page") {
             navigation.navigate("Journal Home Page");
@@ -316,6 +366,7 @@ export const ChatPage = ({ navigation }) => {
         }
     };
 
+    //displays what the user sends or chooses 
     return (
         <GiftedChat
             messages={messages}
