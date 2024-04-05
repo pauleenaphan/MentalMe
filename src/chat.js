@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Button } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { View, Button, Text } from 'react-native';
+import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat';
 import { setDoc, doc, getDoc} from '@firebase/firestore';
+
 
 import { db } from '../firebase/index.js';
 import { getUserInfo } from './userInfo';
 import { getCurrEmail } from './account';
+import { chatPage } from './styles.js';
 
 export const ChatPage = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
@@ -80,7 +82,7 @@ export const ChatPage = ({ navigation }) => {
                 setMessages(initializeChat(text));
             } else if (newUserStatus === 'false' || newUserStatus === false) {
                 //message for returning users
-                const text = "Hi " + userName + ", I hope your day is going good! What can I help you with today";
+                const text = "Hi " + userName + ", I hope your day is going well! What can I help you with today?";
                 setMessages(initializeChat(text));
             }
         }, [newUserStatus, userName])
@@ -226,7 +228,7 @@ export const ChatPage = ({ navigation }) => {
         
         //if the response is an array map thru and return everything
         if (response && Array.isArray(response)) {
-            return response.map((text, index) => ({
+            return response.map((text) => ({
                 _id: generateMessageId(),
                 text,
                 createdAt: new Date(),
@@ -243,6 +245,13 @@ export const ChatPage = ({ navigation }) => {
         }
     };
 
+    //used to style and create option button
+    const OptionButton = ({title, onPress}) => (
+        <View style={chatPage.btn}>
+            <Button title={title} onPress={onPress} color = 'white' />
+        </View>
+    );
+
     //this will create the buttons that Moobie offers as options
     const renderBubble = (props) => {
         const { currentMessage } = props;
@@ -252,40 +261,40 @@ export const ChatPage = ({ navigation }) => {
             //Main menu page with the options for journaling, progress, shop, and closet
             if(currentMessage.text.includes("Nice to meet you") || currentMessage.text.includes("help you with")) {
                 buttons = (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <Button title="Journaling" onPress={() => handleButtonPress("Journaling")} />
-                        <Button title="Daily Logs" onPress={() => handleButtonPress("Daily Logs")} />
-                        <Button title="Moobie" onPress={() => handleButtonPress("Moobie")} />
-                        <Button title="Shop" onPress={() => handleButtonPress("Shop")} />
-                        <Button title="Account Information" onPress={() => handleButtonPress("Account Information")} />
+                    <View style = {chatPage.btnContainer}>
+                        <OptionButton title="Journaling" onPress={() => handleButtonPress("Journaling")}/>
+                        <OptionButton title="Daily Logs" onPress={() => handleButtonPress("Daily Logs")}/>
+                        <OptionButton title="Moobie" onPress={() => handleButtonPress("Moobie")}/>
+                        <OptionButton title="Shop" onPress={() => handleButtonPress("Shop")}/>
+                        <OptionButton title="Account Information" onPress={() => handleButtonPress("Account Information")}/>
                     </View>
                 );
             //journal options
             }else if(currentMessage.text.toLowerCase().includes("journaling")){
                 if(currentMessage.text.toLowerCase().includes("navigate")){
                     buttons = (
-                        <View>
-                            <Button title = "Take me to the journal page!" onPress = {() => {handleButtonPress("Take me to the journal page");}}/>
-                            <Button title = "No thank you" onPress = {() => handleButtonPress("No thank you")}/>
+                        <View style = {chatPage.btnContainer}>
+                            <OptionButton title = "Take me to the journal page!" onPress = {() => {handleButtonPress("Take me to the journal page");}}/>
+                            <OptionButton title = "No thank you" onPress = {() => handleButtonPress("No thank you")}/>
                         </View>
                     )
                 }else{
                     buttons = (
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap'}}>
-                            <Button title = "Why should I journal?" onPress = {() => handleButtonPress("Why should I journal")}/>
-                            <Button title = "What should I journal about?" onPress = {() => handleButtonPress("What should I journal about")}/>
-                            <Button title = "Where do I journal?" onPress = {() => handleButtonPress("Where do I journal")}/>
-                            <Button title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
+                        <View style = {chatPage.btnContainer}>
+                            <OptionButton title = "Why should I journal?" onPress = {() => handleButtonPress("Why should I journal")}/>
+                            <OptionButton title = "What should I journal about?" onPress = {() => handleButtonPress("What should I journal about")}/>
+                            <OptionButton title = "Where do I journal?" onPress = {() => handleButtonPress("Where do I journal")}/>
+                            <OptionButton title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
                         </View>
                     );
                 }
             //daily login options 
             }else if(currentMessage.text.toLowerCase().includes("daily logs") || currentMessage.text.toLowerCase().includes("daily logins")){
                 buttons = (
-                    <View>
-                        <Button title = "Tell me more about the daily logs" onPress = {() => handleButtonPress("Tell me more about the daily logs")}/>
-                        <Button title = "Take me to the daily log page" onPress = {() => {handleButtonPress("Take me to the daily log page")}}/>
-                        <Button title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
+                    <View style = {chatPage.btnContainer}>
+                        <OptionButton title = "Tell me more about the daily logs" onPress = {() => handleButtonPress("Tell me more about the daily logs")}/>
+                        <OptionButton title = "Take me to the daily log page" onPress = {() => {handleButtonPress("Take me to the daily log page")}}/>
+                        <OptionButton title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
                     </View>
                 )  
             //moobie options
@@ -295,31 +304,31 @@ export const ChatPage = ({ navigation }) => {
                 currentMessage.text.toLowerCase().includes("i'm cool") || 
                 currentMessage.text.toLowerCase().includes("favorite honey")){
                 buttons = (
-                    <View>
-                        <Button title = "Tell me about Moobie" onPress = {() => handleButtonPress("Tell me about Moobie")}/>
-                        <Button title = "Why are you so cool?" onPress = {() => handleButtonPress("Why are you so cool?")}/>
-                        <Button title = "What kind of honey do you like?" onPress = {() => handleButtonPress("What kind of honey do you like?")}/>
-                        <Button title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
+                    <View style = {chatPage.btnContainer}>
+                        <OptionButton title = "Tell me about Moobie" onPress = {() => handleButtonPress("Tell me about Moobie")}/>
+                        <OptionButton title = "Why are you so cool?" onPress = {() => handleButtonPress("Why are you so cool?")}/>
+                        <OptionButton title = "What kind of honey do you like?" onPress = {() => handleButtonPress("What kind of honey do you like?")}/>
+                        <OptionButton title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
                     </View>
                 )
             //store options
             }else if(currentMessage.text.toLowerCase().includes("store") || currentMessage.text.toLowerCase().includes("honey coins") || currentMessage.text.toLowerCase().includes("clothes")){
                 buttons = (
-                    <View>
-                        <Button title = "What are honey coins?" onPress = {() => handleButtonPress("What are honey coins?")}/>
-                        <Button title = "Whats in the store?" onPress = {() => handleButtonPress("Whats in the store?")}/>
-                        <Button title = "Where do I equip the clothes I bought?" onPress = {() => handleButtonPress("Where do I equip the clothes I bought?")}/>
-                        <Button title = "Take me to the closet" onPress = {() => handleButtonPress("Take me to the closet")}/>
-                        <Button title = "Take me to the store page" onPress = {() => handleButtonPress("Take me to the store page")}/>
-                        <Button title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
+                    <View style = {chatPage.btnContainer}>
+                        <OptionButton title = "What are honey coins?" onPress = {() => handleButtonPress("What are honey coins?")}/>
+                        <OptionButton title = "Whats in the store?" onPress = {() => handleButtonPress("Whats in the store?")}/>
+                        <OptionButton title = "Where do I equip the clothes I bought?" onPress = {() => handleButtonPress("Where do I equip the clothes I bought?")}/>
+                        <OptionButton title = "Take me to the closet" onPress = {() => handleButtonPress("Take me to the closet")}/>
+                        <OptionButton title = "Take me to the store page" onPress = {() => handleButtonPress("Take me to the store page")}/>
+                        <OptionButton title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
                     </View>
                 )
             //account info options
             }else if(currentMessage.text.toLowerCase().includes("account information")){
                 buttons = (
-                    <View>
-                        <Button title = "Take me to the settings page" onPress = {() => handleButtonPress("Take me to the settings page")}/>
-                        <Button title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
+                    <View style = {chatPage.btnContainer}>
+                        <OptionButton title = "Take me to the settings page" onPress = {() => handleButtonPress("Take me to the settings page")}/>
+                        <OptionButton title = "Back to the main menu" onPress = {()=> handleButtonPress("Back to the main menu")}/>
                     </View>
                 )
             }
@@ -327,7 +336,37 @@ export const ChatPage = ({ navigation }) => {
     
         return (
             <View>
-                <Bubble {...props} />
+                <Bubble {...props} 
+                    wrapperStyle={{
+                        left: {
+                            backgroundColor: 'white',
+                            paddingTop: 5,
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                            width: '80%',
+                        },
+                        right: {
+                            backgroundColor: '#DBE9D9',
+                            paddingTop: 5,
+                            paddingLeft: 5,
+                            width: '80%',
+                        },
+                    }}
+                    textStyle={{
+                        left: {
+                            color: 'black', 
+                            fontSize: 17,
+                            lineHeight: 20
+                            
+                        },
+                        right: {
+                            color: 'black', 
+                            fontSize: 17,
+                            lineHeight: 20
+                        },
+                    }}
+                    
+                />
                 {buttons}
             </View>
         );
@@ -365,17 +404,58 @@ export const ChatPage = ({ navigation }) => {
             handleUserInput([{ text: buttonTitle, buttonPressed: true }]);
         }
     };
+    
+    renderDay = (props) => {
+        return <Day {...props} textStyle={chatPage.day} />;
+    }
 
-    //displays what the user sends or chooses 
+    renderTime = (props) =>{
+        return <Text style={chatPage.time}>{formatTime(props.currentMessage.createdAt)}</Text>
+    }
+
+    renderInputToolbar = (props) => {
+        // Here you will return your custom InputToolbar component with your desired text input
+        return (
+            <InputToolbar
+                {...props}
+                //containerStyle={{}}
+                textInputProps={{
+                    fontSize: 18,
+                    placeholder: "Send a message to Moobie",
+                    paddingTop: 10, 
+                    paddingLeft: 20      
+                }}
+            />
+        );
+    }
+
     return (
-        <GiftedChat
-            messages={messages}
-            onSend={handleUserInput}
-            user={{
-                _id: 1,
-                name: 'User',
-            }}
-            renderBubble={renderBubble}
-        />
+        <View style = {chatPage.userChatContainer}>
+            {/* for the user */}
+            <GiftedChat
+                messages={messages}
+                onSend={handleUserInput}
+                user={{
+                    _id: 1,
+                    name: 'User',
+                }}
+                renderBubble={renderBubble}
+                renderTime = {renderTime}
+                renderDay = {renderDay}
+                renderInputToolbar = {renderInputToolbar}
+            />
+        </View>
+        
     );
 };
+
+// Function to format time
+const formatTime = (time) => {
+    const hour = time.getHours();
+    const minute = time.getMinutes();
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12; // Convert to 12-hour format
+    const formattedMinute = minute < 10 ? `0${minute}` : minute; // Add leading zero if minute is less than 10
+    return `${formattedHour}:${formattedMinute} ${ampm}`;
+};
+  
