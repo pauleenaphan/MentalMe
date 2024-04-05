@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'; //global storage in react, data will stay even when the app is closed
 
@@ -20,6 +20,8 @@ import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsCon
 import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
 import { WeeklyLoginsProvider } from './progress_files/weeklyLoginsContext.js';
 import { ChatPage } from './chat.js';
+import { IconButton } from './homepage.js';
+import { Ionicons } from "@expo/vector-icons";
 
 
 const Stack = createNativeStackNavigator();
@@ -104,10 +106,26 @@ export default function App() {
                         }}>
                       </Stack.Screen>
                       <Stack.Screen
-                        name = "Chat Page"
-                        component = {ChatPage}
-                      >
-                      </Stack.Screen>
+                        name="Chat Page"
+                        component={ChatPage}
+                        options={({ navigation }) => ({
+                          animation: 'none',
+                          gestureEnabled: false,
+                          headerTitle: "Moobie",
+                          headerStyle: {backgroundColor: "#568258"},
+                          headerTintColor: "white",
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="white"
+                            />
+                          ),
+                        })}
+                      />
+
 
                       <Stack.Screen name = "Settings Page" 
                         component = {SettingsPage}
