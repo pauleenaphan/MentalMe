@@ -598,3 +598,39 @@ export const settingsPage = StyleSheet.create({
     padding: 10
   },
 })
+
+//style for chat page
+export const chatPage = StyleSheet.create({
+  btnContainer:{
+    flexDirection: 'row', 
+    flexWrap: 'wrap',
+  },
+  btn:{
+    borderRadius: 8, 
+    backgroundColor: '#568258', 
+    marginRight: 5, 
+    marginTop: 10
+  },
+  btnContainer:{
+    flex: 1,
+    width: '90%'
+  },
+  day:{
+    color: '#404040', 
+    fontSize: 15, 
+    paddingTop: 20, 
+    paddingBottom: 5
+  },
+  time:{
+    color: '#404040', 
+    paddingLeft: 10, 
+    paddingRight: 20, 
+    paddingBottom: 10, 
+    fontSize: 12
+  },
+  userChatContainer:{
+    flex: 1 , 
+    backgroundColor: "#B6D3B3"
+  }
+
+})
