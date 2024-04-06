@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Button, TextInput, ScrollView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -55,15 +55,6 @@ export const JournalHomePage = ({navigation}) =>{
     
     return(
         <View style = {journalPage.fullPageContainer}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.navigate("Home Page")}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
                     <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: "space-around" }}>
@@ -94,19 +85,23 @@ export const JournalHomePage = ({navigation}) =>{
                         </View>
                     ))}
                 </ScrollView>
-                <View style = {journalPage.addEntryBtnBoxContainer}>
+                <TouchableOpacity
+                    onPress = {() => navigation.navigate('Journal New Entry Page')}
+                    style = {journalPage.addEntryBtnBoxContainer}
+                    activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
+                >
                     <View style = {journalPage.addEntryContainer}>
                         <IconButton
-                            onPress = {() => navigation.navigate('Journal New Entry Page')}
                             iconName = "pencil-plus-outline"
                             iconComponent = {MaterialCommunityIcons}
                             size = {40}
                             color = "black"
                             // try this color #848D84
+                            onPress = {() => navigation.navigate('Journal New Entry Page')}
                         /> 
                         <Text style = {journalPage.addEntryText}> Add new entry </Text>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -154,15 +149,6 @@ export const AddJournalEntryPage = ({navigation}) =>{
         //when the screen is touched anywhere that is not a textinput we call the function to put the keyboard down
         <TouchableWithoutFeedback onPress={handlePressOutside}>
             <View style={newEntryPage.pageContainer}>
-                <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                    <IconButton
-                        onPress={() => navigation.goBack()}
-                        iconName="arrow-back"
-                        iconComponent={Ionicons}
-                        size={30}
-                        color="black"
-                    />
-                </View>
                 <View style={newEntryPage.titleDescContainer}>
                     <TextInput
                         style = {newEntryPage.title}
@@ -179,18 +165,34 @@ export const AddJournalEntryPage = ({navigation}) =>{
                         />
                     </View>
                 </View>
-                <View style={{alignSelf: 'center', marginTop: 50}}>
+                <TouchableOpacity
+                    onPress={()=>{
+                        addEntry();
+                        navigation.goBack();
+                    }}
+                    style={{
+                        alignSelf: 'center',
+                        marginTop: 80,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: '#568258',
+                        padding: 10,
+                        borderRadius: 10
+                    }}
+                    activeOpacity={0.8}
+                    > 
                     <IconButton
-                        onPress={()=>{
-                            addEntry();
-                            navigation.goBack();
-                        }}
                         iconName="check"
                         iconComponent={Feather}
                         size={30}
                         color="black"
+                        onPress={()=>{
+                            addEntry();
+                            navigation.goBack();
+                        }}
                     />
-                </View>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}> Submit Entry </Text>
+                </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
     );
@@ -214,15 +216,6 @@ export const ViewJournalEntry = ({route, navigation}) =>{
     return(
         //Prints the journal entry that the user pressed on 
         <View style = {entryPage.pageContainer}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
             <Text style = {entryPage.entryDate}> {entryDate} </Text>
             <View style = {entryPage.headerContainer}>
                 <Text style = {entryPage.title} numberOfLines={2}>{entryTitle}</Text>
@@ -230,18 +223,34 @@ export const ViewJournalEntry = ({route, navigation}) =>{
             {/* <ScrollView style = {{maxHeight: 500}}> */}
             <Text style = {entryPage.description}> {entryDescription} </Text>  
             {/* </ScrollView> */}
-            <View style = {{bottom: -40, alignSelf: 'center'}}>
+            <TouchableOpacity
+                onPress={() => {
+                    removeEntry();
+                    navigation.navigate('Journal Home Page');
+                }}
+                style={{
+                    bottom: -40,
+                    alignSelf: 'center',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: '#568258',
+                    borderRadius: 10,
+                    padding: 10
+                }}
+                activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
+            >
                 <IconButton
-                    onPress={()=>{
-                        removeEntry();
-                        navigation.navigate('Journal Home Page');
-                    }}
                     iconName = "trash"
                     iconComponent = {Ionicons}
                     size = {30}
                     color = "black"
+                    onPress={() => {
+                        removeEntry();
+                        navigation.navigate('Journal Home Page');
+                    }}
                 />
-            </View>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Remove Entry </Text>
+            </TouchableOpacity>
         </View>
     )
 }
