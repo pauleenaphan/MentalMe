@@ -1,7 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const windowHeight = Dimensions.get('window').height;
-//#B6D3B3: used for background color of the pages
-//#568258: used for button colors
+//#B6D3B3: used for background color of the pages (primary)
+//black: used for text (secondary)
+//#568258: used for button colors1 (Accent)
 //#81A282: used for journal entry 
 
 export const styles = StyleSheet.create({
@@ -49,7 +50,7 @@ export const loginPage = StyleSheet.create({
   },
   button:{
     backgroundColor: '#568258',
-    borderRadius: 15,
+    borderRadius: 10,
     paddingHorizontal: 15,
   },
   icon:{
@@ -71,7 +72,7 @@ export const homePage = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-around',
-    backgroundColor: '#568258',
+    backgroundColor: '#B6D3B3',
     width: "100%",
     padding: 20,
     height: 80,
@@ -136,7 +137,6 @@ export const closetPage = StyleSheet.create({
   headerContainer:{
     justifyContent: 'center', 
     alignItems: 'center', 
-    top: 80
   },
   headerTitle:{
     fontWeight: 'bold', 
@@ -144,7 +144,7 @@ export const closetPage = StyleSheet.create({
   },
   moobieContainer:{
     height: 500, 
-    marginTop: 70
+    marginTop: 10
   },
   moobieHead:{
     position: 'absolute',
@@ -170,29 +170,26 @@ export const closetPage = StyleSheet.create({
   //style for the imgs of the clothes
   clothesImg:{
     width: 200, 
-    height: 180, 
-    backgroundColor:'#DBE9D9', 
+    height: 170, 
     borderTopLeftRadius: 10, 
     borderTopRightRadius: 10
   },
   //container for the clothes and text
   clothesContainer:{
-    backgroundColor: '#568258', 
     borderRadius: 10, 
     marginTop: 30, 
     marginLeft: 10, 
     marginRight: 10, 
     marginBottom: 20, 
     alignItems: 'center', 
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#B6D3B3', 
   },
   //container for closet display
   closetContainer:{
     flexDirection: 'row', 
-    backgroundColor: '#81A282', 
+    backgroundColor:'#86AB86',
     alignItems: 'flex-end', 
-    borderTopWidth: 5, 
-    borderTopColor: '#568258'
   }
 })
 
@@ -208,7 +205,6 @@ export const journalPage = StyleSheet.create({
   homePageContainer:{
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
     marginBottom: 40
   },
   //container for the whole page
@@ -268,7 +264,6 @@ export const entryPage = StyleSheet.create({
     backgroundColor: '#B6D3B3',
   },
   headerContainer:{
-    marginTop: 120, 
     marginLeft: 40, 
     marginRight: 40, 
     marginBottom: 50
@@ -283,9 +278,9 @@ export const entryPage = StyleSheet.create({
   entryDate:{
     fontSize: 20, 
     textAlign: 'center', 
-    top: 57, 
     marginLeft: '25%', 
-    width: '50%'
+    width: '50%',
+    marginBottom: 20
   },
   //entry description
   description:{
@@ -309,7 +304,7 @@ export const newEntryPage = StyleSheet.create({
   },
   titleDescContainer:{
     alignItems: 'center', 
-    marginTop: 150, 
+    marginTop: 40, 
     marginLeft: 40, 
     marginRight: 40
   },
@@ -404,8 +399,6 @@ export const progressPage = StyleSheet.create({
 export const storePage = StyleSheet.create({
   pageContainer:{
     flex: 1, 
-    alignItems: 'center',
-    justifyContent: 'center', 
     backgroundColor: "#B6D3B3"
   },
   //container for the honeycoin amt and description
@@ -414,6 +407,7 @@ export const storePage = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center',
     marginBottom: 15,
+    marginTop: -15
   },
   headingContainer2:{
     flexDirection: 'column', 
@@ -424,8 +418,8 @@ export const storePage = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'center', 
     alignItems: 'center', 
-    marginTop: 10
   },
+
   honeyCoinTitle:{
     fontSize: 20, 
     marginTop: 10, 
@@ -437,20 +431,31 @@ export const storePage = StyleSheet.create({
     marginLeft: -10, 
     marginTop: 3
   },
-  itemContainer:{
+  storeItemContainer:{
     flexDirection: 'row', 
-    marginTop: 15, 
-    marginLeft: 6, 
-    marginRight: 8, 
+    flexWrap: 'wrap', 
+    width: '100%', 
+    justifyContent: 'center'
+  },
+  //container for the boxes with the item price, name, and img
+  itemDisplayContainer:{
+    flexDirection: 'column',
     alignItems: 'center',
-    borderWidth: 2, 
-    borderRadius: 10
+    width: '45%', 
+    backgroundColor: '#86AB86',
+    shadowColor: 'black',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 5, // Elevation for Android
+    borderRadius: 10,
+    margin: 10
   },
   itemImgHead:{
     width: 150, 
     height: 150, 
-    marginTop: 25, 
-    marginBottom: -25
+    marginTop: -5, 
+    marginBottom: -25,
   },
   itemImgBody:{
     width: 150, 
@@ -460,7 +465,7 @@ export const storePage = StyleSheet.create({
   itemImgLowerFeet:{
     width: 150, 
     height: 150, 
-    marginTop: -70
+    marginTop: -50
   },
   titlePriceContainer:{
     flexDirection: 'row',
@@ -473,15 +478,26 @@ export const storePage = StyleSheet.create({
     borderLeftWidth: 2
   },
   titleOfItem:{
-    margin: 10
+    margin: 10,
+  },
+  itemTitle:{
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    color: 'black', 
+    marginTop: -20
   },
   priceContainer:{
     alignItems: 'center', 
     flexDirection: 'row', 
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: 10,
+    width: '100%',
+    justifyContent: 'flex-end'
   },
   price:{
-    fontSize: 20
+    fontSize: 20, 
+    marginRight: 5,
+    color: 'black'
   },
   //img of honey coin nenxt to the price 
   priceCoin:{
@@ -501,8 +517,6 @@ export const storePopup = StyleSheet.create({
     justifyContent: 'center', 
     maxHeight: '70%', 
     borderRadius: 10, 
-    borderWidth: 5, 
-    borderColor: 'white'
   },
   //container for price and img
   priceContainer:{
