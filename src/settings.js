@@ -27,6 +27,17 @@ export const SettingsPage = ({navigation}) =>{
         removeItemFromStorage('moobie_body');
         removeItemFromStorage('moobie_lowerBody');
         removeItemFromStorage("userCurrency");
+        removeItemFromStorage('dailyLogins');
+        removeItemFromStorage('latestDate');
+        removeItemFromStorage('consecutiveDLs');
+        removeItemFromStorage('longestStreak');
+        removeItemFromStorage('sundayLogin');
+        removeItemFromStorage('mondayLogin');
+        removeItemFromStorage('tuesdayLogin');
+        removeItemFromStorage('wednesdayLogin');
+        removeItemFromStorage('thursdayLogin');
+        removeItemFromStorage('fridayLogin');
+        removeItemFromStorage('saturdayLogin');
         navigation.navigate('Login Page');
     }
 

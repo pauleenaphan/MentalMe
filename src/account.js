@@ -266,7 +266,7 @@ export const CreateAccPage = ({navigation}) => {
                                     AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                                     AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                                     AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                                    AsyncStorage.setItem("dailyLogins", JSON.stringify(0));
                                     addUserToDb();
                                     giveUserDefaultItems();
                                     addDefaultMoobie();

@@ -18,7 +18,13 @@ import { ClosetPage } from './closet.js';
 import { DailyLoginsProvider } from './progress_files/dailyLoginsContext.js';
 import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsContext.js';
 import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
-import { WeeklyLoginsProvider } from './progress_files/weeklyLoginsContext.js';
+import { SundayLoginProvider } from './progress_files/sundayLoginContext.js';
+import { MondayLoginProvider } from './progress_files/mondayLoginContext.js';
+import { TuesdayLoginProvider } from './progress_files/tuesdayLoginContext.js';
+import { WednesdayLoginProvider } from './progress_files/wednesdayLoginContext.js';
+import { ThursdayLoginProvider } from './progress_files/thursdayLoginContext.js';
+import { FridayLoginProvider } from './progress_files/fridayLoginContext.js';
+import { SaturdayLoginProvider } from './progress_files/saturdayLoginContext.js';
 import { ChatPage } from './chat.js';
 import { IconButton } from './homepage.js';
 import { Ionicons } from "@expo/vector-icons";
@@ -50,7 +56,13 @@ export default function App() {
       <DailyLoginsProvider>
         <ConsecutiveLoginsProvider>
           <LongestStreakProvider>
-            <WeeklyLoginsProvider>
+          <SundayLoginProvider>
+          <MondayLoginProvider>
+          <TuesdayLoginProvider>
+          <WednesdayLoginProvider>
+          <ThursdayLoginProvider>
+          <FridayLoginProvider>
+          <SaturdayLoginProvider>
               <UserCurrencyProvider>
                 <MoobieProvider>
                   <NavigationContainer>
@@ -203,7 +215,13 @@ export default function App() {
                   </NavigationContainer>
                 </MoobieProvider>
               </UserCurrencyProvider>
-            </WeeklyLoginsProvider>
+            </SaturdayLoginProvider>
+            </FridayLoginProvider>
+            </ThursdayLoginProvider>
+            </WednesdayLoginProvider>
+            </TuesdayLoginProvider>
+            </MondayLoginProvider>
+            </SundayLoginProvider>
           </LongestStreakProvider>
         </ConsecutiveLoginsProvider>
       </DailyLoginsProvider>        
