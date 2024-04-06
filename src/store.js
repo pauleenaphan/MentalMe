@@ -1,19 +1,18 @@
 import React, { useEffect, useState} from "react";
-import { View, Text, Button, ScrollView, AlertIOS, Alert } from "react-native";
+import { View, Text, Button, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { Image } from 'expo-image';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { clothesImg, honeyCoin, styles, storePage, storePopup } from "./styles.js";
+import { storePage, storePopup } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
-import { IconButton } from "./homepage.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -85,23 +84,14 @@ export const StorePage = () =>{
     const HeadAccTab = ({navigation}) =>{
         return(
             <View style = {storePage.pageContainer}>
-                {/* <Button
+                <Button
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
                         updateCurrency(parseInt(currency) + 1);
                     }}
-                /> */}
+                />
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Home Page")}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -114,31 +104,30 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.headImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgHead}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.headImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgHead} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
 
                     <Modal 
                         isVisible = {isPopupVisible}
@@ -173,7 +162,6 @@ export const StorePage = () =>{
                                         }catch(error){
                                             console.log("error: ", error);
                                         }
-
                                         toggleItemPopup();
                                     }}
                                 />
@@ -187,7 +175,6 @@ export const StorePage = () =>{
                     </Modal>
                 </ScrollView>
             </View>
-
         )
     }
     
@@ -196,15 +183,6 @@ export const StorePage = () =>{
         return(
             <View style = {storePage.pageContainer}>
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Home Page")}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -217,31 +195,31 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.bodyImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgBody}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.bodyImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgBody} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
 
                     <Modal 
                         isVisible = {isPopupVisible}
@@ -298,15 +276,6 @@ export const StorePage = () =>{
         return(
             <View style = {storePage.pageContainer}>
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Home Page")}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -319,31 +288,31 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.lowerBodyImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgLowerFeet}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.lowerBodyImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgLowerFeet} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
 
                     <Modal 
                         isVisible = {isPopupVisible}
@@ -463,60 +432,72 @@ export const StorePage = () =>{
     return(
         <Tab.Navigator>
             <Tab.Screen 
-                name = "Moobie's Shop: Head Accessories"
+                name = "Head Acessories"
                 component = {HeadAccTab}
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Head',
-                    // tabBarIcon: ()=>{
-                    //     return <FontAwesome6 name="redhat" size={24} color="black" />
-                    // },
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <FontAwesome5 name = "redhat" size = {40} color = "black" style = {{marginBottom: -25}}/> // Set size and color
+                    ),
                 }}
             />
             <Tab.Screen 
                 component = {BodyAccTab}
-                name = "Moobie's Shop: Body Accessories"
+                name = "Body Accessories"
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Body',
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <Ionicons name = "shirt" size = {35} color = "black" style = {{marginBottom: -25}}/>
+                    ),
                 }}
             />
             <Tab.Screen 
-                name = "Moobie's Shop: Lower Body Tab" 
+                name = "Shoe/Leg Accessories" 
                 component = {ShoeAccTab}
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Lower Body',
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <MaterialCommunityIcons name = "shoe-sneaker" size = {55} color = "black"  style = {{marginBottom: -25}}/>
+                    ),
                 }}
             /> 
         </Tab.Navigator>
