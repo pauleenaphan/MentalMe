@@ -120,25 +120,26 @@ export default function App() {
                       <Stack.Screen
                         name="Chat Page"
                         component={ChatPage}
-                        options={({ navigation }) => ({
-                          animation: 'none',
+                        options={({navigation}) => ({
+                          animation: 'fade',
                           gestureEnabled: false,
-                          headerTitle: "Moobie",
-                          headerStyle: {backgroundColor: "#568258"},
-                          headerTintColor: "white",
+                          headerTitle: "Chat with Moobie",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerTintColor: "black",
                           headerLeft: () => (
                             <IconButton
                               onPress={() => navigation.navigate("Home Page")}
                               iconName="arrow-back"
                               iconComponent={Ionicons}
                               size={30}
-                              color="white"
+                              color="black"
                             />
                           ),
                         })}
                       />
-
-
                       <Stack.Screen name = "Settings Page" 
                         component = {SettingsPage}
                         options = {{
@@ -169,47 +170,146 @@ export default function App() {
                       <Stack.Screen 
                         name = "Journal Home Page" 
                         component = {JournalHomePage}
-                        options={{
-                          headerShown: false,
-                          gestureEnabled: false
-                        }}>
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       <Stack.Screen 
                         name = "Journal New Entry Page" 
                         component = {AddJournalEntryPage}
-                        options={{
-                          headerShown: false,
+                        options={({navigation}) =>({
+                          animation: 'slide',
                           gestureEnabled: false,
-
-                        }}>
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Journal Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       <Stack.Screen 
                         name = "Journal Entry Page" 
                         component = {ViewJournalEntry}
-                        options={{
-                          headerShown: false,
+                        options={({navigation}) =>({
+                          animation: 'fade',
                           gestureEnabled: false,
-
-                        }}>
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Journal Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       
-                      <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
+                      <Stack.Screen 
+                        name = "Progress Tracking" 
+                        component = {ProgressTracker}
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+
+                        </Stack.Screen>
 
                       <Stack.Screen 
                         name = "Store Page" 
                         component = {StorePage}
-                        options={{
-                          headerShown: false,
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
                           gestureEnabled: false,
-                        }}>
+                          headerTitle: "Moobie's Shop",
+                          headerShadowVisible: false,
+                          headerTitleStyle:{
+                            fontSize: 25,
+                          },
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       <Stack.Screen 
                         name = "Closet Page" 
                         component = {ClosetPage}
-                        options = {{
-                          headerShown: false,
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
                           gestureEnabled: false,
-                        }}>
+                          headerTitle: " ",
+                          headerShadowVisible: false,
+                          headerTitleStyle:{
+                            fontSize: 25,
+                          },
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                         </Stack.Screen>
                     </Stack.Navigator>
                   </NavigationContainer>
