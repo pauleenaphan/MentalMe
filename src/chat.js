@@ -93,7 +93,7 @@ export const ChatPage = ({ navigation }) => {
         const userMessage = newMessages[0];
         
         //check if the message is triggered by a button press
-        if (userMessage.buttonPressed) {
+        
             //handle button press without adding it to the chat messages
             const botResponse = getBotResponse(userMessage.text);
             //loops through the response array because in our responses some of the text options can be in the form of an array to send two msgs in a row
@@ -127,19 +127,6 @@ export const ChatPage = ({ navigation }) => {
                 );
             }
             return; 
-        }
-    
-        //if the message is not triggered by a button press, add it to the chat messages
-        setMessages(previousMessages =>
-            GiftedChat.append(previousMessages, [
-                {
-                    _id: generateMessageId(),
-                    text: userMessage.text,
-                    createdAt: new Date(),
-                    user: userMessage.user,
-                }
-            ])
-        );
     };
 
     const getBotResponse = (userInput) => {
@@ -444,8 +431,7 @@ export const ChatPage = ({ navigation }) => {
                 renderDay = {renderDay}
                 renderInputToolbar = {renderInputToolbar}
             />
-        </View>
-        
+        </View>      
     );
 };
 
