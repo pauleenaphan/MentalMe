@@ -142,7 +142,7 @@ export const dailyIncrement = async ({
     try {
         let dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
         // let dailyLogs = 0;
-        TrickToYesterday(); // for testing
+        // TrickToYesterday(); // for testing
         let storedDate = await AsyncStorage.getItem("latestDate");
         if (storedDate === null) {
             TrickToYesterday();
@@ -153,6 +153,13 @@ export const dailyIncrement = async ({
         console.log("Current Date: " + currentDate);
         let consecutiveLogs = parseInt(await AsyncStorage.getItem('consecutiveDLs'), 10);
         let longestStreakLogs = parseInt(await AsyncStorage.getItem('longestStreak'), 10);
+        let sundayLog = await AsyncStorage.getItem('sundayLogin');
+        let mondayLog = await AsyncStorage.getItem('mondayLogin');
+        let tuesdayLog = await AsyncStorage.getItem('tuesdayLogin');
+        let wednesdayLog = await AsyncStorage.getItem('wednesdayLogin');
+        let thursdayLog = await AsyncStorage.getItem('thursdayLogin');
+        let fridayLog = await AsyncStorage.getItem('fridayLogin');
+        let saturdayLog = await AsyncStorage.getItem('saturdayLogin');
         if (dailyLogs === 0 || isNaN(dailyLogs)) {
             await addPersonalCounter({
                 setDailyLogins, setConsecutiveDLs, setLongestStreak,
@@ -180,6 +187,41 @@ export const dailyIncrement = async ({
             setDailyLogins(dailyLogs);
             setConsecutiveDLs(consecutiveLogs);
             setLongestStreak(longestStreakLogs);
+            if (sundayLog === 'true') {
+                setSundayLogin(true);
+            } else {
+                setSundayLogin(false);
+            }    
+            if (mondayLog === 'true') {
+                setMondayLogin(true);
+            } else {
+                setMondayLogin(false);
+            }
+            if (tuesdayLog === 'true') {
+                setTuesdayLogin(true);
+            } else {
+                setTuesdayLogin(false);
+            }
+            if (wednesdayLog === 'true') {
+                setWednesdayLogin(true);
+            } else {
+                setWednesdayLogin(false);
+            }
+            if (thursdayLog === 'true') {
+                setThursdayLogin(true);
+            } else {
+                setThursdayLogin(false);
+            }
+            if (fridayLog === 'true') {
+                setFridayLogin(true);
+            } else {
+                setFridayLogin(false);
+            }
+            if (saturdayLog === 'true') {
+                setSaturdayLogin(true);
+            } else {
+                setSaturdayLogin(false);
+            }
         }
         console.log("Daily Logins After Process: " + dailyLogs + " | Consecutive Logins After Process: " + consecutiveLogs + " | Longest Streak After Process: " + longestStreakLogs);
     } catch (error) {
@@ -385,5 +427,16 @@ export const incrementCounters = async ({
             console.log("Trick Date: " + yesterday);
         } catch (error) {
             console.log("Error with tricking to yesterday: " + error);
+        }
+    }
+
+    const TrickToTomorrow = async () => {
+        try {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate()+1);
+            await AsyncStorage.setItem('latestDate', tomorrow.toLocaleDateString());
+            console.log("Trick Date: " + tomorrow);
+        } catch (error) {
+            console.log("Error with tricking to tomorrow: " + error);
         }
     }
