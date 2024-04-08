@@ -567,15 +567,10 @@ export const storePopup = StyleSheet.create({
 export const settingsPage = StyleSheet.create({
   pageContainer:{
     flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    alignItems: 'center',
     backgroundColor: '#B6D3B3'
   },
   //container for the whole page excluding the back button
-  bodyContainer:{
-    flex: 1, 
-    marginTop: 100
-  },
   settingsTitle:{
     fontSize: 40, 
     fontWeight: 'bold', 
@@ -595,6 +590,8 @@ export const settingsPage = StyleSheet.create({
     borderRadius: 10, 
     paddingTop: 10, 
     paddingBottom: 10, 
+    paddingLeft: 20,
+    paddingRight: 20,
     marginTop: 10, 
     marginLeft: 30, 
     marginRight: 30
