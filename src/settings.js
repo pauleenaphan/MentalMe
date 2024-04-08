@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { View, Text, Button, TextInput, Alert } from "react-native";
+import { Image } from 'expo-image';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
-import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
-import { Modal } from "react-native";
-import { IconButton } from "./homepage.js";
-import { styles, settingsPage } from "./styles.js";
+
+import { settingsPage } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
-import { getMoobie } from "./moobie.js";
-import { connectFirestoreEmulator } from "firebase/firestore";
-
 
 //to get user information from the firecloud db
 const auth = getAuth();
@@ -53,64 +49,53 @@ export const SettingsPage = ({navigation}) =>{
 
     return(
         <View style = {settingsPage.pageContainer}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.navigate("Home Page")}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
-
-            <View style = {settingsPage.bodyContainer}>
-                <Text style = {settingsPage.settingsTitle}> Settings </Text> 
-            
-                <View>
-                    <Text style = {settingsPage.inAppTitle}> In App </Text>
-                    <View style = {settingsPage.optionsContainer}>
-                        <Button
-                            color = "black"
-                            title = "Sound"
-                        />
-                        <Button 
-                            color = "black"
-                            title = "Notification"
-                        />
-                    </View>
-
-                    <Text style = {settingsPage.accountTitle}> Account </Text>
-
-                    <View style = {settingsPage.optionsContainer}>
-                        <Button
-                            color = "black"
-                            title = "Account Information"
-                            onPress = {()=>{
-                                navigation.navigate('Account Settings Page');
-                            }}
-                        />
-                    </View>
-                </View>
-                
-                
-                <View style = {settingsPage.logOutBtn}>
+            <Text style = {settingsPage.settingsTitle}> Settings </Text> 
+        
+            <View>
+                <Text style = {settingsPage.inAppTitle}> In App </Text>
+                <View style = {settingsPage.optionsContainer}>
                     <Button
-                        color = "white"
-                        title = "Log Out"
-                        onPress = {() => {
-                            logOut();
-                            navigation.navigate('Login Page');
+                        color = "black"
+                        title = "Sound"
+                    />
+                    <Button 
+                        color = "black"
+                        title = "Notification"
+                    />
+                </View>
+
+                <Text style = {settingsPage.accountTitle}> Account </Text>
+
+                <View style = {settingsPage.optionsContainer}>
+                    <Button
+                        color = "black"
+                        title = "Account Information"
+                        onPress = {()=>{
+                            navigation.navigate('Account Settings Page');
                         }}
                     />
                 </View>
             </View>
+            
+            
+            <View style = {settingsPage.logOutBtn}>
+                <Button
+                    color = "white"
+                    title = "Log Out"
+                    onPress = {() => {
+                        logOut();
+                        navigation.navigate('Login Page');
+                    }}
+                />
+            </View>
+
         </View>
     );
 };
 
 //shows the user email and ask for password change
 export const AccountSettingsPage = ({navigation}) =>{
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userPassword, setUserPassword, userName} = getUserInfo();
 
     //will run when the userEmail is changed, or on render
     useEffect(()=>{
@@ -125,37 +110,28 @@ export const AccountSettingsPage = ({navigation}) =>{
     
 
     return (
-        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
-            <View style = {{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: -300}}>
-                <Text style = {{fontWeight: 'bold', fontSize: 30, marginBottom: 50}}> Account Information </Text>
-                <View>
-                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Email </Text>
-                    <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail} </Text> 
-
-                    <Text style = {{fontWeight: 'bold', fontSize: 25}}> Password </Text>
-                    <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
-                        <Button 
-                            color = "black"
-                            title = "Change Password"
-                            onPress = {()=>{
-                                navigation.navigate('Change Password Page');
-                            }}
-                        />
-                    </View>
-                    
+        <View style = {{flex: 1, alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+            <Text style = {{fontWeight: 'bold', fontSize: 30, marginBottom: 50}}> Account Information </Text>
+            <View>
+                <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {{width: 100, height: 100}}/>
+                    <Text style = {{fontSize: 25, marginBottom: 20}}> {userName} </Text>
                 </View>
                 
+                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Email </Text>
+                <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail} </Text> 
+
+                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Password </Text>
+                <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                    <Button 
+                        color = "black"
+                        title = "Change Password"
+                        onPress = {()=>{
+                            navigation.navigate('Change Password Page');
+                        }}
+                    />
+                </View> 
             </View>
-            
         </View>
     ) 
 }
@@ -258,90 +234,78 @@ export const AccountChangePassword = ({navigation}) => {
 
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
+            <Text style = {{fontWeight: 'bold', fontSize: 35, marginBottom: 20}}> Change Password </Text>
+            <View style = {{flexDirection: 'column', width: 300}}>
+                <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "Current Password"
+                        secureTextEntry = {!showPassword}
+                        value = {currentPass}
+                        // sets to the user input of the old password
+                        onChangeText = {(text) => setCurrentPass(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{ marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+                <View  style = {{flexDirection: 'row', alignItems: 'center', width: 200 }}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "New password"
+                        secureTextEntry = {!showPassword}
+                        value = {newPass}
+                        onChangeText={(text) => checkNewPassword(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{ marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+                <View  style = {{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "Confirm new password"
+                        secureTextEntry = {!showPassword}
+                        value = {confirmPass}
+                        onChangeText = {(text) => checkConfirmPassword(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+            </View>
+            
+            <View style = {{backgroundColor: '#568258', borderRadius: 10, marginTop: 20, padding: 10,}}>
+                <Button
+                    color = "white"
+                    title="Confirm Password Change"
+                    onPress={() => {
+                        //check if the old password is the user's current password
+                        //check if the new password is not the same as the old password
+                        //check that both new passwords are the same
+                        //changes password is all of these pass, else send out the alert
+                        if(!checkOldPassword(currentPass)){
+                            invalidOldPass();
+                        }else if(!checkNewPassword(newPass)){
+                            invalidNewPass();
+                        }else if(!checkConfirmPassword(confirmPass)){
+                            unmatchPassAlert();
+                        }else if(checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)){
+                            changePassword();
+                            validNewPass();
+                        }
+                    }}
                 />
             </View>
-            <View style = {{alignItems: 'center'}}>
-                <Text style = {{fontWeight: 'bold', fontSize: 35, marginBottom: 20}}> Change Password </Text>
-                <View style = {{alignItems: 'flex-start'}}>
-                    <View style = {{flexDirection: 'row', alignItems: 'center'}}>
-                        <TextInput
-                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
-                            placeholder = "Current Password"
-                            secureTextEntry = {!showPassword}
-                            value = {currentPass}
-                            // sets to the user input of the old password
-                            onChangeText = {(text) => setCurrentPass(text)}
-                        />
-                        <Feather 
-                            name={showPassword ? 'eye-off' : 'eye'} 
-                            size={23} 
-                            style={{ marginLeft: -20}} 
-                            onPress={toggleShowPass} 
-                        /> 
-                    </View>
-                    <View  style = {{flexDirection: 'row', alignItems: 'center', width: 200 }}>
-                        <TextInput
-                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
-                            placeholder = "New password"
-                            secureTextEntry = {!showPassword}
-                            value = {newPass}
-                            onChangeText={(text) => checkNewPassword(text)}
-                        />
-                        <Feather 
-                            name={showPassword ? 'eye-off' : 'eye'} 
-                            size={23} 
-                            style={{ marginLeft: -20}} 
-                            onPress={toggleShowPass} 
-                        /> 
-                    </View>
-                    <View  style = {{flexDirection: 'row', alignItems: 'center'}}>
-                        <TextInput
-                            style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
-                            placeholder = "Confirm new password"
-                            secureTextEntry = {!showPassword}
-                            value = {confirmPass}
-                            onChangeText = {(text) => checkConfirmPassword(text)}
-                        />
-                        <Feather 
-                            name={showPassword ? 'eye-off' : 'eye'} 
-                            size={23} 
-                            style={{marginLeft: -20}} 
-                            onPress={toggleShowPass} 
-                        /> 
-                    </View>
-                </View>
-                
-                <View style = {{backgroundColor: '#568258', borderRadius: 10, marginTop: 20, padding: 10}}>
-                    <Button
-                        color = "white"
-                        title="Confirm Password Change"
-                        onPress={() => {
-                            //check if the old password is the user's current password
-                            //check if the new password is not the same as the old password
-                            //check that both new passwords are the same
-                            //changes password is all of these pass, else send out the alert
-                            if(!checkOldPassword(currentPass)){
-                                invalidOldPass();
-                            }else if(!checkNewPassword(newPass)){
-                                invalidNewPass();
-                            }else if(!checkConfirmPassword(confirmPass)){
-                                unmatchPassAlert();
-                            }else if(checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)){
-                                changePassword();
-                                validNewPass();
-                            }
-                        }}
-                    />
-                </View>
-            </View>
-           
         </View>
     )
 }
