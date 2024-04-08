@@ -142,29 +142,65 @@ export default function App() {
                       />
                       <Stack.Screen name = "Settings Page" 
                         component = {SettingsPage}
-                        options = {{
-                          headerBackVisible: false, 
-                          gestureEnabled: false, 
-                          headerShown: false 
-                        }}>
+                        options={({navigation}) => ({
+                          gestureEnabled: false,
+                          headerTitle: " ",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       <Stack.Screen 
                         name = "Account Settings Page" 
                         component = {AccountSettingsPage}
-                        options = {{
-                          headerBackVisible: false, 
-                          gestureEnabled: false, 
-                          headerShown: false 
-                        }}>
+                        options={({navigation}) => ({
+                          gestureEnabled: false,
+                          headerTitle: " ",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Settings Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
                       </Stack.Screen>
                       <Stack.Screen 
                         name = "Change Password Page" 
                           component = {AccountChangePassword}
-                          options = {{
-                            headerBackVisible: false, 
-                            gestureEnabled: false, 
-                            headerShown: false 
-                          }}>
+                          options={({navigation}) => ({
+                            gestureEnabled: false,
+                            headerTitle: " ",
+                            headerStyle: {
+                              backgroundColor: "#B6D3B3",
+                            },
+                            headerShadowVisible: false,
+                            headerLeft: () => (
+                              <IconButton
+                                onPress={() => navigation.navigate("Account Settings Page")}
+                                iconName="arrow-back"
+                                iconComponent={Ionicons}
+                                size={30}
+                                color="black"
+                              />
+                            ),
+                          })}>
                         </Stack.Screen>
 
                       <Stack.Screen 
