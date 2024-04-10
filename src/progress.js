@@ -39,7 +39,123 @@ export const ProgressTracker = () => {
     const { thursdayLogin, setThursdayLogin } = useThursdayLogin();
     const { fridayLogin, setFridayLogin } = useFridayLogin();
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
-    // console.log(fridayLogin);
+
+    const handleTestDailyIncrementV0 = async ({
+        dailyLogins, setDailyLogins, 
+        consecutiveDLs, setConsecutiveDLs, 
+        longestStreak, setLongestStreak, 
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin}) => {
+            try {
+                await testDailyIncrementV0({
+                    setDailyLogins,
+                    setConsecutiveDLs,
+                    setLongestStreak,
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling testDailyIncrementV1: " + error);
+            }
+    };
+
+    const handleTestDailyIncrementV1 = async ({
+        dailyLogins, setDailyLogins, 
+        consecutiveDLs, setConsecutiveDLs, 
+        longestStreak, setLongestStreak, 
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin}) => {
+            try {
+                await testDailyIncrementV1({
+                    setDailyLogins,
+                    setConsecutiveDLs,
+                    setLongestStreak,
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling testDailyIncrementV1: " + error);
+            }
+    };
+
+    const handleTestDailyIncrementV2 = async ({
+        dailyLogins, setDailyLogins, 
+        consecutiveDLs, setConsecutiveDLs, 
+        longestStreak, setLongestStreak, 
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin}) => {
+            try {
+                await testDailyIncrementV2({
+                    setDailyLogins,
+                    setConsecutiveDLs,
+                    setLongestStreak,
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling testDailyIncrementV1: " + error);
+            }
+    };
+
+    const handleTestDailyIncrementV3 = async ({
+        dailyLogins, setDailyLogins, 
+        consecutiveDLs, setConsecutiveDLs, 
+        longestStreak, setLongestStreak, 
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin}) => {
+            try {
+                await testDailyIncrementV3({
+                    setDailyLogins,
+                    setConsecutiveDLs,
+                    setLongestStreak,
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling testDailyIncrementV1: " + error);
+            }
+    };
+
     return(
         <View style={progressPage.fullPageContainer}>
             <Text style={progressPage.title}>Weekly Progress</Text>
@@ -121,31 +237,79 @@ export const ProgressTracker = () => {
                     <Text style={progressPage.statLabel}>Longest Login Streak</Text>
                 </View>
             </View>
-            {/* <Button title="Increment +1 (Testing Yesterday Date)" onPress={TestDailyIncrementYesterday}></Button> */}
-            {/* <Button title="Increment +1 (Testing Tomrorow Date)" onPress={TestDailyIncrementTomorrow}></Button> */}
-            {/* <Button title="Remove All Count (Testing Only)" onPress={clearDailyLogins}></Button> */}
+            <Button title="Simulate New Day" onPress={() => handleTestDailyIncrementV0({
+                dailyLogins, setDailyLogins, 
+                consecutiveDLs, setConsecutiveDLs, 
+                longestStreak, setLongestStreak, 
+                sundayLogin, setSundayLogin, 
+                mondayLogin, setMondayLogin, 
+                tuesdayLogin, setTuesdayLogin, 
+                wednesdayLogin, setWednesdayLogin, 
+                thursdayLogin, setThursdayLogin, 
+                fridayLogin, setFridayLogin, 
+                saturdayLogin, setSaturdayLogin
+            })}></Button>
+            <Button title="Test Last Login: Yesterday" onPress={() => handleTestDailyIncrementV1({
+                dailyLogins, setDailyLogins, 
+                consecutiveDLs, setConsecutiveDLs, 
+                longestStreak, setLongestStreak, 
+                sundayLogin, setSundayLogin, 
+                mondayLogin, setMondayLogin, 
+                tuesdayLogin, setTuesdayLogin, 
+                wednesdayLogin, setWednesdayLogin, 
+                thursdayLogin, setThursdayLogin, 
+                fridayLogin, setFridayLogin, 
+                saturdayLogin, setSaturdayLogin
+            })}></Button>
+            <Button title="Test Last Login: Two Days Ago" onPress={() => handleTestDailyIncrementV2({
+                dailyLogins, setDailyLogins, 
+                consecutiveDLs, setConsecutiveDLs, 
+                longestStreak, setLongestStreak, 
+                sundayLogin, setSundayLogin, 
+                mondayLogin, setMondayLogin, 
+                tuesdayLogin, setTuesdayLogin, 
+                wednesdayLogin, setWednesdayLogin, 
+                thursdayLogin, setThursdayLogin, 
+                fridayLogin, setFridayLogin, 
+                saturdayLogin, setSaturdayLogin
+            })}></Button>
+            <Button title="Test Last Login: Three Days Ago" onPress={() => handleTestDailyIncrementV3({
+                dailyLogins, setDailyLogins, 
+                consecutiveDLs, setConsecutiveDLs, 
+                longestStreak, setLongestStreak, 
+                sundayLogin, setSundayLogin, 
+                mondayLogin, setMondayLogin, 
+                tuesdayLogin, setTuesdayLogin, 
+                wednesdayLogin, setWednesdayLogin, 
+                thursdayLogin, setThursdayLogin, 
+                fridayLogin, setFridayLogin, 
+                saturdayLogin, setSaturdayLogin
+            })}></Button>
+            <Button title="Remove All Count" onPress={() => clearDailyLogins({
+                dailyLogins, setDailyLogins, 
+                consecutiveDLs, setConsecutiveDLs, 
+                longestStreak, setLongestStreak, 
+                sundayLogin, setSundayLogin, 
+                mondayLogin, setMondayLogin, 
+                tuesdayLogin, setTuesdayLogin, 
+                wednesdayLogin, setWednesdayLogin, 
+                thursdayLogin, setThursdayLogin, 
+                fridayLogin, setFridayLogin, 
+                saturdayLogin, setSaturdayLogin
+            })}></Button>
         </View>
     );
 };
 
 export const dailyIncrement = async ({
-    dailyLogins, setDailyLogins, 
-    consecutiveDLs, setConsecutiveDLs, 
-    longestStreak, setLongestStreak, 
-    sundayLogin, setSundayLogin, 
-    mondayLogin, setMondayLogin, 
-    tuesdayLogin, setTuesdayLogin, 
-    wednesdayLogin, setWednesdayLogin, 
-    thursdayLogin, setThursdayLogin, 
-    fridayLogin, setFridayLogin, 
-    saturdayLogin, setSaturdayLogin}) => {
+    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
     try {
         let dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
-        // let dailyLogs = 0;
-        // TrickToYesterday(); // for testing
         let storedDate = await AsyncStorage.getItem("latestDate");
         if (storedDate === null) {
-            TrickToYesterday();
+            trickToYesterday();
             storedDate = await AsyncStorage.getItem("latestDate");
         }
         let currentDate = new Date().toLocaleDateString();
@@ -229,17 +393,10 @@ export const dailyIncrement = async ({
     }
 }
 
-export const addPersonalCounter = async (
-    {dailyLogins, setDailyLogins, 
-    consecutiveDLs, setConsecutiveDLs, 
-    longestStreak, setLongestStreak, 
-    sundayLogin, setSundayLogin, 
-    mondayLogin, setMondayLogin, 
-    tuesdayLogin, setTuesdayLogin, 
-    wednesdayLogin, setWednesdayLogin, 
-    thursdayLogin, setThursdayLogin, 
-    fridayLogin, setFridayLogin, 
-    saturdayLogin, setSaturdayLogin}) => {
+export const addPersonalCounter = async ({
+    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
     try {
         const email = await getCurrEmail();
         let currentUser = email;
@@ -298,16 +455,9 @@ export const addPersonalCounter = async (
 }
 
 export const incrementCounters = async ({
-    dailyLogins, setDailyLogins, 
-    consecutiveDLs, setConsecutiveDLs, 
-    longestStreak, setLongestStreak, 
-    sundayLogin, setSundayLogin, 
-    mondayLogin, setMondayLogin, 
-    tuesdayLogin, setTuesdayLogin, 
-    wednesdayLogin, setWednesdayLogin, 
-    thursdayLogin, setThursdayLogin, 
-    fridayLogin, setFridayLogin, 
-    saturdayLogin, setSaturdayLogin}) => {
+    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
         try {
             const email = await getCurrEmail();
             let currentUser = email;
@@ -326,7 +476,7 @@ export const incrementCounters = async ({
             // Increment daily logins by 1 for a new day
             await AsyncStorage.setItem('dailyLogins', (currentDL+1).toString());
             setDailyLogins(currentDL+1);
-            newDL = parseInt(await AsyncStorage.getItem('dailyLogins'), 10);
+            // newDL = parseInt(await AsyncStorage.getItem('dailyLogins'), 10);
             // console.log("Increment Counter Step 1 - CurrentDL: " + newDL);
 
             //if last date recorded date is -1 of the current date
@@ -419,7 +569,107 @@ export const incrementCounters = async ({
         }
     }
 
-    const TrickToYesterday = async () => {
+    // Test Cases:
+    // 0) Simulate a new day.
+    // -> Make the current day tomorrow
+    export const testDailyIncrementV0 = async ({
+        setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
+        try {
+            let dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
+            let storedDate = new Date();
+            await AsyncStorage.setItem("latestDate", new Date().toLocaleDateString());
+            if (storedDate === null) {
+                trickToYesterday();
+                storedDate = await AsyncStorage.getItem("latestDate");
+            }
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate()+1);
+            console.log("Stored Date: " + storedDate);
+            console.log("Current Date: " + currentDate);
+            let consecutiveLogs = parseInt(await AsyncStorage.getItem('consecutiveDLs'), 10);
+            let longestStreakLogs = parseInt(await AsyncStorage.getItem('longestStreak'), 10);
+            let sundayLog = await AsyncStorage.getItem('sundayLogin');
+            let mondayLog = await AsyncStorage.getItem('mondayLogin');
+            let tuesdayLog = await AsyncStorage.getItem('tuesdayLogin');
+            let wednesdayLog = await AsyncStorage.getItem('wednesdayLogin');
+            let thursdayLog = await AsyncStorage.getItem('thursdayLogin');
+            let fridayLog = await AsyncStorage.getItem('fridayLogin');
+            let saturdayLog = await AsyncStorage.getItem('saturdayLogin');
+            if (dailyLogs === 0 || isNaN(dailyLogs)) {
+                await addPersonalCounter({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
+                    setSundayLogin, setMondayLogin, setTuesdayLogin,
+                    setWednesdayLogin, setThursdayLogin,
+                    setFridayLogin, setSaturdayLogin
+                });
+                await incrementCounters({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
+                    setSundayLogin, setMondayLogin, setTuesdayLogin,
+                    setWednesdayLogin, setThursdayLogin,
+                    setFridayLogin, setSaturdayLogin
+                });
+            } else if (dailyLogs > 0 && storedDate != currentDate) {
+                console.log("Current daily logins: " + dailyLogs)
+                await incrementCounters({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
+                    setSundayLogin, setMondayLogin, setTuesdayLogin,
+                    setWednesdayLogin, setThursdayLogin,
+                    setFridayLogin, setSaturdayLogin
+                });
+                await AsyncStorage.setItem("latestDate", currentDate.toLocaleDateString());
+            } else if (dailyLogs > 0 && storedDate === currentDate) {
+                console.log("Same day, already incremented.");
+                setDailyLogins(dailyLogs);
+                setConsecutiveDLs(consecutiveLogs);
+                setLongestStreak(longestStreakLogs);
+                if (sundayLog === 'true') {
+                    setSundayLogin(true);
+                } else {
+                    setSundayLogin(false);
+                }    
+                if (mondayLog === 'true') {
+                    setMondayLogin(true);
+                } else {
+                    setMondayLogin(false);
+                }
+                if (tuesdayLog === 'true') {
+                    setTuesdayLogin(true);
+                } else {
+                    setTuesdayLogin(false);
+                }
+                if (wednesdayLog === 'true') {
+                    setWednesdayLogin(true);
+                } else {
+                    setWednesdayLogin(false);
+                }
+                if (thursdayLog === 'true') {
+                    setThursdayLogin(true);
+                } else {
+                    setThursdayLogin(false);
+                }
+                if (fridayLog === 'true') {
+                    setFridayLogin(true);
+                } else {
+                    setFridayLogin(false);
+                }
+                if (saturdayLog === 'true') {
+                    setSaturdayLogin(true);
+                } else {
+                    setSaturdayLogin(false);
+                }
+            }
+            console.log("Daily Logins After Process: " + dailyLogs + " | Consecutive Logins After Process: " + consecutiveLogs + " | Longest Streak After Process: " + longestStreakLogs);
+        } catch (error) {
+            console.log("Daily Increment Function Error: " + error);
+        }
+    }
+
+
+    // 1) Test if latest date is one day behind the current date
+    // -> Increment daily login, consecutive login, longest streak if applicable
+    const trickToYesterday = async () => {
         try {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate()-1);
@@ -430,13 +680,98 @@ export const incrementCounters = async ({
         }
     }
 
-    const TrickToTomorrow = async () => {
+    const testDailyIncrementV1 = async ({
+        setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
         try {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate()+1);
-            await AsyncStorage.setItem('latestDate', tomorrow.toLocaleDateString());
-            console.log("Trick Date: " + tomorrow);
+            let temp = await AsyncStorage.getItem('dailyLogins');
+            // console.log("temp = " + temp);
+            // setDailyLogins(temp);
+            trickToYesterday();
+            dailyIncrement({
+                setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
         } catch (error) {
-            console.log("Error with tricking to tomorrow: " + error);
+            console.log("TestV1 Function Error: " + error);
         }
+    }
+
+
+    // 2) Test if latest date is not one day behind the current date (ex: two days behind)
+    // -> Increment daily login
+    // -> Reset consecutive login, keep longest streak
+    const trickToTwoDaysAgo = async () => {
+        try {
+            const yesterday2 = new Date();
+            yesterday2.setDate(yesterday2.getDate()-2);
+            await AsyncStorage.setItem('latestDate', yesterday2.toLocaleDateString());
+            console.log("Trick Date: " + yesterday2);
+        } catch (error) {
+            console.log("Error with tricking to two days ago: " + error);
+        }
+    }
+
+    const testDailyIncrementV2 = async ({
+        setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
+            try {
+                trickToTwoDaysAgo();
+                dailyIncrement({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+            } catch (error) {
+                console.log("TestV2 Function Error: " + error);
+            }
+    }
+
+    // 3) Test when consecutive login broken, longest streak only applies when CDL surpasses LS
+    // -> Use testDailyIncrementV3 then testDailyIncrementV1
+    // -> They are 2 days apart so it would be proper testing
+    const trickToThreeDaysAgo = async () => {
+        try {
+            const yesterday3 = new Date();
+            yesterday3.setDate(yesterday3.getDate()-3);
+            await AsyncStorage.setItem('latestDate', yesterday3.toLocaleDateString());
+            console.log("Trick Date: " + yesterday3);
+        } catch (error) {
+            console.log("Error with tricking to three days ago: " + error);
+        }
+    }
+
+    const testDailyIncrementV3 = async ({
+        setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
+            try {
+                trickToThreeDaysAgo();
+                dailyIncrement({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+            } catch (error) {
+                console.log("TestV3 Function Error: " + error);
+            }
+    }
+
+    // 4) Clear all data
+    const clearDailyLogins = async ({
+        setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin}) => {
+            try {
+                addPersonalCounter({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+                testDailyIncrementV1({
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                    setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+            } catch (error) {
+                console.log("Clear Daily Logins Function Error: " + error);
+            }
     }
