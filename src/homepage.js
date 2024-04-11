@@ -10,7 +10,7 @@ import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
 import FastImage from 'react-native-fast-image' //this wasn't working maybe try it later
 
-import { dailyIncrement, incrementCounters } from "./progress.js";
+import { dailyIncrement } from "./progress.js";
 import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
 import { useConsecutiveLogins } from './progress_files/consecutiveLoginsContext.js';
 import { useLongestStreak } from "./progress_files/longestStreakContext.js";
@@ -66,7 +66,8 @@ export const HomePage = ({navigation}) =>{
         wednesdayLogin, setWednesdayLogin, 
         thursdayLogin, setThursdayLogin, 
         fridayLogin, setFridayLogin, 
-        saturdayLogin, setSaturdayLogin}) => {
+        saturdayLogin, setSaturdayLogin,
+        currency, updateCurrency}) => {
             try {
                 await dailyIncrement({
                     setDailyLogins,
@@ -78,7 +79,8 @@ export const HomePage = ({navigation}) =>{
                     setWednesdayLogin,
                     setThursdayLogin,
                     setFridayLogin,
-                    setSaturdayLogin
+                    setSaturdayLogin,
+                    updateCurrency
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -100,7 +102,8 @@ export const HomePage = ({navigation}) =>{
                 setWednesdayLogin, 
                 setThursdayLogin, 
                 setFridayLogin, 
-                setSaturdayLogin});
+                setSaturdayLogin,
+                updateCurrency});
         }, [])
     )
 

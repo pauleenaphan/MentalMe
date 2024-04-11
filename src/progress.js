@@ -410,7 +410,10 @@ export const dailyIncrement = async ({
             } else {
                 setSaturdayLogin(false);
             }
-            updateCurrency(currencyLog);
+            // console.log("Check 1: " + currencyLog)
+            updateCurrency(parseInt(currencyLog));
+            currencyLog = await AsyncStorage.getItem('userCurrency');
+            // console.log("Check 2: " + currencyLog)
         }
 
         dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
@@ -602,7 +605,7 @@ export const incrementCounters = async ({
             await setDoc(doc(db, currentUser, 'User Currency Document'), {
                 honeyCoins: currencyAmt.toString()
             });
-            // console.log("Increment Counters Function Success!");
+            console.log("Increment Counters Function Success!");
         } catch (error) {
             console.log("Increment Counters Function Error: " + error);
         }
