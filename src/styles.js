@@ -331,29 +331,30 @@ export const newEntryPage = StyleSheet.create({
 export const progressPage = StyleSheet.create({
   fullPageContainer:{
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: '100%',
     backgroundColor: '#B6D3B3'
   },
   title:{
     fontSize: 30,
     fontWeight: 'bold',
-    textDecorationLine: 'underline'
+    textAlign: 'center',
+  },
+  caption:{
+    textAlign: 'center', 
+    marginBottom: 20
   },
   checkboxContainer:{
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: 40,
-    marginRight: 10,
+    marginRight: 5,
     marginLeft: 5,
-    marginTop: 3
   },
   checkboxLabel:{
     marginTop: 5,
     width: 40,
     height: 40,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   weeklyCheckbox:{
     width: 40,
@@ -361,38 +362,36 @@ export const progressPage = StyleSheet.create({
     resizeMode: 'contain'
   },
   rowOfCheckboxes:{
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center'
+    marginBottom: 30,
   },
   statContainer:{
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
-    marginRight: 50,
-    marginLeft: 25,
-    marginTop: 3
-  },
-  statBox:{
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-    position: 'relative'
   },
   statLabel:{
-    width: 115,
-    height: 100,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    width: 100,
+    fontSize: 16,
+    textAlign: 'center',
   },
   statNumber:{
     fontSize: 30,
-    width: 110,
-    height: 150,
     fontWeight: 'bold',
+    backgroundColor: '#81A282',
     textAlign: 'center',
-    marginTop: -30,
-    position: 'absolute'
+    padding: 40,
+    borderWidth: 1,
+    borderRadius: 30,
+    borderColor: '#81A282',
+    overflow: 'hidden',
+  },
+  moobieImg:{
+    width: '100%', 
+    height: '100%', 
+    bottom: '10%'
   }
 })
 
