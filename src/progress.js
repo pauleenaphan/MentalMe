@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Button} from "react-native";
+import { Image } from "expo-image";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { styles, progressPage, storePage } from "./styles";
@@ -167,15 +168,12 @@ export const ProgressTracker = () => {
 
     return(
         <View style={progressPage.fullPageContainer}>
-            <View style = {storePage.headingContainer}>
-                    <View style = {storePage.headingContainer2}>
-                        <View style = {storePage.currencyContainer}>
-                            <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
-                            <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
-                        </View>
-                    </View>
-                </View>
+            {/* <View style = {storePage.currencyContainer}>
+                <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
+                <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
+            </View> */}
             <Text style={progressPage.title}>Weekly Progress</Text>
+            <Text style = {progressPage.caption}> Moobie loves to see your progress! </Text>
             <View style={progressPage.rowOfCheckboxes}>
                 <View style={progressPage.checkboxContainer}>
                     <Image
@@ -228,28 +226,17 @@ export const ProgressTracker = () => {
                 </View>
             </View>
             <Text style={progressPage.title}>All-Time Stats</Text>
+            <Text style = {progressPage.caption}> Moobie is so proud of you! </Text>
             <View style={progressPage.rowOfCheckboxes}>
                 <View style={progressPage.statContainer}>
-                    <Image
-                        style={progressPage.statBox}
-                        source={require("../imgs/squareCheckbox.png")}
-                    />
                     <Text style={progressPage.statNumber}>{dailyLogins}</Text>
                     <Text style={progressPage.statLabel}>Total Daily Logins</Text>
                 </View>
                 <View style={progressPage.statContainer}>
-                    <Image
-                        style={progressPage.statBox}
-                        source={require("../imgs/squareCheckbox.png")}
-                    />
                     <Text style={progressPage.statNumber}>{consecutiveDLs}</Text>
                     <Text style={progressPage.statLabel}>Consecutive Logins</Text>
                 </View>
                 <View style={progressPage.statContainer}>
-                    <Image
-                        style={progressPage.statBox}
-                        source={require("../imgs/squareCheckbox.png")}
-                    />
                     <Text style={progressPage.statNumber}>{longestStreak}</Text>
                     <Text style={progressPage.statLabel}>Longest Login Streak</Text>
                 </View>
@@ -267,7 +254,7 @@ export const ProgressTracker = () => {
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
             })}></Button> */}
-            <Button title="Simulate New Day (Yesterday)" onPress={() => handleTestDailyIncrementV1({
+            {/* <Button title="Simulate New Day (Yesterday)" onPress={() => handleTestDailyIncrementV1({
                 dailyLogins, setDailyLogins, 
                 consecutiveDLs, setConsecutiveDLs, 
                 longestStreak, setLongestStreak, 
@@ -318,7 +305,11 @@ export const ProgressTracker = () => {
                 fridayLogin, setFridayLogin, 
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
-            })}></Button>
+            })}></Button> */}
+            <Image
+                source = {require("../imgs/moobiePoint.png")}
+                style = {progressPage.moobieImg}
+            />
         </View>
     );
 };
