@@ -359,7 +359,7 @@ export const progressPage = StyleSheet.create({
   weeklyCheckbox:{
     width: 40,
     height: 40,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   rowOfCheckboxes:{
     alignItems: 'center',
