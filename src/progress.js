@@ -254,7 +254,7 @@ export const ProgressTracker = () => {
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
             })}></Button> */}
-            <Button title="Simulate New Day (Yesterday)" onPress={() => handleTestDailyIncrementV1({
+            {/* <Button title="Simulate New Day (Yesterday)" onPress={() => handleTestDailyIncrementV1({
                 dailyLogins, setDailyLogins, 
                 consecutiveDLs, setConsecutiveDLs, 
                 longestStreak, setLongestStreak, 
@@ -305,7 +305,7 @@ export const ProgressTracker = () => {
                 fridayLogin, setFridayLogin, 
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
-            })}></Button>
+            })}></Button> */}
             <Image
                 source = {require("../imgs/moobiePoint.png")}
                 style = {progressPage.moobieImg}
@@ -596,20 +596,34 @@ export const incrementCounters = async ({
                 // console.log("New longest streak!: " + currentLS);
             }
 
+            let currencyAmt = parseInt(await AsyncStorage.getItem('userCurrency'), 10);
+            updateCurrency(currencyAmt+1);
+            await AsyncStorage.setItem('userCurrency', (currencyAmt+1).toString());
+
             if (currentDate.getDay() === 0) {
+                if (await AsyncStorage.getItem('sundayLogin') === 'true' && 
+                await AsyncStorage.getItem('mondayLogin') === 'true' && 
+                await AsyncStorage.getItem('tuesdayLogin') === 'true' && 
+                await AsyncStorage.getItem('wednesdayLogin') === 'true' && 
+                await AsyncStorage.getItem('thursdayLogin') === 'true' && 
+                await AsyncStorage.getItem('fridayLogin') === 'true' &&
+                await AsyncStorage.getItem('saturdayLogin') === 'true') {
+                    updateCurrency(currencyAmt+2);
+                    await AsyncStorage.setItem('userCurrency', (currencyAmt+2).toString());
+                }
                 await AsyncStorage.setItem('sundayLogin', 'true');
                 setSundayLogin(true);
-                await AsyncStorage.setItem('mondayLogin', 'false')
+                await AsyncStorage.setItem('mondayLogin', 'false');
                 setMondayLogin(false);
-                await AsyncStorage.setItem('tuesdayLogin', 'false')
+                await AsyncStorage.setItem('tuesdayLogin', 'false');
                 setTuesdayLogin(false);
-                await AsyncStorage.setItem('wednesdayLogin', 'false')
+                await AsyncStorage.setItem('wednesdayLogin', 'false');
                 setWednesdayLogin(false);
-                await AsyncStorage.setItem('thursdayLogin', 'false')
+                await AsyncStorage.setItem('thursdayLogin', 'false');
                 setThursdayLogin(false);
-                await AsyncStorage.setItem('fridayLogin', 'false')
+                await AsyncStorage.setItem('fridayLogin', 'false');
                 setFridayLogin(false);
-                await AsyncStorage.setItem('saturdayLogin', 'false')
+                await AsyncStorage.setItem('saturdayLogin', 'false');
                 setSaturdayLogin(false);
                 console.log("Today is Sunday!");
             } else if (currentDate.getDay() === 1) {
@@ -635,10 +649,6 @@ export const incrementCounters = async ({
                 await AsyncStorage.setItem('saturdayLogin', 'true')
                 setSaturdayLogin(true);
             }
-
-            let currencyAmt = parseInt(await AsyncStorage.getItem('userCurrency'), 10);
-            updateCurrency(currencyAmt+1);
-            await AsyncStorage.setItem('userCurrency', (currencyAmt+1).toString());
 
             lastLogin = new Date().toLocaleDateString();
 
