@@ -373,8 +373,8 @@ export const progressPage = StyleSheet.create({
     justifyContent: 'center',
   },
   statLabel:{
-    width: 150,
-    fontSize: 16,
+    width: 100,
+    fontSize: 13,
     textAlign: 'center',
   },
   statNumber:{
@@ -382,7 +382,10 @@ export const progressPage = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#81A282',
     textAlign: 'center',
-    padding: 40,
+    paddingTop: 40,
+    paddingBottom: 40,
+    paddingLeft:50,
+    paddingRight: 50,
     borderWidth: 1,
     borderRadius: 30,
     borderColor: '#81A282',
@@ -391,7 +394,7 @@ export const progressPage = StyleSheet.create({
   moobieImg:{
     width: '100%', 
     height: '100%', 
-    bottom: '10%'
+    bottom: '15%'
   }
 })
 
