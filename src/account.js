@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import { useFocusEffect } from "@react-navigation/native";
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
@@ -23,6 +24,16 @@ export const CreateAccPage = ({navigation}) => {
     const [showPassword, setShowPassword] = useState('');
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
+
+    //resets the values in the textinput when the page is displayed
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("clearing create acc")
+            setUserEmail("");
+            setUserPassword("");
+            setConfirmPass("");
+        }, [])
+    );
 
     //alert for when user is trying to create an account with an email that has an account already
     const emailExistAlert = () =>{
@@ -223,7 +234,6 @@ export const CreateAccPage = ({navigation}) => {
                 <TextInput
                     style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
-                    value = {userPassword}
                     placeholder = "Password"
                     onChangeText = {(text) => setUserPassword(text)}
                 />
@@ -240,7 +250,6 @@ export const CreateAccPage = ({navigation}) => {
                 <TextInput
                     style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
-                    value = {confirmPass}
                     placeholder = "Confirm Password"
                     onChangeText = {(text) => checkConfirmPass(text)}
                 />
@@ -299,6 +308,16 @@ export const LoginPage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
     const [showPassword, setShowPassword] = useState(false);
+
+    //resets value in the text input when the page is being displayed
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("clearing sign in")
+            setUserEmail("");
+            setUserPassword("");
+        }, [])
+    );
+
 
     const showLoginFailAlert = ()=>{
         Alert.alert(
@@ -398,6 +417,7 @@ export const LoginPage = ({navigation}) =>{
                     <TextInput 
                         style = {loginPage.textInputLogin}
                         placeholder = "Email"
+                        value = {userEmail}
                         onChangeText = {(text) => setUserEmail(text)}
                     />
                 </View>
@@ -428,6 +448,7 @@ export const LoginPage = ({navigation}) =>{
                             AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                             AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                            setUserPassword("");
                             setCurrentMoobie();
                             setUserCurrency();
                             navigation.navigate('Home Page');
