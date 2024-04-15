@@ -166,6 +166,59 @@ export const ProgressTracker = () => {
             }
     };
 
+    const handleClearDailyLogins = async ({
+        dailyLogins, setDailyLogins, 
+        consecutiveDLs, setConsecutiveDLs, 
+        longestStreak, setLongestStreak, 
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin,
+        currency, updateCurrency}) => {
+            try {
+                await clearDailyLogins({
+                    setDailyLogins,
+                    setConsecutiveDLs,
+                    setLongestStreak,
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling clearDailyLogins: " + error);
+            }
+    };
+
+    const handleLoginAll = async ({
+        sundayLogin, setSundayLogin, 
+        mondayLogin, setMondayLogin, 
+        tuesdayLogin, setTuesdayLogin, 
+        wednesdayLogin, setWednesdayLogin, 
+        thursdayLogin, setThursdayLogin, 
+        fridayLogin, setFridayLogin, 
+        saturdayLogin, setSaturdayLogin}) => {
+            try {
+                await loginAll({
+                    setSundayLogin,
+                    setMondayLogin,
+                    setTuesdayLogin,
+                    setWednesdayLogin,
+                    setThursdayLogin,
+                    setFridayLogin,
+                    setSaturdayLogin
+                });
+            } catch (error) {
+                console.log("Error with handling loginAll: " + error);
+            }
+    };
+
     return(
         <View style={progressPage.fullPageContainer}>
             {/* <View style = {storePage.currencyContainer}>
@@ -293,7 +346,7 @@ export const ProgressTracker = () => {
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
             })}></Button>
-            <Button title="Remove All Count" onPress={() => clearDailyLogins({
+            <Button title="Remove All Count" onPress={() => handleClearDailyLogins({
                 dailyLogins, setDailyLogins, 
                 consecutiveDLs, setConsecutiveDLs, 
                 longestStreak, setLongestStreak, 
@@ -305,6 +358,10 @@ export const ProgressTracker = () => {
                 fridayLogin, setFridayLogin, 
                 saturdayLogin, setSaturdayLogin,
                 currency, updateCurrency
+            })}></Button>
+            <Button title="Login all 7 days" onPress={() => handleLoginAll({
+                setSundayLogin, setMondayLogin, setTuesdayLogin,
+                setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
             })}></Button> */}
             <Image
                 source = {require("../imgs/moobiePoint.png")}
@@ -939,4 +996,24 @@ export const incrementCounters = async ({
             } catch (error) {
                 console.log("Clear Daily Logins Function Error: " + error);
             }
+    }
+
+    const loginAll = async ({
+        setSundayLogin, setMondayLogin, setTuesdayLogin,
+        setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
+    }) => {
+        try {
+            await AsyncStorage.setItem('sundayLogin', 'true');
+            await AsyncStorage.setItem('mondayLogin', 'true');
+            await AsyncStorage.setItem('tuesdayLogin', 'true');
+            await AsyncStorage.setItem('wednesdayLogin', 'true');
+            await AsyncStorage.setItem('thursdayLogin', 'true');
+            await AsyncStorage.setItem('fridayLogin', 'true');
+            await AsyncStorage.setItem('saturdayLogin', 'true');
+            await convertDayToBool({
+                setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+        } catch (error) {
+            console.log("Error with Logging All Days: " + error)
+        }
     }

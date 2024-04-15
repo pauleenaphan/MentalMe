@@ -373,7 +373,7 @@ export const progressPage = StyleSheet.create({
     justifyContent: 'center',
   },
   statLabel:{
-    width: 100,
+    width: 150,
     fontSize: 16,
     textAlign: 'center',
   },
