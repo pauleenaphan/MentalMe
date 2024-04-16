@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { backButton, journalPage, entryPage, styles, newEntryPage } from "./styles.js";
+import { backButton, journalPage, entryPage, newEntryPage } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
-import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import { Background } from "@react-navigation/elements";
 import { disableErrorHandling } from "expo";
 
@@ -57,32 +57,34 @@ export const JournalHomePage = ({navigation}) =>{
         <View style = {journalPage.fullPageContainer}>
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
-                    <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: "space-around" }}>
+                    <View style = {journalPage.headerContainer}>
                        <Text style = {journalPage.title}>
                             Journal Entries
                         </Text>
                     </View>
-                    <Text> View your entry by clicking on the journal entry name! </Text>
+                    <Text> View your entry by clicking on your entries below! </Text>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {/* maps out the entries in our db  */}
                     {entries.map(entry =>(
-                        <View key = {entry.id} style = {journalPage.entry}>
-                            <Button 
-                                color = "black"
-                                title = {entry.title}
-                                onPress = {() =>{
-                                    console.log(entry.title, entry.date, entry.description);
-                                    navigation.navigate('Journal Entry Page', {
-                                        entryId: entry.id,
-                                        entryTitle: entry.title,
-                                        entryDate: entry.date,
-                                        entryDescription: entry.description
-                                    });
-                                }}
-                            />
-                            <Text style = {journalPage.entryDate}> {entry.date} </Text>
-                        </View>
+                        <TouchableOpacity
+                            onPress = {() =>{
+                                console.log(entry.title, entry.date, entry.description);
+                                navigation.navigate('Journal Entry Page', {
+                                    entryId: entry.id,
+                                    entryTitle: entry.title,
+                                    entryDate: entry.date,
+                                    entryDescription: entry.description
+                                });
+                            }}
+                            activeOpacity={0.7}
+                        >
+                            <View key = {entry.id} style = {journalPage.entry}>
+                                <Text style = {journalPage.entryTitle}> {entry.title} </Text>
+                                <Text style = {journalPage.entryDate}> {entry.date} </Text>
+                            </View>
+                        </TouchableOpacity>
+                        
                     ))}
                 </ScrollView>
                 <TouchableOpacity
@@ -115,8 +117,8 @@ export const AddJournalEntryPage = ({navigation}) =>{
     };
 
     const[journalInfo, setJournalInfo] = useState({
-        title: '',
-        description: ''
+        title: '[BLANK]',
+        description: '[BLANK]'
     });
 
     const handleInfo = (titleValue, value) =>{
