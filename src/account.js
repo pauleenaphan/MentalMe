@@ -413,7 +413,7 @@ export const LoginPage = ({navigation}) =>{
             const username = await getDoc(doc(db, currentUserEmail, "Username"));
             console.log("THIS IS USERNAME ", username.data().name);
             setUserName(username.data().name);
-            AsyncStorage.setItem("UserName", username.data().name);
+            // AsyncStorage.setItem("UserName", username.data().name);
         } catch (error) {
             console.error("error", error);
         }

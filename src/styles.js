@@ -573,19 +573,15 @@ export const settingsPage = StyleSheet.create({
     backgroundColor: '#B6D3B3'
   },
   //container for the whole page excluding the back button
-  settingsTitle:{
-    fontSize: 40, 
+  pageTitle:{
+    fontSize: 35, 
     fontWeight: 'bold', 
     marginBottom: 50, 
     textAlign: 'center'
   },
-  inAppTitle:{
+  headerTitle:{
     fontWeight: 'bold', 
-    fontSize: 25
-  },
-  accountTitle:{
-    fontWeight: 'bold', 
-    fontSize: 25
+    fontSize: 23
   },
   logOutBtn:{
     backgroundColor: '#568258', 

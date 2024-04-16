@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, Alert } from "react-native";
 import { Image } from 'expo-image';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
+import { doc, getDoc} from '@firebase/firestore';
 import { Feather } from '@expo/vector-icons'; //used for icons
 
 import { settingsPage } from "./styles.js";
@@ -35,7 +36,6 @@ export const SettingsPage = ({navigation}) =>{
         removeItemFromStorage('thursdayLogin');
         removeItemFromStorage('fridayLogin');
         removeItemFromStorage('saturdayLogin');
-        removeItemFromStorage("UserName");
         navigation.navigate('Login Page');
     }
 
@@ -51,10 +51,10 @@ export const SettingsPage = ({navigation}) =>{
 
     return(
         <View style = {settingsPage.pageContainer}>
-            <Text style = {settingsPage.settingsTitle}> Settings </Text> 
+            <Text style = {settingsPage.pageTitle}> Settings </Text> 
         
             <View>
-                <Text style = {settingsPage.inAppTitle}> In App </Text>
+                <Text style = {settingsPage.headerTitle}> In App </Text>
                 <View style = {settingsPage.optionsContainer}>
                     <Button
                         color = "black"
@@ -66,7 +66,7 @@ export const SettingsPage = ({navigation}) =>{
                     />
                 </View>
 
-                <Text style = {settingsPage.accountTitle}> Account </Text>
+                <Text style = {settingsPage.headerTitle}> Account </Text>
 
                 <View style = {settingsPage.optionsContainer}>
                     <Button
@@ -111,12 +111,13 @@ export const AccountSettingsPage = ({navigation}) =>{
         returnEmail();
     }, [userEmail])
 
+    //gets the username from the db when the page is rendered
     useEffect(()=>{
         const returnName = async () =>{
             try{
-                setUserName(await getCurrName());
-                console.log("This is userName", userName);
-                console.log("This is name in async", (await getCurrName()));
+                let currentUserEmail = await getCurrEmail();
+                const username = await getDoc(doc(db, currentUserEmail, "Username"));
+                setUserName(username.data().name);
             }catch(error){
                 console.log("error " + error);
         }};
@@ -125,16 +126,17 @@ export const AccountSettingsPage = ({navigation}) =>{
     
 
     return (
-        <View style = {{flex: 1, alignItems: 'center', backgroundColor: '#B6D3B3'}}>
-            <Text style = {{fontWeight: 'bold', fontSize: 30, marginBottom: 50}}> Account Information </Text>
+        <View style = {settingsPage.pageContainer}>
+            <Text style = {settingsPage.pageTitle}> Account Information </Text>
             <View>
-                <View style = {{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {{width: 100, height: 100}}/>
-                    <Text style = {{fontSize: 25, marginBottom: 20}}> {userName} </Text>
+                <View style = {{flexDirection: 'row', marginBottom: 20, marginRight: 10, marginLeft: 10}}>
+                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {{width: 100, height: 80, borderRadius: 10, borderWidth: 1, marginRight: 10, backgroundColor: '#81A282', borderColor: '#81A282'}}/>
+                    <Text style = {{fontSize: 20, backgroundColor: '#81A282', width: 190, height: 80, borderRadius: 10, borderWidth: 1, overflow: 'hidden', borderColor: '#81A282', padding: 10}}> {userName} </Text>
                 </View>
                 
                 <Text style = {{fontWeight: 'bold', fontSize: 20}}> Email </Text>
-                <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail} </Text> 
+                {/* Removes quotes from the string */}
+                <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail.trim().replace(/['"]+/g, '')} </Text> 
 
                 <Text style = {{fontWeight: 'bold', fontSize: 20}}> Password </Text>
                 <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
