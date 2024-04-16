@@ -217,6 +217,12 @@ export const journalPage = StyleSheet.create({
     fontSize: 40, 
     fontWeight: 'bold'
   },
+  //for title and caption
+  headerContainer:{
+    flexDirection: 'row', 
+    alignContent: 'center', 
+    justifyContent: "space-around"
+  },
   //each entry that is being displayed
   entry:{
     flexDirection: 'row',
@@ -229,6 +235,9 @@ export const journalPage = StyleSheet.create({
     padding: 20,
     marginTop: 15,
   },
+  entryTitle:{
+    fontSize: 20,
+  }, 
   entryDate:{
     fontSize: 20, 
     color: 'black'
