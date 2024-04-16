@@ -122,7 +122,6 @@ export const CreateAccPage = ({navigation}) => {
             
             //default items that every new user will get
             const itemsToAdd = [
-                "HoneyComb Ears",
                 "Default Head",
                 "Default Body",
                 "Default Lower Body"
