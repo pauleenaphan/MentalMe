@@ -3,6 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Button, Text } from 'react-native';
 import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat';
 import { setDoc, doc, getDoc} from '@firebase/firestore';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 import { db } from '../firebase/index.js';
@@ -193,6 +194,7 @@ export const ChatPage = ({ navigation }) => {
                     await setDoc(doc(db, currentUserEmail, 'Username'), {
                         name: userInput
                     })
+                    AsyncStorage.setItem("UserName", JSON.stringify(userInput));
                 } catch(error) {
                     console.log("error", error);
                 }

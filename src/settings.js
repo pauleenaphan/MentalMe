@@ -3,9 +3,10 @@ import { View, Text, Button, TextInput, Alert } from "react-native";
 import { Image } from 'expo-image';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
+import { Feather } from '@expo/vector-icons'; //used for icons
 
 import { settingsPage } from "./styles.js";
-import { getCurrEmail, getCurrPassword } from "./account.js";
+import { getCurrEmail, getCurrPassword, getCurrName } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
 
 //to get user information from the firecloud db
@@ -34,6 +35,7 @@ export const SettingsPage = ({navigation}) =>{
         removeItemFromStorage('thursdayLogin');
         removeItemFromStorage('fridayLogin');
         removeItemFromStorage('saturdayLogin');
+        removeItemFromStorage("UserName");
         navigation.navigate('Login Page');
     }
 
@@ -41,7 +43,7 @@ export const SettingsPage = ({navigation}) =>{
     const removeItemFromStorage = async (key) => {
         try {
             await AsyncStorage.removeItem(key);
-            console.log(`Item with key ${key} removed from AsyncStorage.`);
+            // console.log(`Item with key ${key} removed from AsyncStorage.`);
         } catch (error) {
             console.error(`Error removing item with key ${key} from AsyncStorage:`, error);
         }
@@ -95,9 +97,10 @@ export const SettingsPage = ({navigation}) =>{
 
 //shows the user email and ask for password change
 export const AccountSettingsPage = ({navigation}) =>{
-    const {userEmail, setUserEmail, userPassword, setUserPassword, userName} = getUserInfo();
+    const {userEmail, setUserEmail, userName, setUserName} = getUserInfo();
 
     //will run when the userEmail is changed, or on render
+    //gets useremail from async storage then sets it to the usestate email value
     useEffect(()=>{
         const returnEmail = async () =>{
             try{
@@ -107,6 +110,18 @@ export const AccountSettingsPage = ({navigation}) =>{
         }};
         returnEmail();
     }, [userEmail])
+
+    useEffect(()=>{
+        const returnName = async () =>{
+            try{
+                setUserName(await getCurrName());
+                console.log("This is userName", userName);
+                console.log("This is name in async", (await getCurrName()));
+            }catch(error){
+                console.log("error " + error);
+        }};
+        returnName();
+    }, [userName])
     
 
     return (

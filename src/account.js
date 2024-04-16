@@ -19,7 +19,7 @@ const auth1 = auth;
 
 //Page where user can create an account
 export const CreateAccPage = ({navigation}) => {
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userPassword, setUserPassword, setUserName} = getUserInfo();
     const [confirmPass, setConfirmPass] = useState('');
     const [showPassword, setShowPassword] = useState('');
     const {bodyPart, handlePart} = getMoobie();
@@ -32,6 +32,7 @@ export const CreateAccPage = ({navigation}) => {
             setUserEmail("");
             setUserPassword("");
             setConfirmPass("");
+            setUserName("Talk to Moobie!")
         }, [])
     );
 
@@ -195,7 +196,8 @@ export const CreateAccPage = ({navigation}) => {
             await setDoc(doc(db, currentUserEmail, "Username"), {
                 name: "name"
             })
-            // AsyncStorage.setItem("newUserStatus", JSON.stringify(true));
+            AsyncStorage.setItem("UserName", JSON.stringify("Talk to Moobie!"));
+            setUserName("Talk to Moobie");
             console.log("User Status Document has been created");
         } catch (error) {
             console.error("Error setting user status:", error);
@@ -304,7 +306,7 @@ export const CreateAccPage = ({navigation}) => {
 
 //Page where user can login
 export const LoginPage = ({navigation}) =>{
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userPassword, setUserPassword, userName, setUserName} = getUserInfo();
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
     const [showPassword, setShowPassword] = useState(false);
@@ -403,6 +405,19 @@ export const LoginPage = ({navigation}) =>{
             console.log("error: ", error);
         }
     }
+
+    //gets existing userName from the doc and update its value
+    const setNameForUser = async () =>{
+        try {
+            let currentUserEmail = await getCurrEmail();
+            const username = await getDoc(doc(db, currentUserEmail, "Username"));
+            console.log("THIS IS USERNAME ", username.data().name);
+            setUserName(username.data().name);
+            AsyncStorage.setItem("UserName", username.data().name);
+        } catch (error) {
+            console.error("error", error);
+        }
+    }
     
     return(
         <View style={loginPage.container}>
@@ -448,9 +463,10 @@ export const LoginPage = ({navigation}) =>{
                             AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                             AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                            setUserPassword("");
+                            AsyncStorage.setItem("UserName", JSON.stringify(userName))
                             setCurrentMoobie();
                             setUserCurrency();
+                            setNameForUser();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('login info is not correct');
@@ -481,6 +497,15 @@ export const getCurrEmail = async () =>{
 export const getCurrPassword = async () =>{
     try{
         return await AsyncStorage.getItem("UserPassword");
+    }catch(error){
+        console.log("error" + error);
+        return null;
+    }
+}
+
+export const getCurrName = async () =>{
+    try{
+        return await AsyncStorage.getItem("UserName");
     }catch(error){
         console.log("error" + error);
         return null;
