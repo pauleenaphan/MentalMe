@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity} from "react-native";
 import { Image } from "expo-image";
-import { withSpring } from 'react-native-reanimated';
 
 export const CoverPage = ({navigation, isLogged}) =>{
     
