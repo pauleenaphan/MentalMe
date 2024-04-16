@@ -71,6 +71,7 @@ export default function App() {
                         name = "Cover Page"
                         options = {{
                           headerShown: false,
+                          animation: 'fade'
                         }}>
                         {/* don't need component since we are passing down a child prop instead */}
                         {props => <CoverPage {...props} isLogged={isLogged} />}
