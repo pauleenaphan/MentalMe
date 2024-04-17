@@ -20,6 +20,8 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
          useWednesdayLogin, useThursdayLogin, 
          useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
+import { useShowNotification } from "./progress_files/showNotificationContext.js";
+
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const [taskPopup, setTaskPopup] = useState(false);
@@ -36,6 +38,8 @@ export const HomePage = ({navigation}) =>{
     const { thursdayLogin, setThursdayLogin } = useThursdayLogin();
     const { fridayLogin, setFridayLogin } = useFridayLogin();
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
+
+    const { showNotification, setShowNotification } = useShowNotification();
 
     //load moobie on the homepage
     const setBody = async () => {
@@ -66,7 +70,8 @@ export const HomePage = ({navigation}) =>{
         thursdayLogin, setThursdayLogin, 
         fridayLogin, setFridayLogin, 
         saturdayLogin, setSaturdayLogin,
-        currency, updateCurrency}) => {
+        currency, updateCurrency,
+        showNotification, setShowNotification}) => {
             try {
                 await dailyIncrement({
                     setDailyLogins,
@@ -79,7 +84,8 @@ export const HomePage = ({navigation}) =>{
                     setThursdayLogin,
                     setFridayLogin,
                     setSaturdayLogin,
-                    updateCurrency
+                    updateCurrency,
+                    setShowNotification
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -89,6 +95,10 @@ export const HomePage = ({navigation}) =>{
 
     const toggleTaskPopup = () =>{
         setTaskPopup(!taskPopup);
+    }
+
+    const toggleDailyLoginPopUp = () =>{
+        setShowNotification(!showNotification);
     }
 
     useFocusEffect(
@@ -106,7 +116,8 @@ export const HomePage = ({navigation}) =>{
                 setThursdayLogin, 
                 setFridayLogin, 
                 setSaturdayLogin,
-                updateCurrency});
+                updateCurrency,
+                setShowNotification});
         }, [])
     )
 
@@ -178,7 +189,27 @@ export const HomePage = ({navigation}) =>{
                     
                 </Modal>
                 
-                
+                <Modal
+                    isVisible = { showNotification }
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                >
+                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                        <IconButton
+                            onPress={() => {
+                                navigation.navigate("Home Page")
+                                toggleDailyLoginPopUp();
+                            }}
+                            iconName="arrow-back"
+                            iconComponent={Ionicons}
+                            size={30}
+                            color="black"
+                        />
+                        <Text>+1 Honey Coin for Daily Login!</Text>
+                        <Text>New Honey Coin Total: {currency}</Text>
+                    </View>
+                </Modal>
+
                 {/* All icons on the bottom bar */}
                 <View style = {homePage.iconBarContainer}>
                     <View style = {homePage.iconBar}>

@@ -25,6 +25,7 @@ import { ChatPage } from './chat.js';
 import { IconButton } from './homepage.js';
 import { Ionicons } from "@expo/vector-icons";
 import { TaskContextProvider } from './task.js';
+import { ShowNotificationProvider } from './progress_files/showNotificationContext.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <UserInfoProvider>
       <TaskContextProvider>
+      <ShowNotificationProvider>
       <DailyLoginsProvider>
         <ConsecutiveLoginsProvider>
           <LongestStreakProvider>
@@ -359,7 +361,8 @@ export default function App() {
             </SundayLoginProvider>
           </LongestStreakProvider>
         </ConsecutiveLoginsProvider>
-      </DailyLoginsProvider> 
+      </DailyLoginsProvider>
+      </ShowNotificationProvider>
       </TaskContextProvider>       
     </UserInfoProvider>
   );
