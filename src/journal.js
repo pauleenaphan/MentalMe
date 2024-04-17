@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
-import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
 import { backButton, journalPage, entryPage, newEntryPage } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
-import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
-import { Background } from "@react-navigation/elements";
-import { disableErrorHandling } from "expo";
+import { getCurrency } from "./currency.js";
 
 
 //Return's today's date
@@ -29,6 +28,7 @@ export const JournalHomePage = ({navigation}) =>{
     useFocusEffect(
         React.useCallback(() => {
             console.log('Showing new Entries');
+            console.log("DATE FORMAT", getDate());
             getEntries();
             return () => {
               // Cleanup logic (if any)
@@ -111,6 +111,8 @@ export const JournalHomePage = ({navigation}) =>{
 
 //Adds journal entry
 export const AddJournalEntryPage = ({navigation}) =>{
+    const {currency, updateCurrency} = getCurrency();
+    
     const handlePressOutside = () => {
         //brings the keyboard down
         Keyboard.dismiss(); 
@@ -134,6 +136,18 @@ export const AddJournalEntryPage = ({navigation}) =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
             let currentUserEmail = await getCurrEmail();
+            
+            let currDate = getDate();
+            const lastDate = await getDoc(doc(db, currentUserEmail, "Journal Date"));
+            if(lastDate.data().date == currDate){
+                console.log("user has journaled today already")
+            }else{
+                //updates the date and give the user a coin
+                await setDoc(doc(db, currentUserEmail, "Journal Date"),{
+                    date: currDate
+                })
+                updateCurrency(parseInt(currency) + 1);
+            }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
                 title: journalInfo.title.toString(),
@@ -141,6 +155,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 date: getDate().toString()
             });
             console.log("entry was created " + entry.id);
+        
         }catch(error){
             console.log("error " + error)
         }
@@ -170,7 +185,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 <TouchableOpacity
                     onPress={()=>{
                         addEntry();
-                        navigation.goBack();
+                        navigation.navigate("Journal Home Page")
                     }}
                     style={{
                         alignSelf: 'center',
