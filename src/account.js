@@ -188,12 +188,20 @@ export const CreateAccPage = ({navigation}) => {
         console.log("SET USER STATUS FUNCTIONNNNNN ");
         try {
             let currentUserEmail = await getCurrEmail();
-            // console.log("current user emailLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ", currentUserEmail)
+            
+            //adds whether or not the user is new
             await setDoc(doc(db, currentUserEmail, "User Status"), {
                 status: "true"
             })
+
+            //adds doc for the user name
             await setDoc(doc(db, currentUserEmail, "Username"), {
                 name: "name"
+            })
+
+            //adds doc for the journal date to check
+            await setDoc(doc(db, currentUserEmail, "Journal Date"), {
+                date: "0/0/0"
             })
             AsyncStorage.setItem("UserName", JSON.stringify("Talk to Moobie!"));
             setUserName("Talk to Moobie");
