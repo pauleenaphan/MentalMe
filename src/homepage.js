@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Button, TouchableOpacity, ImageBackground } from "react-native";
 import { Image } from 'expo-image'; //makes the imgs load faster
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+import Modal from "react-native-modal";
+import { Ionicons } from "@expo/vector-icons";
 
 import { homePageMoobie, styles, homePage } from "./styles.js";
 import { getMoobie } from "./moobie.js";
@@ -24,6 +26,7 @@ import { useSaturdayLogin } from './progress_files/saturdayLoginContext.js';
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
+    const [taskPopup, setTaskPopup] = useState(false);
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
 
@@ -88,6 +91,10 @@ export const HomePage = ({navigation}) =>{
             }
     };
 
+    const toggleTaskPopup = () =>{
+        setTaskPopup(!taskPopup);
+    }
+
     useFocusEffect(
         React.useCallback(()=>{
             setBody();
@@ -141,6 +148,39 @@ export const HomePage = ({navigation}) =>{
                         />
                     </View>
                 </View>
+                {/* Icon for the daily task */}
+                <View style = {{marginRight: 'auto', marginLeft: 30}}>
+                    <IconButton
+                        onPress = {() =>{ toggleTaskPopup() }}
+                        iconName = "tasks"
+                        iconComponent = {FontAwesome5}
+                        size = {40}
+                        color = "black"
+                    />
+                </View>
+                <Modal
+                    isVisible = {taskPopup}
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                >
+                    <View style = {{backgroundColor: 'white', padding: 20}}> 
+                        <IconButton
+                            onPress={() => {
+                                navigation.navigate("Home Page")
+                                toggleTaskPopup();
+                            }}
+                            iconName="arrow-back"
+                            iconComponent={Ionicons}
+                            size={30}
+                            color="black"
+                        />
+                        <Text> Daily Task </Text>
+                        <Text> Daily Login: </Text>
+                        <Text> Completed Journal Entry: </Text>
+                        <Text> Weekly Login: </Text>
+                    </View>
+                    
+                </Modal>
                 
                 
                 {/* All icons on the bottom bar */}
