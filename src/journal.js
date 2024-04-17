@@ -9,6 +9,7 @@ import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
 import { getCurrency } from "./currency.js";
+import { getTaskInfo } from "./task.js";
 
 
 //Return's today's date
@@ -111,6 +112,7 @@ export const JournalHomePage = ({navigation}) =>{
 
 //Adds journal entry
 export const AddJournalEntryPage = ({navigation}) =>{
+    const {setJournalTask} = getTaskInfo();
     const {currency, updateCurrency} = getCurrency();
     
     const handlePressOutside = () => {
@@ -147,6 +149,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                     date: currDate
                 })
                 updateCurrency(parseInt(currency) + 1);
+
             }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
