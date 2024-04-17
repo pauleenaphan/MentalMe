@@ -203,6 +203,14 @@ export const CreateAccPage = ({navigation}) => {
             await setDoc(doc(db, currentUserEmail, "Journal Date"), {
                 date: "0/0/0"
             })
+
+            //adds doc for the user's daily/weekly task
+            await setDoc(doc(db, currentUserEmail, "User Task"), {
+                loginTask: false,
+                journalTask: false,
+                weeklyLogin: false
+            })
+
             AsyncStorage.setItem("UserName", JSON.stringify("Talk to Moobie!"));
             setUserName("Talk to Moobie");
             console.log("User Status Document has been created");
