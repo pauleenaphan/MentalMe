@@ -13,13 +13,9 @@ import { getCurrEmail } from "./account.js";
 import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
 import { useConsecutiveLogins } from './progress_files/consecutiveLoginsContext.js';
 import { useLongestStreak } from "./progress_files/longestStreakContext.js";
-import { useSundayLogin } from './progress_files/sundayLoginContext.js';
-import { useMondayLogin } from './progress_files/mondayLoginContext.js';
-import { useTuesdayLogin } from './progress_files/tuesdayLoginContext.js';
-import { useWednesdayLogin } from './progress_files/wednesdayLoginContext.js';
-import { useThursdayLogin } from './progress_files/thursdayLoginContext.js';
-import { useFridayLogin } from './progress_files/fridayLoginContext.js';
-import { useSaturdayLogin } from './progress_files/saturdayLoginContext.js';
+import { useSundayLogin, useMondayLogin, useTuesdayLogin, 
+         useWednesdayLogin, useThursdayLogin, 
+         useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
 import { getCurrency } from "./currency.js";
 
@@ -291,7 +287,7 @@ export const ProgressTracker = () => {
                 </View>
                 <View style={progressPage.statContainer}>
                     <Text style={progressPage.statNumber}>{longestStreak}</Text>
-                    <Text style={progressPage.statLabel}>Longest Login Streak</Text>
+                    <Text style={progressPage.statLabel}>Longest Streak</Text>
                 </View>
             </View>
             {/* <Button title="Simulate New Day (Tomorrow)" onPress={() => handleTestDailyIncrementV0({

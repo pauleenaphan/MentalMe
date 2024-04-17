@@ -18,13 +18,9 @@ import { ClosetPage } from './closet.js';
 import { DailyLoginsProvider } from './progress_files/dailyLoginsContext.js';
 import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsContext.js';
 import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
-import { SundayLoginProvider } from './progress_files/sundayLoginContext.js';
-import { MondayLoginProvider } from './progress_files/mondayLoginContext.js';
-import { TuesdayLoginProvider } from './progress_files/tuesdayLoginContext.js';
-import { WednesdayLoginProvider } from './progress_files/wednesdayLoginContext.js';
-import { ThursdayLoginProvider } from './progress_files/thursdayLoginContext.js';
-import { FridayLoginProvider } from './progress_files/fridayLoginContext.js';
-import { SaturdayLoginProvider } from './progress_files/saturdayLoginContext.js';
+import { SundayLoginProvider, MondayLoginProvider, TuesdayLoginProvider, 
+         WednesdayLoginProvider, ThursdayLoginProvider, 
+         FridayLoginProvider, SaturdayLoginProvider } from './progress_files/weeklyLoginContext.js';
 import { ChatPage } from './chat.js';
 import { IconButton } from './homepage.js';
 import { Ionicons } from "@expo/vector-icons";
