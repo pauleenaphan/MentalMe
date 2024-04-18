@@ -4,9 +4,9 @@ const TaskContext = createContext();
 
 //keeps track of the user's daily/weekly task
 export const TaskContextProvider = ({ children }) =>{
-    const [loginTask, setLoginTask] = useState('');
-    const [journalTask, setJournalTask] = useState('');
-    const [weeklyLogin, setWeeklyLogin] = useState('');
+    const [loginTask, setLoginTask] = useState('false');
+    const [journalTask, setJournalTask] = useState('false');
+    const [weeklyLogin, setWeeklyLogin] = useState('false');
 
     return (
         <TaskContext.Provider value = {{ loginTask, setLoginTask, journalTask, setJournalTask, weeklyLogin, setWeeklyLogin}}>
