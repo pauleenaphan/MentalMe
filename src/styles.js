@@ -124,6 +124,43 @@ export const homePageMoobie = StyleSheet.create({
     bottom: 129,
     right: 22,
   }
+});
+
+export const userTaskPopup = StyleSheet.create({
+  xBtn:{
+    textAlign: 'right', 
+    fontSize: 40, 
+    fontWeight: 'bold', 
+    marginTop: -10
+  },
+  title:{
+    textAlign: 'center', 
+    fontWeight: 'bold', 
+    fontSize: 30
+  },
+  caption:{
+    textAlign: 'center', 
+    marginBottom: 20
+  },
+  //container for task name and task status
+  bodyContainer:{
+    flexDirection: 'row', 
+    marginLeft: 15, 
+    marginBottom: 10
+  },
+  taskName:{
+    fontSize: 25, 
+    margin: 10
+  },
+  taskStatusContainer:{
+    flex: 1, 
+    alignItems: 'center'
+  },
+  taskStatus:{
+    width: 40, 
+    height: 40, 
+    margin: 5
+  }
 })
 
 //style for the closet page
@@ -655,6 +692,6 @@ export const chatPage = StyleSheet.create({
 
 export const notifStyle = StyleSheet.create({
   mainText:{
-    textAlign: center
+    textAlign: 'center'
   }
 })
