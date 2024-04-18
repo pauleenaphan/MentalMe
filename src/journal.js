@@ -15,7 +15,7 @@ import { getTaskInfo } from "./task.js";
 //Return's today's date
 export const getDate = () =>{
     const today = new Date();
-    const month = today.getMonth();
+    const month = today.getMonth() + 1;
     const year = today.getFullYear();
     const date = today.getDate();
     return `${month}/${date}/${year}`;
@@ -152,8 +152,9 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 updateCurrency(parseInt(currency) + 1);
                 //updates the doc for the user journal task
                 await updateDoc(doc(db, currentUserEmail, "User Task"), {
-                    journalTask: true
+                    journalTask: "true"
                 })
+                setJournalTask("true");
             }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
