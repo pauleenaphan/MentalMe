@@ -7,13 +7,14 @@ import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vec
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import { db } from "../firebase/index.js";
-import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 
-import { homePageMoobie, styles, homePage, notifStyle } from "./styles.js";
+import { homePageMoobie, styles, homePage, notifStyle, userTaskPopup } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
 import { getCurrEmail } from "./account.js";
 import { getDate } from "./journal.js";
+import { getTaskInfo } from "./task.js";
 
 import { dailyIncrement } from "./progress.js";
 import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
@@ -26,11 +27,13 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
 import { useShowNotification } from "./progress_files/showNotificationContext.js";
 
 
+
 //Main home page 
 export const HomePage = ({navigation}) =>{
     const [taskPopup, setTaskPopup] = useState(false);
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
+    const {setLoginTask, setJournalTask, setWeeklyLogin, loginTask, journalTask, weeklyLogin} = getTaskInfo();
 
     const { dailyLogins, setDailyLogins } = useDailyLogins();
     const { consecutiveDLs, setConsecutiveDLs } = useConsecutiveLogins();
@@ -44,7 +47,6 @@ export const HomePage = ({navigation}) =>{
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
 
     const { showNotification, setShowNotification } = useShowNotification();
-
     //load moobie on the homepage
     const setBody = async () => {
         try {
@@ -63,16 +65,34 @@ export const HomePage = ({navigation}) =>{
         }
     };
 
+    //resets the task if the user has not logged in today
     const resetTask = async () =>{
         try{
             const currUserEmail = await getCurrEmail();
+
+            //gets the last login datw
             const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
             console.log("LAST LOGIN ", loginDate.data().userLastLogin);
+     
             console.log("THIS IS TODAYS DATE", getDate());
-            if(loginDate == getDate()){
-                console.log("same date as last login");
+            //compares today's date and the last date the user logged in
+            //if the dates are the same then do nothing, keep the current task
+            //else reset all of the task
+            if(loginDate.data().userLastLogin == getDate()){
+                const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
+                setJournalTask(taskDoc.data().journalTask);
+                setLoginTask(taskDoc.data().loginTask);
+                setWeeklyLogin(taskDoc.data().weeklyLogin);
+            }else{
+                await updateDoc(doc(db, currUserEmail, "User Task"), {
+                    loginTask: "false",
+                    journalTask: "false",
+                    weeklyLogin: "false"
+                })
+                setLoginTask('false');
+                setJournalTask('false');
+                setWeeklyLogin('false');
             }
-
         }catch(error){
             console.log("Error ", error);
         }
@@ -139,7 +159,6 @@ export const HomePage = ({navigation}) =>{
                 updateCurrency,
                 setShowNotification});
             resetTask();
-                
         }, [])
     )
 
@@ -194,7 +213,7 @@ export const HomePage = ({navigation}) =>{
                     onBackdropPress={() => toggleTaskPopup()}
                     backdropOpacity={.35}
                 >
-                    <View style = {{backgroundColor: 'white', padding: 20}}> 
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 30, borderRadius: 10}}> 
                         {/* <IconButton
                             onPress={() => {
                                 navigation.navigate("Home Page")
@@ -205,12 +224,36 @@ export const HomePage = ({navigation}) =>{
                             size={30}
                             color="black"
                         /> */}
-                        <Text> Daily Task </Text>
-                        <Text> Daily Login: </Text>
-                        <Text> Completed Journal Entry: </Text>
-                        <Text> Weekly Login: </Text>
+                        <TouchableOpacity
+                            onPress = {() => toggleTaskPopup()}
+                        >
+                            <Text style = {userTaskPopup.xBtn}> x </Text>
+                        </TouchableOpacity>
+                        <Text style = {userTaskPopup.title}> Daily Task </Text>
+                        <Text style = {userTaskPopup.caption}> Moobie is counting on you! </Text>
+                        <View style = {userTaskPopup.bodyContainer}>
+                            <View>
+                                <Text style = {userTaskPopup.taskName}> Daily Login </Text>
+                                <Text style = {userTaskPopup.taskName}> Journal Entry </Text>
+                                <Text style = {userTaskPopup.taskName}> Weekly Login </Text>
+                            </View>
+                            
+                            <View style = {userTaskPopup.taskStatusContainer}>
+                                <Image
+                                    style = {userTaskPopup.taskStatus}
+                                    source = {(loginTask == "true") ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                                />
+                                <Image
+                                    style = {userTaskPopup.taskStatus}
+                                    source = {(journalTask == "true") ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                                />
+                                <Image
+                                    style = {userTaskPopup.taskStatus}
+                                    source = {(weeklyLogin == "true") ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
+                                />
+                            </View>  
+                        </View>
                     </View>
-                    
                 </Modal>
                 
                 <Modal
