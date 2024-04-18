@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
-import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
@@ -13,7 +13,7 @@ import { getTaskInfo } from "./task.js";
 
 
 //Return's today's date
-function getDate(){
+export const getDate = () =>{
     const today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
@@ -139,6 +139,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
         try{
             let currentUserEmail = await getCurrEmail();
             
+            //checks the current date for whether or not the user has journaled today
             let currDate = getDate();
             const lastDate = await getDoc(doc(db, currentUserEmail, "Journal Date"));
             if(lastDate.data().date == currDate){
@@ -149,7 +150,10 @@ export const AddJournalEntryPage = ({navigation}) =>{
                     date: currDate
                 })
                 updateCurrency(parseInt(currency) + 1);
-
+                //updates the doc for the user journal task
+                await updateDoc(doc(db, currentUserEmail, "User Task"), {
+                    journalTask: true
+                })
             }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
@@ -158,7 +162,6 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 date: getDate().toString()
             });
             console.log("entry was created " + entry.id);
-        
         }catch(error){
             console.log("error " + error)
         }
