@@ -1,7 +1,8 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 const TaskContext = createContext();
 
+//keeps track of the user's daily/weekly task
 export const TaskContextProvider = ({ children }) =>{
     const [loginTask, setLoginTask] = useState('');
     const [journalTask, setJournalTask] = useState('');
