@@ -6,11 +6,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
+import { db } from "../firebase/index.js";
+import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore"; 
 
 import { homePageMoobie, styles, homePage } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
-import FastImage from 'react-native-fast-image' //this wasn't working maybe try it later
+import { getCurrEmail } from "./account.js";
+import { getDate } from "./journal.js";
 
 import { dailyIncrement } from "./progress.js";
 import { useDailyLogins } from './progress_files/dailyLoginsContext.js';
@@ -21,6 +24,7 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
          useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
 import { useShowNotification } from "./progress_files/showNotificationContext.js";
+
 
 //Main home page 
 export const HomePage = ({navigation}) =>{
@@ -58,6 +62,22 @@ export const HomePage = ({navigation}) =>{
             console.error("Error in setBody:", error);
         }
     };
+
+    const resetTask = async () =>{
+        try{
+            const currUserEmail = await getCurrEmail();
+            const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
+            console.log("LAST LOGIN ", loginDate.data().userLastLogin);
+            console.log("THIS IS TODAYS DATE", getDate());
+            if(loginDate == getDate()){
+                console.log("same date as last login");
+            }
+
+        }catch(error){
+            console.log("Error ", error);
+        }
+    }
+
 
     const handleDailyIncrement = async ({
         dailyLogins, setDailyLogins, 
@@ -118,6 +138,8 @@ export const HomePage = ({navigation}) =>{
                 setSaturdayLogin,
                 updateCurrency,
                 setShowNotification});
+            resetTask();
+                
         }, [])
     )
 
