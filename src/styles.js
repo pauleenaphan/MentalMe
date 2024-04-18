@@ -629,6 +629,32 @@ export const storePopup = StyleSheet.create({
   }
 })
 
+export const storePurchasedPopup = StyleSheet.create({
+  modal:{
+    justifyContent: 'flex-end', 
+    alignItems: 'flex-start' 
+  },
+  container:{
+    backgroundColor: "#B6D3B3", 
+    height: 150, 
+    width: 180, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    borderRadius: 10, 
+    padding: 25
+  },
+  title:{
+    fontSize: 25, 
+    fontWeight: 'bold', 
+    marginBottom: -35, 
+    paddingTop: 20
+  },
+  itemImg:{
+    height: 100, 
+    width: 100
+  }
+})
+
 //style for the settings page
 export const settingsPage = StyleSheet.create({
   pageContainer:{
