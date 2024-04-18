@@ -652,3 +652,9 @@ export const chatPage = StyleSheet.create({
   }
 
 })
+
+export const notifStyle = StyleSheet.create({
+  mainText:{
+    textAlign: center
+  }
+})

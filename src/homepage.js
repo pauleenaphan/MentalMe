@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { db } from "../firebase/index.js";
 import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore"; 
 
-import { homePageMoobie, styles, homePage } from "./styles.js";
+import { homePageMoobie, styles, homePage, notifStyle } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
 import { getCurrEmail } from "./account.js";
@@ -191,9 +191,11 @@ export const HomePage = ({navigation}) =>{
                     isVisible = {taskPopup}
                     animationIn = {'zoomIn'}
                     animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleTaskPopup()}
+                    backdropOpacity={.35}
                 >
                     <View style = {{backgroundColor: 'white', padding: 20}}> 
-                        <IconButton
+                        {/* <IconButton
                             onPress={() => {
                                 navigation.navigate("Home Page")
                                 toggleTaskPopup();
@@ -202,7 +204,7 @@ export const HomePage = ({navigation}) =>{
                             iconComponent={Ionicons}
                             size={30}
                             color="black"
-                        />
+                        /> */}
                         <Text> Daily Task </Text>
                         <Text> Daily Login: </Text>
                         <Text> Completed Journal Entry: </Text>
@@ -212,12 +214,14 @@ export const HomePage = ({navigation}) =>{
                 </Modal>
                 
                 <Modal
-                    isVisible = { showNotification }
+                    isVisible = { showNotification } // taskPopup for testing and comment out ^^^
                     animationIn = {'zoomIn'}
                     animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleDailyLoginPopUp()} // toggleTaskPopup() for testing
+                    backdropOpacity={.35}
                 >
                     <View style = {{backgroundColor: 'white', padding: 20}}>
-                        <IconButton
+                        {/* <IconButton
                             onPress={() => {
                                 navigation.navigate("Home Page")
                                 toggleDailyLoginPopUp();
@@ -226,9 +230,12 @@ export const HomePage = ({navigation}) =>{
                             iconComponent={Ionicons}
                             size={30}
                             color="black"
-                        />
-                        <Text>+1 Honey Coin for Daily Login!</Text>
-                        <Text>New Honey Coin Total: {currency}</Text>
+                        /> */}
+                        <View style = {{alignItems: 'center'}}>
+                            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5}}>Daily Login ✅</Text>
+                            <Text>Reward: +1 Honey Coin</Text>
+                        </View>
                     </View>
                 </Modal>
 
