@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
@@ -31,11 +31,9 @@ export const JournalHomePage = ({navigation}) =>{
             console.log('Showing new Entries');
             console.log("DATE FORMAT", getDate());
             getEntries();
-            return () => {
-              // Cleanup logic (if any)
-            };
-        }, [])
+        }, [entries])
     );
+
 
     const getEntries = async () => {
         try {
@@ -69,6 +67,7 @@ export const JournalHomePage = ({navigation}) =>{
                     {/* maps out the entries in our db  */}
                     {entries.map(entry =>(
                         <TouchableOpacity
+                            key = {entry.id}
                             onPress = {() =>{
                                 console.log(entry.title, entry.date, entry.description);
                                 navigation.navigate('Journal Entry Page', {
@@ -132,7 +131,6 @@ export const AddJournalEntryPage = ({navigation}) =>{
         })
     }
 
-
     //adds entry to journal
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
@@ -162,6 +160,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
             });
+           
             console.log("entry was created " + entry.id);
         }catch(error){
             console.log("error " + error)
@@ -192,7 +191,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 <TouchableOpacity
                     onPress={()=>{
                         addEntry();
-                        navigation.navigate("Journal Home Page")
+                        navigation.navigate("Journal Home Page");
                     }}
                     style={{
                         alignSelf: 'center',
