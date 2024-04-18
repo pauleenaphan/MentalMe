@@ -10,7 +10,7 @@ import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-ico
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { storePage, storePopup } from "./styles.js";
+import { storePage, storePopup, storePurchasedPopup } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
 
@@ -19,6 +19,7 @@ const Tab = createBottomTabNavigator();
 //Main home page 
 export const StorePage = () =>{
     const [isPopupVisible, setPopup] = useState(false);
+    const [boughtItemPopup, setBoughtItemPopup] = useState(false);
     const [boughtItem, setBoughtItem] = useState({
         itemName: '',
         image: '',
@@ -32,6 +33,7 @@ export const StorePage = () =>{
             printValueInAsync();
         }, [])
     )
+ 
 
     const printValueInAsync = async () =>{
         try{
@@ -59,6 +61,17 @@ export const StorePage = () =>{
         setPopup(!isPopupVisible);
     }
 
+    const toggleBoughtPopup = () =>{
+        setBoughtItemPopup(!boughtItemPopup);
+
+        //if the popup is visible, close it after 5 seconds
+        if (!boughtItemPopup) {
+            setTimeout(() => {
+                setBoughtItemPopup(false); 
+            }, 5000); 
+        }
+    }
+
     //shows the alert when the user is trying to buy an item they own already
     const showItemOwnAlert = () =>{
         Alert.alert(
@@ -84,13 +97,13 @@ export const StorePage = () =>{
     const HeadAccTab = ({navigation}) =>{
         return(
             <View style = {storePage.pageContainer}>
-                {/* <Button
+                <Button
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
                         updateCurrency(parseInt(currency) + 1);
                     }}
-                /> */}
+                />
                 {/* amount of coins that the user owns */}
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
@@ -128,7 +141,7 @@ export const StorePage = () =>{
                         ))}
                     </View>
 
-
+                    {/* Popup for the item the user plans to buy */}
                     <Modal 
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
@@ -155,14 +168,20 @@ export const StorePage = () =>{
                                             if(itemFound){
                                                 showItemOwnAlert();
                                                 console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
                                             }else{
                                                 canBuy();
                                                 addToCloset();
+                                                
+                                                toggleItemPopup();
+                                                //this popup will be executued after the item popup is toggled off 
+                                                setTimeout(() => {
+                                                    toggleBoughtPopup();
+                                                }, 1); 
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
-                                        }
-                                        toggleItemPopup();
+                                        } 
                                     }}
                                 />
                             </View>
@@ -170,7 +189,22 @@ export const StorePage = () =>{
                                 color = 'black'
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
+                                
                             />
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
                     </Modal>
                 </ScrollView>
@@ -247,15 +281,20 @@ export const StorePage = () =>{
                                             if(itemFound){
                                                 showItemOwnAlert();
                                                 console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
                                             }else{
                                                 canBuy();
                                                 addToCloset();
+                                                toggleItemPopup();
+                                                setTimeout(() => {
+                                                    toggleBoughtPopup();
+                                                }, 1); 
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
                                         }
 
-                                        toggleItemPopup();
+                                        
                                     }}
                                 />
                             </View>
@@ -264,6 +303,20 @@ export const StorePage = () =>{
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
                             />
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
                     </Modal>
                 </ScrollView>
@@ -340,15 +393,20 @@ export const StorePage = () =>{
                                             if(itemFound){
                                                 showItemOwnAlert();
                                                 console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
                                             }else{
                                                 canBuy();
                                                 addToCloset();
+                                                toggleItemPopup();
+                                                setTimeout(() => {
+                                                    toggleBoughtPopup();
+                                                }, 1); 
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
                                         }
 
-                                        toggleItemPopup();
+                                        
                                     }}
                                 />
                             </View>
@@ -357,6 +415,20 @@ export const StorePage = () =>{
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
                             />
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
                     </Modal>
                 </ScrollView>
