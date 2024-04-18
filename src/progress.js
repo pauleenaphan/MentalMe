@@ -21,6 +21,8 @@ import { getCurrency } from "./currency.js";
 
 import { useShowNotification } from "./progress_files/showNotificationContext.js";
 
+import { getTaskInfo } from "./task.js";
+
 // Note: There are three variables to consider with daily logins
 // 1. "dailylogins" - State variable to display the daily logins
 // 2. .getItem('DailyLogins') -  Uses AsyncStorage to retrieve the value of 'DailyLogins'
@@ -41,6 +43,8 @@ export const ProgressTracker = () => {
     const { fridayLogin, setFridayLogin } = useFridayLogin();
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
     const { currency, updateCurrency } = getCurrency();
+    const { loginTask, setLoginTask } = getTaskInfo();
+    const { weeklyLogin, setWeeklyLogin } = getTaskInfo();
 
     const handleTestDailyIncrementV0 = async ({
         dailyLogins, setDailyLogins, 
@@ -219,10 +223,6 @@ export const ProgressTracker = () => {
 
     return(
         <View style={progressPage.fullPageContainer}>
-            {/* <View style = {storePage.currencyContainer}>
-                <Text style = {storePage.honeyCoinTitle}> Honey Coins: {currency} </Text>
-                <Image source = {require("../imgs/honeycoin.png")} style = {storePage.honeyCoinTitleImg}/>
-            </View> */}
             <Text style={progressPage.title}>Weekly Progress</Text>
             <Text style = {progressPage.caption}> Moobie loves to see your progress! </Text>
             <View style={progressPage.rowOfCheckboxes}>
@@ -373,7 +373,8 @@ export const dailyIncrement = async ({
     setDailyLogins, setConsecutiveDLs, setLongestStreak, 
     setSundayLogin, setMondayLogin, setTuesdayLogin, 
     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-    setSaturdayLogin, updateCurrency, setShowNotification}) => {
+    setSaturdayLogin, updateCurrency, setShowNotification,
+    setLoginTask, setWeeklyLogin}) => {
     try {
         let dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
         let storedDate = await AsyncStorage.getItem("latestDate");
@@ -399,7 +400,8 @@ export const dailyIncrement = async ({
                 setDailyLogins, setConsecutiveDLs, setLongestStreak,
                 setSundayLogin, setMondayLogin, setTuesdayLogin,
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification
+                setSaturdayLogin, updateCurrency, setShowNotification,
+                setLoginTask, setWeeklyLogin
             });
         } else if (isNaN(dailyLogs)) {
             await setPersonalCounters({
@@ -418,7 +420,8 @@ export const dailyIncrement = async ({
                     setDailyLogins, setConsecutiveDLs, setLongestStreak,
                     setSundayLogin, setMondayLogin, setTuesdayLogin,
                     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                    setSaturdayLogin, updateCurrency, setShowNotification
+                    setSaturdayLogin, updateCurrency, setShowNotification,
+                    setLoginTask, setWeeklyLogin
                 });
             } else if (dailyLogs > 0 && storedDate != currentDate) {
                 // console.log("Current daily logins: " + dailyLogs)
@@ -426,7 +429,8 @@ export const dailyIncrement = async ({
                     setDailyLogins, setConsecutiveDLs, setLongestStreak,
                     setSundayLogin, setMondayLogin, setTuesdayLogin,
                     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                    setSaturdayLogin, updateCurrency
+                    setSaturdayLogin, updateCurrency,
+                    setLoginTask, setWeeklyLogin
                 });
                 await AsyncStorage.setItem("latestDate", currentDate);
             } else if (dailyLogs > 0 && storedDate === currentDate) {
@@ -446,7 +450,8 @@ export const dailyIncrement = async ({
                 setDailyLogins, setConsecutiveDLs, setLongestStreak,
                 setSundayLogin, setMondayLogin, setTuesdayLogin,
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification
+                setSaturdayLogin, updateCurrency, setShowNotification,
+                setLoginTask, setWeeklyLogin
             });
             await AsyncStorage.setItem("latestDate", currentDate);
         } else if (dailyLogs > 0 && storedDate === currentDate) {
@@ -602,7 +607,8 @@ export const incrementCounters = async ({
     setDailyLogins, setConsecutiveDLs, setLongestStreak, 
     setSundayLogin, setMondayLogin, setTuesdayLogin, 
     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-    setSaturdayLogin, updateCurrency, setShowNotification}) => {
+    setSaturdayLogin, updateCurrency, setShowNotification,
+    setLoginTask, setWeeklyLogin}) => {
         try {
             const email = await getCurrEmail();
             let currentUser = email;
@@ -670,6 +676,7 @@ export const incrementCounters = async ({
                 await AsyncStorage.getItem('saturdayLogin') === 'true') {
                     updateCurrency(currencyAmt+2);
                     await AsyncStorage.setItem('userCurrency', (currencyAmt+2).toString());
+                    setWeeklyLogin('true');
                 }
                 await AsyncStorage.setItem('sundayLogin', 'true');
                 setSundayLogin(true);
@@ -731,6 +738,7 @@ export const incrementCounters = async ({
             });
 
             setShowNotification(true);
+            setLoginTask('true');
             console.log("Increment Counters Function Success!");
         } catch (error) {
             console.log("Increment Counters Function Error: " + error);

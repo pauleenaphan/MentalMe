@@ -111,21 +111,16 @@ export const HomePage = ({navigation}) =>{
         fridayLogin, setFridayLogin, 
         saturdayLogin, setSaturdayLogin,
         currency, updateCurrency,
-        showNotification, setShowNotification}) => {
+        showNotification, setShowNotification,
+        loginTask, setLoginTask,
+        weeklyLogin, setWeeklyLogin}) => {
             try {
                 await dailyIncrement({
-                    setDailyLogins,
-                    setConsecutiveDLs,
-                    setLongestStreak,
-                    setSundayLogin,
-                    setMondayLogin,
-                    setTuesdayLogin,
-                    setWednesdayLogin,
-                    setThursdayLogin,
-                    setFridayLogin,
-                    setSaturdayLogin,
-                    updateCurrency,
-                    setShowNotification
+                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
+                    setSundayLogin, setMondayLogin, setTuesdayLogin,
+                    setWednesdayLogin, setThursdayLogin, setFridayLogin,
+                    setSaturdayLogin, updateCurrency, setShowNotification,
+                    setLoginTask, setWeeklyLogin
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -146,18 +141,11 @@ export const HomePage = ({navigation}) =>{
             setBody();
             console.log("body part changed");
             handleDailyIncrement({
-                setDailyLogins, 
-                setConsecutiveDLs, 
-                setLongestStreak, 
-                setSundayLogin, 
-                setMondayLogin, 
-                setTuesdayLogin, 
-                setWednesdayLogin, 
-                setThursdayLogin, 
-                setFridayLogin, 
-                setSaturdayLogin,
-                updateCurrency,
-                setShowNotification});
+                setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+                setSundayLogin, setMondayLogin, setTuesdayLogin, 
+                setWednesdayLogin, setThursdayLogin, setFridayLogin, 
+                setSaturdayLogin, updateCurrency, setShowNotification,
+                setLoginTask, setWeeklyLogin});
             resetTask();
         }, [])
     )
