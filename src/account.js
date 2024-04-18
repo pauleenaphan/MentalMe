@@ -15,6 +15,7 @@ import { getMoobie } from './moobie.js';
 import { getCurrency } from './currency.js';
 import { images } from './images.js';
 import { getTaskInfo } from './task.js';
+import { getDate } from './journal.js';
 
 const auth1 = auth;
 
@@ -186,6 +187,23 @@ export const CreateAccPage = ({navigation}) => {
         }
     }
 
+    // //adds a journal entry that moobie wrote
+    // const addMoobieEntry = async () =>{
+    //     console.log("ADDING MOOBIE DOC 1");
+    //     try{
+    //         let currentUserEmail = await getCurrEmail();
+    //         await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
+    //             title: "Lost Honey",
+    //             description: "Today I was walking through the forest looking for something to do. While I walked past a tree I saw something glowing. It was a tub of honey! This was the best day ever because I love honey and honey is super good. Moobie is having a good day today.",
+    //             date: getDate().toString()
+    //         });
+    //         console.log("ADDING MOOBIE DOC 2");
+    //     }catch(error){
+    //         console.log("Error ", error);
+    //     }
+        
+    // }
+
     const setUserStatus = async () => {
         console.log("SET USER STATUS FUNCTIONNNNNN ");
         try {
@@ -212,6 +230,13 @@ export const CreateAccPage = ({navigation}) => {
                 journalTask: "false",
                 weeklyLogin: "false"
             })
+
+            //adds doc for moobie's journal entry
+            await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
+                title: "Lost Honey",
+                description: "Today I was walking through the forest looking for something to do. While I walked past a tree I saw something glowing. It was a tub of honey! This was the best day ever because I love honey and honey is super good. Moobie is having a good day today.",
+                date: getDate().toString()
+            });
             /*
                 Safety because sometimes homepage won't update correctly if the user is in the app
                 then logs out and creates a new acccount, it will show the status from the previous
@@ -308,6 +333,7 @@ export const CreateAccPage = ({navigation}) => {
                                     addDefaultMoobie();
                                     addDefaultCurrency();
                                     setUserStatus();
+                                    //addMoobieEntry();
                                     navigation.navigate('Home Page');
                                 }else{
                                     console.log('account error');
