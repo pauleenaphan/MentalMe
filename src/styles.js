@@ -142,24 +142,42 @@ export const userTaskPopup = StyleSheet.create({
     textAlign: 'center', 
     marginBottom: 20
   },
+  honeyCoin:{
+    width: 50, 
+    height: 50, 
+    marginTop: -10
+  },
   //container for task name and task status
-  bodyContainer:{
+  taskContainer:{
     flexDirection: 'row', 
-    marginLeft: 15, 
-    marginBottom: 10
+    alignItems: 'center', 
+    marginLeft: -5
   },
   taskName:{
     fontSize: 25, 
-    margin: 10
   },
-  taskStatusContainer:{
-    flex: 1, 
-    alignItems: 'center'
+  taskCaption:{
+    marginBottom: 15
   },
   taskStatus:{
     width: 40, 
     height: 40, 
-    margin: 5
+    marginLeft: 10
+  },
+  loginCoinValue:{
+    fontSize: 20, 
+    marginLeft: 53, 
+    marginRight: -10
+  },
+  journalCoinValue:{
+    fontSize: 20, 
+    marginLeft: 30, 
+    marginRight: -10
+  },
+  weeklyCoinValue:{
+    fontSize: 20, 
+    marginLeft: 25, 
+    marginRight: -10
   }
 })
 
@@ -405,7 +423,7 @@ export const progressPage = StyleSheet.create({
   weeklyCheckbox:{
     width: 40,
     height: 40,
-    resizeMode: 'contain',
+    contentFit: 'contain',
   },
   rowOfCheckboxes:{
     alignItems: 'center',
