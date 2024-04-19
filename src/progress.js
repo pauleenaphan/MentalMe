@@ -376,6 +376,11 @@ export const dailyIncrement = async ({
     setSaturdayLogin, updateCurrency, setShowNotification,
     setLoginTask, setWeeklyLogin}) => {
     try {
+        await setPersonalCounters({
+            setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+            setSundayLogin, setMondayLogin, setTuesdayLogin, 
+            setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
+        });
         let dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
         let storedDate = await AsyncStorage.getItem("latestDate");
         if (storedDate === null) {
@@ -403,47 +408,52 @@ export const dailyIncrement = async ({
                 setSaturdayLogin, updateCurrency, setShowNotification,
                 setLoginTask, setWeeklyLogin
             });
-        } else if (isNaN(dailyLogs)) {
-            await setPersonalCounters({
-                setDailyLogins, setConsecutiveDLs, setLongestStreak, 
-                setSundayLogin, setMondayLogin, setTuesdayLogin, 
-                setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
-            });
-            if (dailyLogs === 0) {
-                await addPersonalCounter({
-                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
-                    setSundayLogin, setMondayLogin, setTuesdayLogin,
-                    setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                    setSaturdayLogin
-                });
-                await incrementCounters({
-                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
-                    setSundayLogin, setMondayLogin, setTuesdayLogin,
-                    setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                    setSaturdayLogin, updateCurrency, setShowNotification,
-                    setLoginTask, setWeeklyLogin
-                });
-            } else if (dailyLogs > 0 && storedDate != currentDate) {
-                // console.log("Current daily logins: " + dailyLogs)
-                await incrementCounters({
-                    setDailyLogins, setConsecutiveDLs, setLongestStreak,
-                    setSundayLogin, setMondayLogin, setTuesdayLogin,
-                    setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                    setSaturdayLogin, updateCurrency,
-                    setLoginTask, setWeeklyLogin
-                });
-                await AsyncStorage.setItem("latestDate", currentDate);
-            } else if (dailyLogs > 0 && storedDate === currentDate) {
-                console.log("Same day, already incremented.");
-                setDailyLogins(dailyLogs);
-                setConsecutiveDLs(consecutiveLogs);
-                setLongestStreak(longestStreakLogs);
-                await convertDayToBool({
-                    setSundayLogin, setMondayLogin, setTuesdayLogin, 
-                    setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
-                updateCurrency(parseInt(currencyLog));
-                currencyLog = await AsyncStorage.getItem('userCurrency');
-            }
+        // } else if (isNaN(dailyLogs)) {
+        //     await setPersonalCounters({
+        //         setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+        //         setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        //         setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
+        //     });
+        //     dailyLogs = parseInt(await AsyncStorage.getItem("dailyLogins"), 10);
+        //     storedDate = await AsyncStorage.getItem("latestDate");
+        //     console.log("Set Daily Logs: " + dailyLogs);
+        //     console.log("Set Stored Date: " + storedDate);
+        //     console.log("New Current Date: " + currentDate);
+        //     if (dailyLogs === 0) {
+        //         await addPersonalCounter({
+        //             setDailyLogins, setConsecutiveDLs, setLongestStreak,
+        //             setSundayLogin, setMondayLogin, setTuesdayLogin,
+        //             setWednesdayLogin, setThursdayLogin, setFridayLogin, 
+        //             setSaturdayLogin
+        //         });
+        //         await incrementCounters({
+        //             setDailyLogins, setConsecutiveDLs, setLongestStreak,
+        //             setSundayLogin, setMondayLogin, setTuesdayLogin,
+        //             setWednesdayLogin, setThursdayLogin, setFridayLogin, 
+        //             setSaturdayLogin, updateCurrency, setShowNotification,
+        //             setLoginTask, setWeeklyLogin
+        //         });
+        //     } else if (dailyLogs > 0 && storedDate != currentDate) {
+        //         // console.log("Current daily logins: " + dailyLogs)
+        //         await incrementCounters({
+        //             setDailyLogins, setConsecutiveDLs, setLongestStreak,
+        //             setSundayLogin, setMondayLogin, setTuesdayLogin,
+        //             setWednesdayLogin, setThursdayLogin, setFridayLogin, 
+        //             setSaturdayLogin, updateCurrency,
+        //             setLoginTask, setWeeklyLogin
+        //         });
+        //         await AsyncStorage.setItem("latestDate", currentDate);
+        //     } else if (dailyLogs > 0 && storedDate === currentDate) {
+        //         console.log("Same day, already incremented.");
+        //         setDailyLogins(dailyLogs);
+        //         setConsecutiveDLs(consecutiveLogs);
+        //         setLongestStreak(longestStreakLogs);
+        //         await convertDayToBool({
+        //             setSundayLogin, setMondayLogin, setTuesdayLogin, 
+        //             setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin});
+        //         updateCurrency(parseInt(currencyLog));
+        //         currencyLog = await AsyncStorage.getItem('userCurrency');
+        //     }
         } else if (dailyLogs > 0 && storedDate != currentDate) {
             console.log("Daily Logs Greater Than 0 and the Date is Not the Same");
             await incrementCounters({
@@ -456,11 +466,11 @@ export const dailyIncrement = async ({
             await AsyncStorage.setItem("latestDate", currentDate);
         } else if (dailyLogs > 0 && storedDate === currentDate) {
             console.log("Same day, already incremented.");
-            await setPersonalCounters({
-                setDailyLogins, setConsecutiveDLs, setLongestStreak, 
-                setSundayLogin, setMondayLogin, setTuesdayLogin, 
-                setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
-            });
+            // await setPersonalCounters({
+            //     setDailyLogins, setConsecutiveDLs, setLongestStreak, 
+            //     setSundayLogin, setMondayLogin, setTuesdayLogin, 
+            //     setWednesdayLogin, setThursdayLogin, setFridayLogin, setSaturdayLogin
+            // });
             setDailyLogins(dailyLogs);
             setConsecutiveDLs(consecutiveLogs);
             setLongestStreak(longestStreakLogs);
@@ -718,6 +728,17 @@ export const incrementCounters = async ({
             }
 
             lastLogin = new Date().toLocaleDateString();
+
+            currentDL = parseInt(await AsyncStorage.getItem('dailyLogins'), 10);
+            currentCDL = parseInt(await AsyncStorage.getItem('consecutiveDLs'), 10);
+            currentLS = parseInt(await AsyncStorage.getItem('longestStreak'), 10);
+            currentSunday = await AsyncStorage.getItem('sundayLogin');
+            currentMonday = await AsyncStorage.getItem('mondayLogin');
+            currentTuesday = await AsyncStorage.getItem('tuesdayLogin');
+            currentWednesday = await AsyncStorage.getItem('wednesdayLogin');
+            currentThursday = await AsyncStorage.getItem('thursdayLogin');
+            currentFriday = await AsyncStorage.getItem('fridayLogin');
+            currentSaturday = await AsyncStorage.getItem('saturdayLogin');
 
             await setDoc(doc(db, currentUser, 'ProgressTrackingDoc'), {
                 userDailyLogins: currentDL.toString(),
