@@ -661,6 +661,39 @@ export const storePurchasedPopup = StyleSheet.create({
   }
 })
 
+export const storeItemOwnPopup = StyleSheet.create({
+  container:{
+    padding: 20, 
+    backgroundColor: '#B6D3B3', 
+    borderRadius: 10, 
+    height: 200, width: 250, 
+    justifyContent: 'center', 
+    alignItems: 'center'
+  },
+  title:{
+    fontSize: 25, 
+    fontWeight: 'bold', 
+    paddingTop: 25
+  },
+  itemName:{
+    fontWeight: 'bold', 
+    marginTop: 10
+  },
+  bodyItemName:{
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: -35
+  },
+  lowerBodyItemName:{
+    fontWeight: 'bold',
+    marginTop: 10, 
+    marginBottom: -50
+  },
+  itemImg:{
+    height: 130, 
+    width: 130
+  }
+})
 //style for the settings page
 export const settingsPage = StyleSheet.create({
   pageContainer:{
