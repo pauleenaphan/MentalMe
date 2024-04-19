@@ -10,7 +10,7 @@ import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-ico
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { storePage, storePopup, storePurchasedPopup } from "./styles.js";
+import { storeItemOwnPopup, storePage, storePopup, storePurchasedPopup } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
 
@@ -20,6 +20,8 @@ const Tab = createBottomTabNavigator();
 export const StorePage = () =>{
     const [isPopupVisible, setPopup] = useState(false);
     const [boughtItemPopup, setBoughtItemPopup] = useState(false);
+    const [itemOwnPopup, setItemOwnPopup] = useState(false);
+    const [invalidPurchasePopup, setInvalidPurchasePopup] = useState(false);
     const [boughtItem, setBoughtItem] = useState({
         itemName: '',
         image: '',
@@ -61,38 +63,40 @@ export const StorePage = () =>{
         setPopup(!isPopupVisible);
     }
 
+    //toggles the popup after a user buys an item
     const toggleBoughtPopup = () =>{
         setBoughtItemPopup(!boughtItemPopup);
 
-        // //if the popup is visible, close it after 5 seconds
-        // if (!boughtItemPopup) {
-        //     setTimeout(() => {
-        //         setBoughtItemPopup(false); 
-        //     }, 5000); 
-        // }
+        //if the popup is visible, close it after 5 seconds
+        if (!boughtItemPopup) {
+            setTimeout(() => {
+                setBoughtItemPopup(false); 
+            }, 4000); 
+        }
     }
 
-    //shows the alert when the user is trying to buy an item they own already
-    const showItemOwnAlert = () =>{
-        Alert.alert(
-            //title of alert, then caption
-            "You already own this item: ", boughtItem.itemName,
-            [
-                {text: "Back to Store Page", onPress: () => (console.log("user popup: item owned"))}
-            ]
-        )
+    //toggles the popup that the user has an item already
+    const toggleItemOwnPopup = () =>{
+        setItemOwnPopup(!itemOwnPopup);
+
+        if (!itemOwnPopup) {
+            setTimeout(() => {
+                setItemOwnPopup(false); 
+            }, 4000); 
+        }
     }
 
-    //show the alert when the user does not have enough coins to buy an item
-    const showInsufficientFundsAlert = () =>{
-        Alert.alert(
-            "You do not have enough honey coins for: ", boughtItem.itemName,
-            [
-                {text: "Back to Store Page", onPress: () => {console.log("user popup: not enough funds")}}
-            ]
-        )
+    //toggles the popup that the user does not have enough money
+    const toggleInvalidPopup = () =>{
+        setInvalidPurchasePopup(!invalidPurchasePopup);
+
+        if (!invalidPurchasePopup) {
+            setTimeout(() => {
+                setInvalidPurchasePopup(false); 
+            }, 4000); 
+        }
     }
-    
+
     //tab for head accessories
     const HeadAccTab = ({navigation}) =>{
         return(
@@ -146,6 +150,7 @@ export const StorePage = () =>{
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleItemPopup()}
 
                     >
                         <View style = {storePopup.popupContainer}>
@@ -166,18 +171,26 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
                                                 console.log("user has this item already: ", boughtItem.itemName);
                                                 toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
+
                                             }else{
-                                                canBuy();
-                                                addToCloset();
-                                                
-                                                toggleItemPopup();
-                                                //this popup will be executued after the item popup is toggled off 
-                                                setTimeout(() => {
-                                                    toggleBoughtPopup();
-                                                }, 1); 
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    addToCloset();
+                                                    toggleItemPopup();
+                                                    //this popup will be executued after the item popup is toggled off 
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                } 
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
@@ -193,6 +206,7 @@ export const StorePage = () =>{
                             />
                         </View>
                     </Modal>
+                    {/* Popup after a user buys an item */}
                     <Modal
                         isVisible = {boughtItemPopup}
                         animationIn = {'zoomIn'}
@@ -206,6 +220,41 @@ export const StorePage = () =>{
                             <Text> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
+                    </Modal>
+
+                    {/* Popup when a user tries to buy an item they own already */}
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+
+                    {/* Popup for when a user does not have enough honey coins */}
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
                     </Modal>
                 </ScrollView>
             </View>
@@ -259,7 +308,7 @@ export const StorePage = () =>{
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
-
+                        onBackdropPress = {() => toggleItemPopup()}
                     >
                         <View style = {storePopup.popupContainer}>
                             <View style = {storePopup.priceContainer}>
@@ -279,16 +328,22 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
-                                                console.log("user has this item already: ", boughtItem.itemName);
                                                 toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
                                             }else{
-                                                canBuy();
-                                                addToCloset();
-                                                toggleItemPopup();
-                                                setTimeout(() => {
-                                                    toggleBoughtPopup();
-                                                }, 1); 
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                }
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
@@ -318,6 +373,37 @@ export const StorePage = () =>{
                             <Text style = {storePurchasedPopup.bodyItemName}> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.bodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.bodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
                     </Modal>
                 </ScrollView>
             </View>
@@ -371,7 +457,7 @@ export const StorePage = () =>{
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
-
+                        onBackdropPress = {() => toggleItemPopup()}
                     >
                         <View style = {storePopup.popupContainer}>
                             <View style = {storePopup.priceContainer}>
@@ -391,22 +477,26 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
-                                                console.log("user has this item already: ", boughtItem.itemName);
                                                 toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
                                             }else{
-                                                canBuy();
-                                                addToCloset();
-                                                toggleItemPopup();
-                                                setTimeout(() => {
-                                                    toggleBoughtPopup();
-                                                }, 1); 
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                }
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
-                                        }
-
-                                        
+                                        }    
                                     }}
                                 />
                             </View>
@@ -430,6 +520,37 @@ export const StorePage = () =>{
                             <Text style = {storePurchasedPopup.lowerItemName}> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.lowerBodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.lowerBodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
                     </Modal>
                 </ScrollView>
             </View>
@@ -495,9 +616,10 @@ export const StorePage = () =>{
         if(currency >= boughtItem.price){
             console.log("user has enough to buy this item: ", boughtItem.itemName);
             updateCurrency(currency - boughtItem.price);
+            return true;
         }else{
             console.log("user does not have enough to buy this item");
-            showInsufficientFundsAlert();
+            return false;
         }
     }
 
