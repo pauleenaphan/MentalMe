@@ -647,11 +647,17 @@ export const storePurchasedPopup = StyleSheet.create({
     fontSize: 25, 
     fontWeight: 'bold', 
     marginBottom: -35, 
-    paddingTop: 20
+    paddingTop: 20,
   },
   itemImg:{
     height: 100, 
     width: 100
+  },
+  bodyItemName:{
+    marginBottom: -30
+  },
+  lowerItemName:{
+    marginBottom: -40
   }
 })
 

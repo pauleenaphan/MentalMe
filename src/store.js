@@ -64,12 +64,12 @@ export const StorePage = () =>{
     const toggleBoughtPopup = () =>{
         setBoughtItemPopup(!boughtItemPopup);
 
-        //if the popup is visible, close it after 5 seconds
-        if (!boughtItemPopup) {
-            setTimeout(() => {
-                setBoughtItemPopup(false); 
-            }, 5000); 
-        }
+        // //if the popup is visible, close it after 5 seconds
+        // if (!boughtItemPopup) {
+        //     setTimeout(() => {
+        //         setBoughtItemPopup(false); 
+        //     }, 5000); 
+        // }
     }
 
     //shows the alert when the user is trying to buy an item they own already
@@ -101,7 +101,7 @@ export const StorePage = () =>{
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
-                        updateCurrency(parseInt(currency) + 1);
+                        updateCurrency(parseInt(currency) + 100);
                     }}
                 />
                 {/* amount of coins that the user owns */}
@@ -315,7 +315,7 @@ export const StorePage = () =>{
                     >
                         <View style = {storePurchasedPopup.container}>
                             <Text style = {storePurchasedPopup.title}> Purchased </Text>
-                            <Text> {boughtItem.itemName} </Text>
+                            <Text style = {storePurchasedPopup.bodyItemName}> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
                     </Modal>
@@ -427,7 +427,7 @@ export const StorePage = () =>{
                     >
                         <View style = {storePurchasedPopup.container}>
                             <Text style = {storePurchasedPopup.title}> Purchased </Text>
-                            <Text> {boughtItem.itemName} </Text>
+                            <Text style = {storePurchasedPopup.lowerItemName}> {boughtItem.itemName} </Text>
                             <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
                         </View>
                     </Modal>
