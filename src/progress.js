@@ -289,7 +289,7 @@ export const ProgressTracker = () => {
                 </View>
                 <View style={progressPage.statContainer}>
                     <Text style={progressPage.statNumber}>{longestStreak}</Text>
-                    <Text style={progressPage.statLabel}>Longest Streak</Text>
+                    <Text style={progressPage.statLabel}>Longest All time Streak</Text>
                 </View>
             </View>
             {/* <Button title="Simulate New Day (Tomorrow)" onPress={() => handleTestDailyIncrementV0({
