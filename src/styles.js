@@ -60,6 +60,32 @@ export const loginPage = StyleSheet.create({
   
 })
 
+export const coverPage = StyleSheet.create({
+  container:{
+    backgroundColor: "#B6D3B3", 
+    flex: 1, 
+    alignItems: 'center', 
+    paddingTop: 200
+  },
+  logo:{
+    width: '120%', 
+    height: '40%', 
+    marginBottom: -140,
+    marginLeft: 20
+  },
+  caption:{
+    textAlign: 'right', 
+    width: '80%', 
+    fontSize: 20, 
+    fontWeight: 'bold'
+  },
+  loadingGif:{
+    width: '73%',  
+    height: '20%', 
+    marginTop: 100
+  }
+})
+
 //style for homepage
 export const homePage = StyleSheet.create({
   iconBarContainer: {
