@@ -219,42 +219,51 @@ export const HomePage = ({navigation}) =>{
                         </TouchableOpacity>
                         <Text style = {userTaskPopup.title}> Daily Task </Text>
                         <Text style = {userTaskPopup.caption}> Moobie is counting on you! </Text>
-                        <View style = {userTaskPopup.bodyContainer}>
-                            <View style = {userTaskPopup.taskContainer}>
-                                <Text style = {userTaskPopup.taskName}> Daily Login </Text>
-                                
-                                <Text style = {userTaskPopup.loginCoinValue}> +1 </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
+                        <View style = {userTaskPopup.taskContainer}>
+                            <View style = {userTaskPopup.taskNameContainer}>
+                                <View>
+                                    <Text style = {userTaskPopup.taskName}> Daily Login </Text>
+                                    <Text> Login daily</Text>
+                                </View>
+                                <View>  
+                                    <Text style = {userTaskPopup.taskName}> Journal Entry </Text>
+                                    <Text> Write a journal entry today  </Text>
+                                </View>
+                                <View>
+                                    <Text style = {userTaskPopup.taskName}> Weekly Login </Text>
+                                    <Text> Login 7 days a week</Text> 
+                                </View>
+                            </View>
+                            
+                            <View style = {userTaskPopup.amtContainer}>
+                                <View style = {userTaskPopup.amtPerContainer}>
+                                    <Text style = {userTaskPopup.plusAmt}> +1 </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
+                                </View>
+                                <View style = {userTaskPopup.amtPerContainer}>
+                                <Text style = {userTaskPopup.plusAmt}> +1 </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
+                                </View>
+                                <View style = {userTaskPopup.amtPerContainer}>
+                                    <Text style = {userTaskPopup.plusAmt}> +3 </Text>
+                                    <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
+                                </View>
+                            </View>
+                            
+                            <View style = {userTaskPopup.taskStatusContainer}>
                                 <Image
                                     style = {userTaskPopup.taskStatus}
                                     source = {require("../imgs/checked.png")}
                                 />
-                            </View>
-                            <Text style = {userTaskPopup.taskCaption}> Login daily</Text>
-                            
-                            <View style = {userTaskPopup.taskContainer}>
-                                <Text style = {userTaskPopup.taskName}> Journal Entry </Text>
-                                
-                                <Text style = {userTaskPopup.journalCoinValue}> +1 </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
                                 <Image
                                     style = {userTaskPopup.taskStatus}
                                     source = {(journalTask == "true") ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
                                 />
-                            </View>
-                            <Text style = {userTaskPopup.taskCaption}> Write a journal entry today  </Text>
-
-                            <View style = {userTaskPopup.taskContainer}>
-                                <Text style = {userTaskPopup.taskName}> Weekly Login </Text>
-                                
-                                <Text style = {userTaskPopup.weeklyCoinValue}> +3 </Text>
-                                <Image source = {require("../imgs/honeycoin.png")} style = {userTaskPopup.honeyCoin}/>
                                 <Image
                                     style = {userTaskPopup.taskStatus}
                                     source = {(weeklyLogin == "true") ? require("../imgs/checked.png") : require("../imgs/squareCheckbox.png")}
                                 />
                             </View>
-                            <Text style = {userTaskPopup.taskCaption}> Login 7 days a week</Text>
                         </View>
                     </View>
                 </Modal>

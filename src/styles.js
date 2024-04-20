@@ -166,7 +166,7 @@ export const userTaskPopup = StyleSheet.create({
   },
   caption:{
     textAlign: 'center', 
-    marginBottom: 20
+    marginBottom: 10
   },
   honeyCoin:{
     width: 50, 
@@ -175,36 +175,37 @@ export const userTaskPopup = StyleSheet.create({
   },
   //container for task name and task status
   taskContainer:{
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    marginLeft: -5
+    flexDirection: 'row'
+  },
+  taskNameContainer:{
+    width: '60%', 
+    height: 200, 
+    justifyContent: 'space-evenly', 
+    marginTop: 15
   },
   taskName:{
     fontSize: 25, 
   },
-  taskCaption:{
-    marginBottom: 15
+  amtContainer:{
+    width: '24%', 
+    justifyContent: 'space-evenly'
+  },
+  amtPerContainer:{
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  plusAmt:{
+    fontSize: 20, 
+    marginRight: -10
+  }, 
+  taskStatusContainer:{
+    width: '20%', 
+    justifyContent: 'space-evenly'
   },
   taskStatus:{
     width: 40, 
     height: 40, 
-    marginLeft: 10
   },
-  loginCoinValue:{
-    fontSize: 20, 
-    marginLeft: 53, 
-    marginRight: -10
-  },
-  journalCoinValue:{
-    fontSize: 20, 
-    marginLeft: 30, 
-    marginRight: -10
-  },
-  weeklyCoinValue:{
-    fontSize: 20, 
-    marginLeft: 25, 
-    marginRight: -10
-  }
 })
 
 //style for the closet page
