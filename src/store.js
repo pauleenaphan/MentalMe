@@ -1,24 +1,27 @@
 import React, { useEffect, useState} from "react";
-import { View, Text, Button, Image, ScrollView, AlertIOS, Alert } from "react-native";
+import { View, Text, Button, ScrollView, Alert, TouchableOpacity } from "react-native";
+import { Image } from 'expo-image';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { db } from "../firebase/index.js";
 import { getCurrEmail } from "./account.js";
-import { clothesImg, honeyCoin, styles, storePage, storePopup } from "./styles.js";
+import { storeItemOwnPopup, storePage, storePopup, storePurchasedPopup } from "./styles.js";
 import { images } from "./images.js";
 import { getCurrency } from "./currency.js";
-import { IconButton } from "./homepage.js";
 
 const Tab = createBottomTabNavigator();
 
 //Main home page 
 export const StorePage = () =>{
     const [isPopupVisible, setPopup] = useState(false);
+    const [boughtItemPopup, setBoughtItemPopup] = useState(false);
+    const [itemOwnPopup, setItemOwnPopup] = useState(false);
+    const [invalidPurchasePopup, setInvalidPurchasePopup] = useState(false);
     const [boughtItem, setBoughtItem] = useState({
         itemName: '',
         image: '',
@@ -32,6 +35,7 @@ export const StorePage = () =>{
             printValueInAsync();
         }, [])
     )
+ 
 
     const printValueInAsync = async () =>{
         try{
@@ -59,48 +63,52 @@ export const StorePage = () =>{
         setPopup(!isPopupVisible);
     }
 
-    //shows the alert when the user is trying to buy an item they own already
-    const showItemOwnAlert = () =>{
-        Alert.alert(
-            //title of alert, then caption
-            "You already own this item: ", boughtItem.itemName,
-            [
-                {text: "Back to Store Page", onPress: () => (console.log("user popup: item owned"))}
-            ]
-        )
+    //toggles the popup after a user buys an item
+    const toggleBoughtPopup = () =>{
+        setBoughtItemPopup(!boughtItemPopup);
+
+        //if the popup is visible, close it after 5 seconds
+        if (!boughtItemPopup) {
+            setTimeout(() => {
+                setBoughtItemPopup(false); 
+            }, 4000); 
+        }
     }
 
-    //show the alert when the user does not have enough coins to buy an item
-    const showInsufficientFundsAlert = () =>{
-        Alert.alert(
-            "You do not have enough honey coins for: ", boughtItem.itemName,
-            [
-                {text: "Back to Store Page", onPress: () => {console.log("user popup: not enough funds")}}
-            ]
-        )
+    //toggles the popup that the user has an item already
+    const toggleItemOwnPopup = () =>{
+        setItemOwnPopup(!itemOwnPopup);
+
+        if (!itemOwnPopup) {
+            setTimeout(() => {
+                setItemOwnPopup(false); 
+            }, 4000); 
+        }
     }
-    
+
+    //toggles the popup that the user does not have enough money
+    const toggleInvalidPopup = () =>{
+        setInvalidPurchasePopup(!invalidPurchasePopup);
+
+        if (!invalidPurchasePopup) {
+            setTimeout(() => {
+                setInvalidPurchasePopup(false); 
+            }, 4000); 
+        }
+    }
+
     //tab for head accessories
     const HeadAccTab = ({navigation}) =>{
         return(
             <View style = {storePage.pageContainer}>
-                {/* <Button
+                <Button
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
-                        updateCurrency(parseInt(currency) + 1);
+                        updateCurrency(parseInt(currency) + 100);
                     }}
-                /> */}
+                />
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.goBack()}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -113,36 +121,36 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.headImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgHead}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.headImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgHead} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
 
+                    {/* Popup for the item the user plans to buy */}
                     <Modal 
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleItemPopup()}
 
                     >
                         <View style = {storePopup.popupContainer}>
@@ -163,17 +171,30 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
                                                 console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
+
                                             }else{
-                                                canBuy();
-                                                addToCloset();
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    addToCloset();
+                                                    toggleItemPopup();
+                                                    //this popup will be executued after the item popup is toggled off 
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                } 
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
-                                        }
-
-                                        toggleItemPopup();
+                                        } 
                                     }}
                                 />
                             </View>
@@ -181,12 +202,62 @@ export const StorePage = () =>{
                                 color = 'black'
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
+                                
                             />
                         </View>
                     </Modal>
+                    {/* Popup after a user buys an item */}
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
+                        </View>
+                    </Modal>
+
+                    {/* Popup when a user tries to buy an item they own already */}
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+
+                    {/* Popup for when a user does not have enough honey coins */}
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.itemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
+                    </Modal>
                 </ScrollView>
             </View>
-
         )
     }
     
@@ -195,15 +266,6 @@ export const StorePage = () =>{
         return(
             <View style = {storePage.pageContainer}>
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Home Page")}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -216,37 +278,37 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.bodyImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgBody}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.bodyImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgBody} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
 
                     <Modal 
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
-
+                        onBackdropPress = {() => toggleItemPopup()}
                     >
                         <View style = {storePopup.popupContainer}>
                             <View style = {storePopup.priceContainer}>
@@ -266,17 +328,29 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
-                                                console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
                                             }else{
-                                                canBuy();
-                                                addToCloset();
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    addToCloset();
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                }
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
                                         }
 
-                                        toggleItemPopup();
+                                        
                                     }}
                                 />
                             </View>
@@ -286,6 +360,51 @@ export const StorePage = () =>{
                                 onPress = {toggleItemPopup}
                             />
                         </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text style = {storePurchasedPopup.bodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.bodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.bodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
                     </Modal>
                 </ScrollView>
             </View>
@@ -297,15 +416,6 @@ export const StorePage = () =>{
         return(
             <View style = {storePage.pageContainer}>
                 {/* amount of coins that the user owns */}
-                <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 10, marginLeft: 20}}>
-                    <IconButton
-                        onPress = {() => navigation.navigate("Home Page")}
-                        iconName = "arrow-back"
-                        iconComponent = {Ionicons}
-                        size = {30}
-                        color = "black"
-                    />
-                </View>
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
                         <View style = {storePage.currencyContainer}>
@@ -318,37 +428,37 @@ export const StorePage = () =>{
                 
                 <ScrollView showsVerticalScrollIndicator = {false} horizontal = {false}>
                     {/* maps through the headimgs instead of printing them all out here */}
-
-                    {images.lowerBodyImgs.map((img) =>(
-                        <View key = {img.name} style = {storePage.itemContainer}>
-                            <Image source = {img.image} style = {storePage.itemImgLowerFeet}/>
-                            <View style = {storePage.titlePriceContainer}>
-                                <View style = {storePage.titleOfItem}>
-                                    <Button
-                                        color = "black"
-                                        title = {img.name}
-                                        onPress = {()=>{
-                                            handleBoughtItem(img.name, img.image, img.price);
-                                            toggleItemPopup();
-                                        }}
-                                    /> 
+                    <View style = {storePage.storeItemContainer}>
+                        {images.lowerBodyImgs.map((img) => (
+                            <TouchableOpacity
+                            
+                                key={img.name}
+                                onPress={() => {
+                                    handleBoughtItem(img.name, img.image, img.price);
+                                    toggleItemPopup();
+                                }}
+                                style = {storePage.itemDisplayContainer}
+                            >
+                                <View style={storePage.priceContainer}>
+                                    <Text style={storePage.price}>{img.price}</Text>
+                                    <Image source={require("../imgs/honeycoin.png")} style={storePage.priceCoin} />
                                 </View>
-                                    
-                                {/* Shows the price of the item */}
-                                <View style = {storePage.priceContainer}>
-                                    <Text style = {storePage.price}> {img.price} </Text>
-                                    <Image source = {require("../imgs/honeycoin.png")} style = {storePage.priceCoin}/>
-                                </View>
+                                <Image source={img.image} style = {storePage.itemImgLowerFeet} />
                                 
-                            </View>
-                        </View>
-                    ))}
+                                <View style={storePage.titleOfItem}>
+                                    <Text style={storePage.itemTitle}>{img.name}</Text>
+                                </View>
+                            
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
 
                     <Modal 
                         isVisible = {isPopupVisible}
                         animationIn = {'zoomIn'}
                         animationOut = {'zoomOut'}
-
+                        onBackdropPress = {() => toggleItemPopup()}
                     >
                         <View style = {storePopup.popupContainer}>
                             <View style = {storePopup.priceContainer}>
@@ -368,17 +478,27 @@ export const StorePage = () =>{
                                             console.log("user wants this item: " + boughtItem.itemName);
                                             const itemFound = await checkForItem();
                                             if(itemFound){
-                                                showItemOwnAlert();
-                                                console.log("user has this item already: ", boughtItem.itemName);
+                                                toggleItemPopup();
+                                                setTimeout(()=>{
+                                                    toggleItemOwnPopup();
+                                                }, 1);
                                             }else{
-                                                canBuy();
-                                                addToCloset();
+                                                if(canBuy() == false){
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleInvalidPopup();
+                                                    }, 1); 
+                                                }else{
+                                                    addToCloset();
+                                                    toggleItemPopup();
+                                                    setTimeout(() => {
+                                                        toggleBoughtPopup();
+                                                    }, 1); 
+                                                }
                                             }
                                         }catch(error){
                                             console.log("error: ", error);
-                                        }
-
-                                        toggleItemPopup();
+                                        }    
                                     }}
                                 />
                             </View>
@@ -388,6 +508,51 @@ export const StorePage = () =>{
                                 onPress = {toggleItemPopup}
                             />
                         </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {boughtItemPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {() => toggleBoughtPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storePurchasedPopup.container}>
+                            <Text style = {storePurchasedPopup.title}> Purchased </Text>
+                            <Text style = {storePurchasedPopup.lowerItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storePurchasedPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {itemOwnPopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleItemOwnPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You already own this item </Text>
+                            <Text style = {storeItemOwnPopup.lowerBodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+                    </Modal>
+                    <Modal
+                        isVisible = {invalidPurchasePopup}
+                        animationIn = {'zoomIn'}
+                        animationOut = {'zoomOut'}
+                        onBackdropPress = {()=> toggleInvalidPopup()}
+                        style = {storePurchasedPopup.modal}
+                        backdropOpacity = {0}
+                    >
+                        <View style = {storeItemOwnPopup.container}>
+                            <Text style = {storeItemOwnPopup.title}> Purchase Failed </Text>
+                            <Text> You do not have enough honey coins to buy this item </Text>
+                            <Text style = {storeItemOwnPopup.lowerBodyItemName}> {boughtItem.itemName} </Text>
+                            <Image source = {boughtItem.image} style = {storeItemOwnPopup.itemImg}/>
+                        </View>
+
                     </Modal>
                 </ScrollView>
             </View>
@@ -453,69 +618,82 @@ export const StorePage = () =>{
         if(currency >= boughtItem.price){
             console.log("user has enough to buy this item: ", boughtItem.itemName);
             updateCurrency(currency - boughtItem.price);
+            return true;
         }else{
             console.log("user does not have enough to buy this item");
-            showInsufficientFundsAlert();
+            return false;
         }
     }
 
     return(
         <Tab.Navigator>
             <Tab.Screen 
-                name = "Moobie's Shop: Head Accessories"
+                name = "Head Acessories"
                 component = {HeadAccTab}
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Head',
-                    // tabBarIcon: ()=>{
-                    //     return <FontAwesome6 name="redhat" size={24} color="black" />
-                    // },
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <FontAwesome5 name = "redhat" size = {40} color = "black" style = {{marginBottom: -25}}/> // Set size and color
+                    ),
                 }}
             />
             <Tab.Screen 
                 component = {BodyAccTab}
-                name = "Moobie's Shop: Body Accessories"
+                name = "Body Accessories"
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Body',
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <Ionicons name = "shirt" size = {35} color = "black" style = {{marginBottom: -25}}/>
+                    ),
                 }}
             />
             <Tab.Screen 
-                name = "Moobie's Shop: Lower Body Tab" 
+                name = "Shoe/Leg Accessories" 
                 component = {ShoeAccTab}
                 options = {{
                     headerStyle:{
-                        backgroundColor: '#568258',
+                        backgroundColor: '#B6D3B3',
                     },
-                    tabBarLabel: 'Lower Body',
+                    headerShadowVisible: false,
+                    headerTitleContainerStyle:{
+                        marginTop: -30
+                    },
+                    headerTitleStyle:{
+                        fontSize: 15,
+                    },
+                    tabBarLabel: ' ',
                     tabBarStyle:{
                         backgroundColor: '#568258',
-                        paddingTop: 30,
                     },
-                    tabBarLabelStyle:{
-                        color: 'black',
-                        fontSize: 16
-                    },
+                    tabBarIcon: () => ( // Pass color and size as props
+                        <MaterialCommunityIcons name = "shoe-sneaker" size = {55} color = "black"  style = {{marginBottom: -25}}/>
+                    ),
                 }}
             /> 
         </Tab.Navigator>

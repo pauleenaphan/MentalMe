@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { useFocusEffect } from "@react-navigation/native";
+import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,16 +14,70 @@ import { getUserInfo } from './userInfo.js';
 import { getMoobie } from './moobie.js';
 import { getCurrency } from './currency.js';
 import { images } from './images.js';
+import { getTaskInfo } from './task.js';
+import { getDate } from './journal.js';
 
 const auth1 = auth;
 
 //Page where user can create an account
 export const CreateAccPage = ({navigation}) => {
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userPassword, setUserPassword, setUserName} = getUserInfo();
+    const {setLoginTask, setJournalTask, setWeeklyLogin} = getTaskInfo();
     const [confirmPass, setConfirmPass] = useState('');
     const [showPassword, setShowPassword] = useState('');
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
+
+    //resets the values in the textinput when the page is displayed
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("clearing create acc")
+            setUserEmail("");
+            setUserPassword("");
+            setConfirmPass("");
+            setUserName("Talk to Moobie!")
+        }, [])
+    );
+
+    //alert for when user is trying to create an account with an email that has an account already
+    const emailExistAlert = () =>{
+        Alert.alert(
+            "Account Exist", "This email already has an account Please try logging in",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user has an account already")}}
+            ]
+        )
+    }
+
+    //alert for when users enters a email that is not valid
+    const emailInvalidAlert = () =>{
+        Alert.alert(
+            "Invalid Email", "Please enter a valid email",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user enter invalid email")}}
+            ]
+        )
+    }
+
+    //alert when password is not at least 6 characters
+    const shortPassAlert = () =>{
+        Alert.alert(
+            "Invalid Password", "Your password must be more than 6 characters",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>{console.log("user has entered an invalid password")}}
+            ]
+        )
+    }
+
+    //alert when passwords dont match
+    const unmatchPassAlert = () =>{
+        Alert.alert(
+            "Invalid Passwords", "Your passwords do not match",
+            [
+                {text: "Back to Sign Up Page", onPress: () =>(console.log("user passwords dont match"))}
+            ]
+        )
+    }
 
     //password should be at least 6 characters
     //firebase already checks if user exists
@@ -32,7 +87,14 @@ export const CreateAccPage = ({navigation}) => {
             console.log("success creating new account");
             return true;
         }catch(error){
-            console.log("error " + error);
+            console.log("error " + error.code);
+            if(error.code === "auth/invalid-email"){
+                emailInvalidAlert();
+            }else if(error.code === "auth/email-already-in-use"){
+                emailExistAlert();
+            }else if(error.code === "auth/weak-password"){
+                shortPassAlert();
+            }
             return false;
         }
     }
@@ -51,6 +113,7 @@ export const CreateAccPage = ({navigation}) => {
             await addDoc(collection(db, currentUserEmail, 'User Information Document', 'EmptyDoc'), {});
             console.log("user was addded to firecloud db");
         }catch(error){
+
             console.log("error " + error)
         }
     }
@@ -62,7 +125,6 @@ export const CreateAccPage = ({navigation}) => {
             
             //default items that every new user will get
             const itemsToAdd = [
-                "HoneyComb Ears",
                 "Default Head",
                 "Default Body",
                 "Default Lower Body"
@@ -125,6 +187,75 @@ export const CreateAccPage = ({navigation}) => {
         }
     }
 
+    // //adds a journal entry that moobie wrote
+    // const addMoobieEntry = async () =>{
+    //     console.log("ADDING MOOBIE DOC 1");
+    //     try{
+    //         let currentUserEmail = await getCurrEmail();
+    //         await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
+    //             title: "Lost Honey",
+    //             description: "Today I was walking through the forest looking for something to do. While I walked past a tree I saw something glowing. It was a tub of honey! This was the best day ever because I love honey and honey is super good. Moobie is having a good day today.",
+    //             date: getDate().toString()
+    //         });
+    //         console.log("ADDING MOOBIE DOC 2");
+    //     }catch(error){
+    //         console.log("Error ", error);
+    //     }
+        
+    // }
+
+    const setUserStatus = async () => {
+        console.log("SET USER STATUS FUNCTIONNNNNN ");
+        try {
+            let currentUserEmail = await getCurrEmail();
+            
+            //adds whether or not the user is new
+            await setDoc(doc(db, currentUserEmail, "User Status"), {
+                status: "true"
+            })
+
+            //adds doc for the user name
+            await setDoc(doc(db, currentUserEmail, "Username"), {
+                name: "name"
+            })
+
+            //adds doc for the journal date to check
+            await setDoc(doc(db, currentUserEmail, "Journal Date"), {
+                date: "0/0/0"
+            })
+
+            //adds doc for the user's daily/weekly task
+            await setDoc(doc(db, currentUserEmail, "User Task"), {
+                loginTask: "false",
+                journalTask: "false",
+                weeklyLogin: "false"
+            })
+
+            //adds doc for moobie's journal entry
+            await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
+                title: "Lost Honey",
+                description: "Today I was walking through the forest looking for something to do. While I walked past a tree I saw something glowing. It was a tub of honey! This was the best day ever because I love honey and honey is super good. Moobie is having a good day today.",
+                date: getDate().toString()
+            });
+            /*
+                Safety because sometimes homepage won't update correctly if the user is in the app
+                then logs out and creates a new acccount, it will show the status from the previous
+                accounts
+             */
+            setLoginTask('false');
+            setJournalTask('false');
+            setWeeklyLogin('false');
+
+            AsyncStorage.setItem("UserName", JSON.stringify("Talk to Moobie!"));
+            setUserName("Talk to Moobie");
+            console.log("User Status Document has been created");
+        } catch (error) {
+            console.error("Error setting user status:", error);
+        }
+
+
+    };
+
     //checks whether or not the confirm password matches the new user's password
     const checkConfirmPass = (text) =>{
         const passwordStatus = text == userPassword;
@@ -155,7 +286,6 @@ export const CreateAccPage = ({navigation}) => {
                 <TextInput
                     style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
-                    value = {userPassword}
                     placeholder = "Password"
                     onChangeText = {(text) => setUserPassword(text)}
                 />
@@ -172,7 +302,6 @@ export const CreateAccPage = ({navigation}) => {
                 <TextInput
                     style = {loginPage.textInputCreate}
                     secureTextEntry = {!showPassword}
-                    value = {confirmPass}
                     placeholder = "Confirm Password"
                     onChangeText = {(text) => checkConfirmPass(text)}
                 />
@@ -198,16 +327,19 @@ export const CreateAccPage = ({navigation}) => {
                                     AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                                     AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                                     AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
-                                    AsyncStorage.setItem("DailyLogins", JSON.stringify(0));
+                                    AsyncStorage.setItem("dailyLogins", JSON.stringify(0));
                                     addUserToDb();
                                     giveUserDefaultItems();
                                     addDefaultMoobie();
                                     addDefaultCurrency();
+                                    setUserStatus();
+                                    //addMoobieEntry();
                                     navigation.navigate('Home Page');
                                 }else{
                                     console.log('account error');
                                 }
                             }else{
+                                unmatchPassAlert();
                                 console.log("passwords did not match");
                             }
                         }}
@@ -225,10 +357,29 @@ export const CreateAccPage = ({navigation}) => {
 
 //Page where user can login
 export const LoginPage = ({navigation}) =>{
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userPassword, setUserPassword, userName, setUserName} = getUserInfo();
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
     const [showPassword, setShowPassword] = useState(false);
+
+    //resets value in the text input when the page is being displayed
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("clearing sign in")
+            setUserEmail("");
+            setUserPassword("");
+        }, [])
+    );
+
+
+    const showLoginFailAlert = ()=>{
+        Alert.alert(
+            "Invalid Login", "Your email or password is incorrect",
+            [
+                {text: "Back to Login Page", onPress: () =>(console.log("user has failed login"))}
+            ]
+        )
+    }
 
     //Logins the user
     const loginAcc = async () =>{
@@ -237,6 +388,7 @@ export const LoginPage = ({navigation}) =>{
             console.log("successfully logged in")
             return true;
         }catch(error){
+            showLoginFailAlert();
             console.log("error" + error);
             return false;
         }
@@ -304,6 +456,19 @@ export const LoginPage = ({navigation}) =>{
             console.log("error: ", error);
         }
     }
+
+    //gets existing userName from the doc and update its value
+    const setNameForUser = async () =>{
+        try {
+            let currentUserEmail = await getCurrEmail();
+            const username = await getDoc(doc(db, currentUserEmail, "Username"));
+            console.log("THIS IS USERNAME ", username.data().name);
+            setUserName(username.data().name);
+            // AsyncStorage.setItem("UserName", username.data().name);
+        } catch (error) {
+            console.error("error", error);
+        }
+    }
     
     return(
         <View style={loginPage.container}>
@@ -318,6 +483,7 @@ export const LoginPage = ({navigation}) =>{
                     <TextInput 
                         style = {loginPage.textInputLogin}
                         placeholder = "Email"
+                        value = {userEmail}
                         onChangeText = {(text) => setUserEmail(text)}
                     />
                 </View>
@@ -348,8 +514,10 @@ export const LoginPage = ({navigation}) =>{
                             AsyncStorage.setItem("UserIsLoggedIn", JSON.stringify(true));
                             AsyncStorage.setItem("UserEmail", JSON.stringify(userEmail));
                             AsyncStorage.setItem("UserPassword", JSON.stringify(userPassword));
+                            AsyncStorage.setItem("UserName", JSON.stringify(userName))
                             setCurrentMoobie();
                             setUserCurrency();
+                            setNameForUser();
                             navigation.navigate('Home Page');
                         }else{
                             console.log('login info is not correct');
@@ -380,6 +548,15 @@ export const getCurrEmail = async () =>{
 export const getCurrPassword = async () =>{
     try{
         return await AsyncStorage.getItem("UserPassword");
+    }catch(error){
+        console.log("error" + error);
+        return null;
+    }
+}
+
+export const getCurrName = async () =>{
+    try{
+        return await AsyncStorage.getItem("UserName");
     }catch(error){
         console.log("error" + error);
         return null;

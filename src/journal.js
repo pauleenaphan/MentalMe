@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Button, TextInput, ScrollView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { collection, addDoc, doc, getDocs, deleteDoc, getDoc } from "firebase/firestore"; 
+import React, { useState, useEffect } from "react";
+import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
-import { backButton, journalPage, entryPage, styles, newEntryPage } from "./styles.js";
+import { backButton, journalPage, entryPage, newEntryPage } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
-import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
-import { Background } from "@react-navigation/elements";
-import { disableErrorHandling } from "expo";
+import { getCurrency } from "./currency.js";
+import { getTaskInfo } from "./task.js";
 
 
 //Return's today's date
-function getDate(){
+export const getDate = () =>{
     const today = new Date();
-    const month = today.getMonth();
+    const month = today.getMonth() + 1;
     const year = today.getFullYear();
     const date = today.getDate();
     return `${month}/${date}/${year}`;
@@ -29,12 +29,11 @@ export const JournalHomePage = ({navigation}) =>{
     useFocusEffect(
         React.useCallback(() => {
             console.log('Showing new Entries');
+            console.log("DATE FORMAT", getDate());
             getEntries();
-            return () => {
-              // Cleanup logic (if any)
-            };
-        }, [])
+        }, [entries])
     );
+
 
     const getEntries = async () => {
         try {
@@ -55,58 +54,56 @@ export const JournalHomePage = ({navigation}) =>{
     
     return(
         <View style = {journalPage.fullPageContainer}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
-                    <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: "space-around" }}>
+                    <View style = {journalPage.headerContainer}>
                        <Text style = {journalPage.title}>
                             Journal Entries
                         </Text>
                     </View>
-                    <Text> View your entry by clicking on the journal entry name! </Text>
+                    <Text> View your entry by clicking on your entries below! </Text>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {/* maps out the entries in our db  */}
                     {entries.map(entry =>(
-                        <View key = {entry.id} style = {journalPage.entry}>
-                            <Button 
-                                color = "black"
-                                title = {entry.title}
-                                onPress = {() =>{
-                                    console.log(entry.title, entry.date, entry.description);
-                                    navigation.navigate('Journal Entry Page', {
-                                        entryId: entry.id,
-                                        entryTitle: entry.title,
-                                        entryDate: entry.date,
-                                        entryDescription: entry.description
-                                    });
-                                }}
-                            />
-                            <Text style = {journalPage.entryDate}> {entry.date} </Text>
-                        </View>
+                        <TouchableOpacity
+                            key = {entry.id}
+                            onPress = {() =>{
+                                console.log(entry.title, entry.date, entry.description);
+                                navigation.navigate('Journal Entry Page', {
+                                    entryId: entry.id,
+                                    entryTitle: entry.title,
+                                    entryDate: entry.date,
+                                    entryDescription: entry.description
+                                });
+                            }}
+                            activeOpacity={0.7}
+                        >
+                            <View key = {entry.id} style = {journalPage.entry}>
+                                <Text style = {journalPage.entryTitle}> {entry.title} </Text>
+                                <Text style = {journalPage.entryDate}> {entry.date} </Text>
+                            </View>
+                        </TouchableOpacity>
+                        
                     ))}
                 </ScrollView>
-                <View style = {journalPage.addEntryBtnBoxContainer}>
+                <TouchableOpacity
+                    onPress = {() => navigation.navigate('Journal New Entry Page')}
+                    style = {journalPage.addEntryBtnBoxContainer}
+                    activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
+                >
                     <View style = {journalPage.addEntryContainer}>
                         <IconButton
-                            onPress = {() => navigation.navigate('Journal New Entry Page')}
                             iconName = "pencil-plus-outline"
                             iconComponent = {MaterialCommunityIcons}
                             size = {40}
                             color = "black"
                             // try this color #848D84
+                            onPress = {() => navigation.navigate('Journal New Entry Page')}
                         /> 
                         <Text style = {journalPage.addEntryText}> Add new entry </Text>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -114,14 +111,17 @@ export const JournalHomePage = ({navigation}) =>{
 
 //Adds journal entry
 export const AddJournalEntryPage = ({navigation}) =>{
+    const {setJournalTask} = getTaskInfo();
+    const {currency, updateCurrency} = getCurrency();
+    
     const handlePressOutside = () => {
         //brings the keyboard down
         Keyboard.dismiss(); 
     };
 
     const[journalInfo, setJournalInfo] = useState({
-        title: '',
-        description: ''
+        title: '[BLANK]',
+        description: '[BLANK]'
     });
 
     const handleInfo = (titleValue, value) =>{
@@ -131,18 +131,36 @@ export const AddJournalEntryPage = ({navigation}) =>{
         })
     }
 
-
     //adds entry to journal
     const addEntry = async () =>{
         console.log("JOURNAL CONSOLE:" + journalInfo.title);
         try{
             let currentUserEmail = await getCurrEmail();
+            
+            //checks the current date for whether or not the user has journaled today
+            let currDate = getDate();
+            const lastDate = await getDoc(doc(db, currentUserEmail, "Journal Date"));
+            if(lastDate.data().date == currDate){
+                console.log("user has journaled today already")
+            }else{
+                //updates the date and give the user a coin
+                await setDoc(doc(db, currentUserEmail, "Journal Date"),{
+                    date: currDate
+                })
+                updateCurrency(parseInt(currency) + 1);
+                //updates the doc for the user journal task
+                await updateDoc(doc(db, currentUserEmail, "User Task"), {
+                    journalTask: "true"
+                })
+                setJournalTask("true");
+            }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
                 title: journalInfo.title.toString(),
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
             });
+           
             console.log("entry was created " + entry.id);
         }catch(error){
             console.log("error " + error)
@@ -154,15 +172,6 @@ export const AddJournalEntryPage = ({navigation}) =>{
         //when the screen is touched anywhere that is not a textinput we call the function to put the keyboard down
         <TouchableWithoutFeedback onPress={handlePressOutside}>
             <View style={newEntryPage.pageContainer}>
-                <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                    <IconButton
-                        onPress={() => navigation.goBack()}
-                        iconName="arrow-back"
-                        iconComponent={Ionicons}
-                        size={30}
-                        color="black"
-                    />
-                </View>
                 <View style={newEntryPage.titleDescContainer}>
                     <TextInput
                         style = {newEntryPage.title}
@@ -179,18 +188,34 @@ export const AddJournalEntryPage = ({navigation}) =>{
                         />
                     </View>
                 </View>
-                <View style={{alignSelf: 'center', marginTop: 50}}>
+                <TouchableOpacity
+                    onPress={()=>{
+                        addEntry();
+                        navigation.navigate("Journal Home Page");
+                    }}
+                    style={{
+                        alignSelf: 'center',
+                        marginTop: 80,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: '#568258',
+                        padding: 10,
+                        borderRadius: 10
+                    }}
+                    activeOpacity={0.8}
+                    > 
                     <IconButton
-                        onPress={()=>{
-                            addEntry();
-                            navigation.goBack();
-                        }}
                         iconName="check"
                         iconComponent={Feather}
                         size={30}
                         color="black"
+                        onPress={()=>{
+                            addEntry();
+                            navigation.goBack();
+                        }}
                     />
-                </View>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}> Submit Entry </Text>
+                </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
     );
@@ -214,15 +239,6 @@ export const ViewJournalEntry = ({route, navigation}) =>{
     return(
         //Prints the journal entry that the user pressed on 
         <View style = {entryPage.pageContainer}>
-            <View style = {{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30}}>
-                <IconButton
-                    onPress = {() => navigation.goBack()}
-                    iconName = "arrow-back"
-                    iconComponent = {Ionicons}
-                    size = {30}
-                    color = "black"
-                />
-            </View>
             <Text style = {entryPage.entryDate}> {entryDate} </Text>
             <View style = {entryPage.headerContainer}>
                 <Text style = {entryPage.title} numberOfLines={2}>{entryTitle}</Text>
@@ -230,18 +246,34 @@ export const ViewJournalEntry = ({route, navigation}) =>{
             {/* <ScrollView style = {{maxHeight: 500}}> */}
             <Text style = {entryPage.description}> {entryDescription} </Text>  
             {/* </ScrollView> */}
-            <View style = {{bottom: -40, alignSelf: 'center'}}>
+            <TouchableOpacity
+                onPress={() => {
+                    removeEntry();
+                    navigation.navigate('Journal Home Page');
+                }}
+                style={{
+                    bottom: -40,
+                    alignSelf: 'center',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: '#568258',
+                    borderRadius: 10,
+                    padding: 10
+                }}
+                activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
+            >
                 <IconButton
-                    onPress={()=>{
-                        removeEntry();
-                        navigation.navigate('Journal Home Page');
-                    }}
                     iconName = "trash"
                     iconComponent = {Ionicons}
                     size = {30}
                     color = "black"
+                    onPress={() => {
+                        removeEntry();
+                        navigation.navigate('Journal Home Page');
+                    }}
                 />
-            </View>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Remove Entry </Text>
+            </TouchableOpacity>
         </View>
     )
 }

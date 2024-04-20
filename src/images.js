@@ -6,7 +6,7 @@ export const images = {
         {name: 'Default Lower Body', image: require('../imgs/moobie_feet/feet1.png'), imageP:('../imgs/moobie_feet/feet1.png')},
     ],
     headImgs: [
-        {name: 'HoneyComb Ears', image: require('../imgs/moobie_head/head5.png'), imageP: ('../imgs/moobie_head/head5.png'), price: '0'},
+        {name: 'Honey Ears', image: require('../imgs/moobie_head/head5.png'), imageP: ('../imgs/moobie_head/head5.png'), price: '0'},
         {name: 'Old Moobie', image: require('../imgs/moobie_head/head10.png'), imageP: ('../imgs/moobie_head/head10.png'), price: '4'},
         {name: 'Minion Glasses', image: require('../imgs/moobie_head/head11.png'), imageP: ('../imgs/moobie_head/head11.png'), price: '4'},
         {name: 'Flower Head', image: require('../imgs/moobie_head/head6.png'), imageP: ('../imgs/moobie_head/head6.png'), price: '4'},

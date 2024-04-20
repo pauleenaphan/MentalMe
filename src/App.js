@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'; //global storage in react, data will stay even when the app is closed
 
@@ -15,6 +15,17 @@ import { StorePage, ViewItemPage } from './store.js';
 import { MoobieProvider } from './moobie.js';
 import { UserCurrencyProvider } from './currency.js';
 import { ClosetPage } from './closet.js';
+import { DailyLoginsProvider } from './progress_files/dailyLoginsContext.js';
+import { ConsecutiveLoginsProvider } from './progress_files/consecutiveLoginsContext.js';
+import { LongestStreakProvider } from './progress_files/longestStreakContext.js';
+import { SundayLoginProvider, MondayLoginProvider, TuesdayLoginProvider, 
+         WednesdayLoginProvider, ThursdayLoginProvider, 
+         FridayLoginProvider, SaturdayLoginProvider } from './progress_files/weeklyLoginContext.js';
+import { ChatPage } from './chat.js';
+import { IconButton } from './homepage.js';
+import { Ionicons } from "@expo/vector-icons";
+import { TaskContextProvider } from './task.js';
+import { ShowNotificationProvider } from './progress_files/showNotificationContext.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -40,115 +51,319 @@ export default function App() {
 
   return (
     <UserInfoProvider>
-      <UserCurrencyProvider>
-        <MoobieProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen 
-                name = "Cover Page"
-                options = {{
-                  headerShown: false,
-                }}>
-                {/* don't need component since we are passing down a child prop instead */}
-                {props => <CoverPage {...props} isLogged={isLogged} />}
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Login Page" 
-                component = {LoginPage} 
-                //animation removes the screen to slide from left to right
-                //gesture disables the user to allow from moving to the previous screen on swipe
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none', 
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Create Account Page" 
-                component = {CreateAccPage} 
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none',
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Loading Page" 
-                component = {LoadingPage}
-                options = {{
-                  headerBackVisible: true, 
-                  animation: 'none', 
-                  gestureEnabled: false,
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Home Page" 
-                component = {HomePage}
-                options = {{
-                  headerBackVisible: false, 
-                  animation: 'none', 
-                  gestureEnabled: false, 
-                  headerShown: false 
-                }}>
-              </Stack.Screen>
+      <TaskContextProvider>
+      <ShowNotificationProvider>
+      <DailyLoginsProvider>
+        <ConsecutiveLoginsProvider>
+          <LongestStreakProvider>
+          <SundayLoginProvider>
+          <MondayLoginProvider>
+          <TuesdayLoginProvider>
+          <WednesdayLoginProvider>
+          <ThursdayLoginProvider>
+          <FridayLoginProvider>
+          <SaturdayLoginProvider>
+              <UserCurrencyProvider>
+                <MoobieProvider>
+                  <NavigationContainer>
+                    <Stack.Navigator>
+                      <Stack.Screen 
+                        name = "Cover Page"
+                        options = {{
+                          headerShown: false,
+                          animation: 'fade'
+                        }}>
+                        {/* don't need component since we are passing down a child prop instead */}
+                        {props => <CoverPage {...props} isLogged={isLogged} />}
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Login Page" 
+                        component = {LoginPage} 
+                        //animation removes the screen to slide from left to right
+                        //gesture disables the user to allow from moving to the previous screen on swipe
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none', 
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Create Account Page" 
+                        component = {CreateAccPage} 
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none',
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Loading Page" 
+                        component = {LoadingPage}
+                        options = {{
+                          headerBackVisible: true, 
+                          animation: 'none', 
+                          gestureEnabled: false,
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Home Page" 
+                        component = {HomePage}
+                        options = {{
+                          headerBackVisible: false, 
+                          animation: 'none', 
+                          gestureEnabled: false, 
+                          headerShown: false 
+                        }}>
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name="Chat Page"
+                        component={ChatPage}
+                        options={({navigation}) => ({
+                          animation: 'fade',
+                          gestureEnabled: false,
+                          headerTitle: "Chat with Moobie",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerTintColor: "black",
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}
+                      />
+                      <Stack.Screen name = "Settings Page" 
+                        component = {SettingsPage}
+                        options={({navigation}) => ({
+                          gestureEnabled: false,
+                          headerTitle: " ",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Account Settings Page" 
+                        component = {AccountSettingsPage}
+                        options={({navigation}) => ({
+                          gestureEnabled: false,
+                          headerTitle: " ",
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerShadowVisible: false,
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Settings Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Change Password Page" 
+                          component = {AccountChangePassword}
+                          options={({navigation}) => ({
+                            gestureEnabled: false,
+                            headerTitle: " ",
+                            headerStyle: {
+                              backgroundColor: "#B6D3B3",
+                            },
+                            headerShadowVisible: false,
+                            headerLeft: () => (
+                              <IconButton
+                                onPress={() => navigation.navigate("Account Settings Page")}
+                                iconName="arrow-back"
+                                iconComponent={Ionicons}
+                                size={30}
+                                color="black"
+                              />
+                            ),
+                          })}>
+                        </Stack.Screen>
 
-              <Stack.Screen name = "Settings Page" component = {SettingsPage}></Stack.Screen>
-              <Stack.Screen name = "Account Settings Page" component = {AccountSettingsPage}></Stack.Screen>
-              <Stack.Screen name = "Change Password Page" component = {AccountChangePassword}></Stack.Screen>
+                      <Stack.Screen 
+                        name = "Journal Home Page" 
+                        component = {JournalHomePage}
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Journal New Entry Page" 
+                        component = {AddJournalEntryPage}
+                        options={({navigation}) =>({
+                          animation: 'slide',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Journal Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Journal Entry Page" 
+                        component = {ViewJournalEntry}
+                        options={({navigation}) =>({
+                          animation: 'fade',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Journal Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      
+                      <Stack.Screen 
+                        name = "Progress Tracking" 
+                        component = {ProgressTracker}
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: "",
+                          headerShadowVisible: false,
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
 
-              <Stack.Screen 
-                name = "Journal Home Page" 
-                component = {JournalHomePage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Journal New Entry Page" 
-                component = {AddJournalEntryPage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
+                        </Stack.Screen>
 
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Journal Entry Page" 
-                component = {ViewJournalEntry}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
+                      <Stack.Screen 
+                        name = "Store Page" 
+                        component = {StorePage}
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: "Moobie's Shop",
+                          headerShadowVisible: false,
+                          headerTitleStyle:{
+                            fontSize: 25,
+                          },
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
 
-                }}>
-              </Stack.Screen>
-              
-              <Stack.Screen name = "Progress Tracking" component = {ProgressTracker}></Stack.Screen>
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                      </Stack.Screen>
+                      <Stack.Screen 
+                        name = "Closet Page" 
+                        component = {ClosetPage}
+                        options={({navigation}) =>({
+                          animation: 'slide_from_bottom',
+                          gestureEnabled: false,
+                          headerTitle: " ",
+                          headerShadowVisible: false,
+                          headerTitleStyle:{
+                            fontSize: 25,
+                          },
+                          headerStyle: {
+                            backgroundColor: "#B6D3B3",
+                          },
 
-              <Stack.Screen 
-                name = "Store Page" 
-                component = {StorePage}
-                options={{
-                  headerShown: false,
-                  gestureEnabled: false,
-                }}>
-              </Stack.Screen>
-              <Stack.Screen 
-                name = "Closet Page" 
-                component = {ClosetPage}
-                options = {{
-                  headerShown: false,
-                  gestureEnabled: false,
-                }}>
-
-                </Stack.Screen>
-            </Stack.Navigator>
-          </NavigationContainer>
-        </MoobieProvider>
-      </UserCurrencyProvider>
+                          headerLeft: () => (
+                            <IconButton
+                              onPress={() => navigation.navigate("Home Page")}
+                              iconName="arrow-back"
+                              iconComponent={Ionicons}
+                              size={30}
+                              color="black"
+                            />
+                          ),
+                        })}>
+                        </Stack.Screen>
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </MoobieProvider>
+              </UserCurrencyProvider>
+            </SaturdayLoginProvider>
+            </FridayLoginProvider>
+            </ThursdayLoginProvider>
+            </WednesdayLoginProvider>
+            </TuesdayLoginProvider>
+            </MondayLoginProvider>
+            </SundayLoginProvider>
+          </LongestStreakProvider>
+        </ConsecutiveLoginsProvider>
+      </DailyLoginsProvider>
+      </ShowNotificationProvider>
+      </TaskContextProvider>       
     </UserInfoProvider>
   );
 }

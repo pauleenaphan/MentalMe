@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput, Alert } from "react-native";
+import { Image } from 'expo-image';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
+import { doc, getDoc} from '@firebase/firestore';
+import { Feather } from '@expo/vector-icons'; //used for icons
 
-import { styles } from "./styles.js";
-import { getCurrEmail, getCurrPassword } from "./account.js";
+import { settingsPage } from "./styles.js";
+import { getCurrEmail, getCurrPassword, getCurrName } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
-import { getMoobie } from "./moobie.js";
-
 
 //to get user information from the firecloud db
 const auth = getAuth();
@@ -24,6 +25,17 @@ export const SettingsPage = ({navigation}) =>{
         removeItemFromStorage('moobie_body');
         removeItemFromStorage('moobie_lowerBody');
         removeItemFromStorage("userCurrency");
+        removeItemFromStorage('dailyLogins');
+        removeItemFromStorage('latestDate');
+        removeItemFromStorage('consecutiveDLs');
+        removeItemFromStorage('longestStreak');
+        removeItemFromStorage('sundayLogin');
+        removeItemFromStorage('mondayLogin');
+        removeItemFromStorage('tuesdayLogin');
+        removeItemFromStorage('wednesdayLogin');
+        removeItemFromStorage('thursdayLogin');
+        removeItemFromStorage('fridayLogin');
+        removeItemFromStorage('saturdayLogin');
         navigation.navigate('Login Page');
     }
 
@@ -31,37 +43,64 @@ export const SettingsPage = ({navigation}) =>{
     const removeItemFromStorage = async (key) => {
         try {
             await AsyncStorage.removeItem(key);
-            console.log(`Item with key ${key} removed from AsyncStorage.`);
+            // console.log(`Item with key ${key} removed from AsyncStorage.`);
         } catch (error) {
             console.error(`Error removing item with key ${key} from AsyncStorage:`, error);
         }
     };
 
     return(
-        <View style = {styles.container}>
-            <Text> Settings </Text>
-            <Button
-                title = "Account Information"
-                onPress = {()=>{
-                    navigation.navigate('Account Settings Page');
-                }}
-            />
-            <Button
-                title = "Log Out"
-                onPress = {() => {
-                    logOut();
-                    navigation.navigate('Login Page');
-                }}
-            />
+        <View style = {settingsPage.pageContainer}>
+            <Text style = {settingsPage.pageTitle}> Settings </Text> 
+        
+            <View>
+                <Text style = {settingsPage.headerTitle}> In App </Text>
+                <View style = {settingsPage.optionsContainer}>
+                    <Button
+                        color = "black"
+                        title = "Sound"
+                    />
+                    <Button 
+                        color = "black"
+                        title = "Notification"
+                    />
+                </View>
+
+                <Text style = {settingsPage.headerTitle}> Account </Text>
+
+                <View style = {settingsPage.optionsContainer}>
+                    <Button
+                        color = "black"
+                        title = "Account Information"
+                        onPress = {()=>{
+                            navigation.navigate('Account Settings Page');
+                        }}
+                    />
+                </View>
+            </View>
+            
+            
+            <View style = {settingsPage.logOutBtn}>
+                <Button
+                    color = "white"
+                    title = "Log Out"
+                    onPress = {() => {
+                        logOut();
+                        navigation.navigate('Login Page');
+                    }}
+                />
+            </View>
+
         </View>
     );
 };
 
 //shows the user email and ask for password change
 export const AccountSettingsPage = ({navigation}) =>{
-    const {userEmail, setUserEmail, userPassword, setUserPassword} = getUserInfo();
+    const {userEmail, setUserEmail, userName, setUserName} = getUserInfo();
 
     //will run when the userEmail is changed, or on render
+    //gets useremail from async storage then sets it to the usestate email value
     useEffect(()=>{
         const returnEmail = async () =>{
             try{
@@ -71,30 +110,56 @@ export const AccountSettingsPage = ({navigation}) =>{
         }};
         returnEmail();
     }, [userEmail])
+
+    //gets the username from the db when the page is rendered
+    useEffect(()=>{
+        const returnName = async () =>{
+            try{
+                let currentUserEmail = await getCurrEmail();
+                const username = await getDoc(doc(db, currentUserEmail, "Username"));
+                setUserName(username.data().name);
+            }catch(error){
+                console.log("error " + error);
+        }};
+        returnName();
+    }, [userName])
     
 
     return (
-        <View style = {styles.container}>
-            <Text> Email </Text>
-            <Text> {userEmail} </Text>
-            <Text> Password </Text>
-            <Button 
-                title = "Change Password"
-                onPress = {()=>{
-                    navigation.navigate('Change Password Page');
-                }}
-            />
+        <View style = {settingsPage.pageContainer}>
+            <Text style = {settingsPage.pageTitle}> Account Information </Text>
+            <View>
+                <View style = {{flexDirection: 'row', marginBottom: 20, marginRight: 10, marginLeft: 10}}>
+                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {{width: 100, height: 80, borderRadius: 10, borderWidth: 1, marginRight: 10, backgroundColor: '#81A282', borderColor: '#81A282'}}/>
+                    <Text style = {{fontSize: 20, backgroundColor: '#81A282', width: 190, height: 80, borderRadius: 10, borderWidth: 1, overflow: 'hidden', borderColor: '#81A282', padding: 10}}> {userName} </Text>
+                </View>
+                
+                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Email </Text>
+                {/* Removes quotes from the string */}
+                <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail.trim().replace(/['"]+/g, '')} </Text> 
+
+                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Password </Text>
+                <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                    <Button 
+                        color = "black"
+                        title = "Change Password"
+                        onPress = {()=>{
+                            navigation.navigate('Change Password Page');
+                        }}
+                    />
+                </View> 
+            </View>
         </View>
     ) 
 }
 
 //changes the user password
-export const AccountChangePassword = () => {
+export const AccountChangePassword = ({navigation}) => {
     const {userPassword, setUserPassword} = getUserInfo();
     const [currentPass, setCurrentPass] = useState('');
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
-
+    const [showPassword, setShowPassword] = useState('');
     const user = auth.currentUser;
 
     useEffect(() => {
@@ -107,6 +172,49 @@ export const AccountChangePassword = () => {
         };
         returnPassword();
     }, [userPassword]);
+
+    const toggleShowPass = () =>{
+        setShowPassword(!showPassword);
+    }
+
+    //alert when passwords dont match
+    const unmatchPassAlert = () =>{
+        Alert.alert(
+            "Invalid Passwords", "Your new passwords do not match",
+            [
+                {text: "Back to Page", onPress: () =>(console.log("user passwords dont match"))}
+            ]
+        )
+    }
+
+    //alerts when old password is not correct
+    const invalidOldPass = () =>{
+        Alert.alert(
+            "Invalid Password", "Your old password is not correct",
+            [
+                {text: "Back to Page", onPress: ()=>(console.log("user old password is not correct"))}
+            ]
+        )
+    }
+
+    const invalidNewPass = () =>{
+        Alert.alert(
+            "Invalid New Password", "Your new password cannot be the same as your old one",
+            [
+                {text: "Back to Page"}
+            ]
+        )
+    }
+
+    //alerts when password is changed
+    const validNewPass = () =>{
+        Alert.alert(
+            "Your password has been changed", "",
+            [
+                {text: "Back to Page"}
+            ]
+        )
+    }
 
     //checks if the user enter their current password correctly
     const checkOldPassword = (text) => {
@@ -142,34 +250,79 @@ export const AccountChangePassword = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text> Change Password </Text>
-            <TextInput
-                placeholder = "current password"
-                // sets to the user input of the old password
-                onChangeText = {(text) => setCurrentPass(text)}
-            />
-            <TextInput
-                placeholder = "new password"
-                onChangeText={(text) => checkNewPassword(text)}
-            />
-            <TextInput
-                placeholder = "confirm new password"
-                onChangeText = {(text) => checkConfirmPassword(text)}
-            />
-            <Button
-                title="Confirm Password Change"
-                onPress={() => {
-                    //then we check the old password based on the user input
-                    //also check the new password from user input to see if it is different from the old one
-                    if (checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)) {
-                        changePassword();
-                        console.log("password has been changed");
-                    }else{
-                        console.log("password has not been changed");
-                    }
-                }}
-            />
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
+            <Text style = {{fontWeight: 'bold', fontSize: 35, marginBottom: 20}}> Change Password </Text>
+            <View style = {{flexDirection: 'column', width: 300}}>
+                <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "Current Password"
+                        secureTextEntry = {!showPassword}
+                        value = {currentPass}
+                        // sets to the user input of the old password
+                        onChangeText = {(text) => setCurrentPass(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{ marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+                <View  style = {{flexDirection: 'row', alignItems: 'center', width: 200 }}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "New password"
+                        secureTextEntry = {!showPassword}
+                        value = {newPass}
+                        onChangeText={(text) => checkNewPassword(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{ marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+                <View  style = {{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        placeholder = "Confirm new password"
+                        secureTextEntry = {!showPassword}
+                        value = {confirmPass}
+                        onChangeText = {(text) => checkConfirmPassword(text)}
+                    />
+                    <Feather 
+                        name={showPassword ? 'eye-off' : 'eye'} 
+                        size={23} 
+                        style={{marginLeft: -20}} 
+                        onPress={toggleShowPass} 
+                    /> 
+                </View>
+            </View>
+            
+            <View style = {{backgroundColor: '#568258', borderRadius: 10, marginTop: 20, padding: 10,}}>
+                <Button
+                    color = "white"
+                    title="Confirm Password Change"
+                    onPress={() => {
+                        //check if the old password is the user's current password
+                        //check if the new password is not the same as the old password
+                        //check that both new passwords are the same
+                        //changes password is all of these pass, else send out the alert
+                        if(!checkOldPassword(currentPass)){
+                            invalidOldPass();
+                        }else if(!checkNewPassword(newPass)){
+                            invalidNewPass();
+                        }else if(!checkConfirmPassword(confirmPass)){
+                            unmatchPassAlert();
+                        }else if(checkOldPassword(currentPass) && checkNewPassword(newPass) && checkConfirmPassword(confirmPass)){
+                            changePassword();
+                            validNewPass();
+                        }
+                    }}
+                />
+            </View>
         </View>
     )
 }

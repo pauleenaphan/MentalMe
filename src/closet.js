@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import { View, Text, Button, Image, ScrollView } from "react-native";
+import { View, Text, Button, ScrollView, TouchableOpacity } from "react-native";
+import { Image } from 'expo-image';
 import { collection, setDoc, doc, getDocs, deleteDoc, getDoc, updateDoc} from "firebase/firestore"; 
 import { db } from "../firebase";
 import { useFocusEffect } from "@react-navigation/core";
@@ -64,15 +65,6 @@ export const ClosetPage = ({navigation}) =>{
 
     return(
         <View style = {closetPage.pageContainer}>
-            <View style={{position: 'absolute', top: 0, left: 0, marginTop: 55, marginLeft: 30, marginRight: 30, marginBottom: 100}}>
-                <IconButton
-                    onPress={() => navigation.goBack()}
-                    iconName="arrow-back"
-                    iconComponent={Ionicons}
-                    size = {30}
-                    color="black"
-                />
-            </View>
             <View style = {closetPage.headerContainer}>
                 <Text style = {closetPage.headerTitle}> Moobie's Closet </Text>
                 <Text> I wanna look like i'm made of honeycoins! </Text>
@@ -86,80 +78,78 @@ export const ClosetPage = ({navigation}) =>{
             </View>
 
             <View style = {{flex: 1}}>
-                <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}
-                bounces = {false}
+                <ScrollView horizontal = {true} showsHorizontalScrollIndicator={true}
+                    bounces = {false}
                 >
                     <View style = {closetPage.closetContainer}>
                         {/* Maps through the closet in order to display all the clothes the user has bought */}
                         {closet.map(item =>(
-                            <View key = {item.itemName} style = {closetPage.clothesContainer}>
-                                {allImgs.map((img)=>{
-                                    if(img.name === item.itemName){
-                                        return <Image source = {img.image} style = {closetPage.clothesImg}/>
-                                    }
-                                })}
-                                <Button
-                                    color = "white"
-                                    //FUTURE TO DO: CHANGE MAP TO SOME OR A DIFFERENT ITERATION TO 
-                                    //when the user wants to change moobie's clothes it will loop through the item arr
-                                    title = {item.itemName}
-                                    onPress = {() =>{
-                                        //We need this check to see if the item is a head, body, or lower body clothing item
-                                        //so here we are first looping thru the head array
-                                        {images.headImgs.map((currItem)=>{
-                                            //if it is a head item then change the head to that item, else check if it's abody or lower body
-                                            if(currItem.name == item.itemName){
-                                                //set the current mooobie head in the homepaage and everywhere else
-                                                handlePart("head", currItem.image);
-                                                console.log("What is this showing" + currItem.image);
-                                                //keep it in async so when the user leaves, the head will stay the same
-                                                AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
-                                                console.log("this is a head item: " + currItem.name);
-                                                addToMoobie("head", currItem.name);
-                                            }
-                                        })}
-                                        {images.bodyImgs.map((currItem)=>{
-                                            if(currItem.name == item.itemName){
-                                                //set the current mooobie head in the homepaage and everywhere else
-                                                handlePart("body", currItem.image);
-                                                //keep it in async so when the user leaves, the head will stay the same
-                                                AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
-                                                console.log("this is a body item: " + currItem.name);
-                                                addToMoobie("body", currItem.name);
-                                            }
-                                        })}
-                                        {images.lowerBodyImgs.map((currItem)=>{
-                                            if(currItem.name == item.itemName){
-                                                //set the current mooobie head in the homepaage and everywhere else
-                                                handlePart("lowerBody", currItem.image);
-                                                //keep it in async so when the user leaves, the head will stay the same
-                                                AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
-                                                console.log("this is a lower body item: " + currItem.name);
-                                                addToMoobie("lowerBody", currItem.name);
-                                            }
-                                        })}
-                                        {images.defaultImgs.map((currItem)=>{
-                                            if(currItem.name === item.itemName && item.itemName === "Default Head"){
-                                                handlePart("head", currItem.image);
-                                                AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
-                                                console.log("this is a head item: " + currItem.name);
-                                                addToMoobie("head", currItem.name);
-                                            }else if(currItem.name === item.itemName && item.itemName === "Default Body"){
-                                                handlePart("body", currItem.image);
-                                                AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
-                                                console.log("this is a body item: " + currItem.name);
-                                                addToMoobie("body", currItem.name);
-                                            }else if(currItem.name === item.itemName && item.itemName === "Default Lower Body"){
-                                                handlePart("lowerBody", currItem.image);
-                                                AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
-                                                console.log("this is a lower body item: " + currItem.name);
-                                                addToMoobie("lowerBody", currItem.name);
-                                            }
-                                        })}
-
-                                    }}
-                                />
-                            </View>
+                            <TouchableOpacity
+                                key = {item.itemName}
+                                onPress = {() =>{
+                                    //We need this check to see if the item is a head, body, or lower body clothing item
+                                    //so here we are first looping thru the head array
+                                    {images.headImgs.map((currItem)=>{
+                                        //if it is a head item then change the head to that item, else check if it's abody or lower body
+                                        if(currItem.name == item.itemName){
+                                            //set the current mooobie head in the homepaage and everywhere else
+                                            handlePart("head", currItem.image);
+                                            console.log("What is this showing" + currItem.image);
+                                            //keep it in async so when the user leaves, the head will stay the same
+                                            AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
+                                            console.log("this is a head item: " + currItem.name);
+                                            addToMoobie("head", currItem.name);
+                                        }
+                                    })}
+                                    {images.bodyImgs.map((currItem)=>{
+                                        if(currItem.name == item.itemName){
+                                            //set the current mooobie head in the homepaage and everywhere else
+                                            handlePart("body", currItem.image);
+                                            //keep it in async so when the user leaves, the head will stay the same
+                                            AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
+                                            console.log("this is a body item: " + currItem.name);
+                                            addToMoobie("body", currItem.name);
+                                        }
+                                    })}
+                                    {images.lowerBodyImgs.map((currItem)=>{
+                                        if(currItem.name == item.itemName){
+                                            //set the current mooobie head in the homepaage and everywhere else
+                                            handlePart("lowerBody", currItem.image);
+                                            //keep it in async so when the user leaves, the head will stay the same
+                                            AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
+                                            console.log("this is a lower body item: " + currItem.name);
+                                            addToMoobie("lowerBody", currItem.name);
+                                        }
+                                    })}
+                                    {images.defaultImgs.map((currItem)=>{
+                                        if(currItem.name === item.itemName && item.itemName === "Default Head"){
+                                            handlePart("head", currItem.image);
+                                            AsyncStorage.setItem("moobie_head", JSON.stringify(currItem.image));
+                                            console.log("this is a head item: " + currItem.name);
+                                            addToMoobie("head", currItem.name);
+                                        }else if(currItem.name === item.itemName && item.itemName === "Default Body"){
+                                            handlePart("body", currItem.image);
+                                            AsyncStorage.setItem("moobie_body", JSON.stringify(currItem.image));
+                                            console.log("this is a body item: " + currItem.name);
+                                            addToMoobie("body", currItem.name);
+                                        }else if(currItem.name === item.itemName && item.itemName === "Default Lower Body"){
+                                            handlePart("lowerBody", currItem.image);
+                                            AsyncStorage.setItem("moobie_lowerBody", JSON.stringify(currItem.image));
+                                            console.log("this is a lower body item: " + currItem.name);
+                                            addToMoobie("lowerBody", currItem.name);
+                                        }
+                                    })}
+                                }}
+                            >
+                                <View key = {item.itemName} style = {closetPage.clothesContainer}>
+                                    {allImgs.map((img)=>{
+                                        if(img.name === item.itemName){
+                                            return <Image source = {img.image} style = {closetPage.clothesImg}/>
+                                        }
+                                    })}
+                                    <Text style = {{fontSize: 20, padding: 10}}> {item.itemName} </Text>
+                                </View>
+                            </TouchableOpacity>
                         ))}
                     </View>
                 </ScrollView>
@@ -167,3 +157,4 @@ export const ClosetPage = ({navigation}) =>{
         </View>
     );
 };
+
