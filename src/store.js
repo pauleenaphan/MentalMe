@@ -339,6 +339,7 @@ export const StorePage = () =>{
                                                         toggleInvalidPopup();
                                                     }, 1); 
                                                 }else{
+                                                    addToCloset();
                                                     toggleItemPopup();
                                                     setTimeout(() => {
                                                         toggleBoughtPopup();
@@ -488,6 +489,7 @@ export const StorePage = () =>{
                                                         toggleInvalidPopup();
                                                     }, 1); 
                                                 }else{
+                                                    addToCloset();
                                                     toggleItemPopup();
                                                     setTimeout(() => {
                                                         toggleBoughtPopup();
