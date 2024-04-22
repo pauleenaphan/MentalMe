@@ -33,7 +33,7 @@ export const HomePage = ({navigation}) =>{
     const [taskPopup, setTaskPopup] = useState(false);
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
-    const {setLoginTask, setJournalTask, setWeeklyLogin, loginTask, journalTask, weeklyLogin} = getTaskInfo();
+    const {setJournalTask, setWeeklyLogin, journalTask, weeklyLogin} = getTaskInfo();
 
     const { dailyLogins, setDailyLogins } = useDailyLogins();
     const { consecutiveDLs, setConsecutiveDLs } = useConsecutiveLogins();
@@ -66,37 +66,45 @@ export const HomePage = ({navigation}) =>{
     };
 
     //resets the task if the user has not logged in today
-    const resetTask = async () =>{
-        try{
-            const currUserEmail = await getCurrEmail();
+    // const resetTask = async () =>{
+    //     try{
+    //         const currUserEmail = await getCurrEmail(); 
 
-            //gets the last login datw
-            const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
-            console.log("LAST LOGIN ", loginDate.data().userLastLogin);
+    //         console.log("WeeklyLogin: " + weeklyLogin);
+
+    //         //gets the last login date
+    //         const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
+    //         console.log("LAST LOGIN ", loginDate.data().userLastLogin);
      
-            console.log("THIS IS TODAYS DATE", getDate());
-            //compares today's date and the last date the user logged in
-            //if the dates are the same then do nothing, keep the current task
-            //else reset all of the task
-            if(loginDate.data().userLastLogin == getDate()){
-                const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
-                setJournalTask(taskDoc.data().journalTask);
-                setLoginTask(taskDoc.data().loginTask);
-                setWeeklyLogin(taskDoc.data().weeklyLogin);
-            }else{
-                await updateDoc(doc(db, currUserEmail, "User Task"), {
-                    loginTask: "false",
-                    journalTask: "false",
-                    weeklyLogin: "false"
-                })
-                setLoginTask('false');
-                setJournalTask('false');
-                setWeeklyLogin('false');
-            }
-        }catch(error){
-            console.log("Error ", error);
-        }
-    }
+    //         console.log("THIS IS TODAYS DATE", getDate());
+    //         //compares today's date and the last date the user logged in
+    //         //if the dates are the same then do nothing, keep the current task
+    //         //else reset all of the task
+    //         if(loginDate.data().userLastLogin == getDate()){
+    //             const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
+    //             setJournalTask(taskDoc.data().journalTask);
+    //             // setLoginTask(taskDoc.data().loginTask);
+    //             setWeeklyLogin(taskDoc.data().weeklyLogin);
+    //         } else if (weeklyLogin === 'true' && loginDate.data().userLastLogin === getDate()) { 
+    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
+    //                 journalTask: journalTask,
+    //                 weeklyLogin: "true"
+    //             })
+    //         } else {
+    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
+    //                 // loginTask: "false",
+    //                 journalTask: "false",
+    //                 weeklyLogin: "false"
+    //             })
+    //             // setLoginTask('false');
+    //             setJournalTask('false');
+    //             setWeeklyLogin('false');
+    //             console.log("Cleared task data.");
+    //         }
+    //     }catch(error){
+    //         console.log("Error ", error);
+    //     }
+    // }
 
 
     const handleDailyIncrement = async ({
@@ -112,7 +120,8 @@ export const HomePage = ({navigation}) =>{
         saturdayLogin, setSaturdayLogin,
         currency, updateCurrency,
         showNotification, setShowNotification,
-        loginTask, setLoginTask,
+        // loginTask, setLoginTask,
+        journalTask, setJournalTask,
         weeklyLogin, setWeeklyLogin}) => {
             try {
                 await dailyIncrement({
@@ -120,7 +129,7 @@ export const HomePage = ({navigation}) =>{
                     setSundayLogin, setMondayLogin, setTuesdayLogin,
                     setWednesdayLogin, setThursdayLogin, setFridayLogin,
                     setSaturdayLogin, updateCurrency, setShowNotification,
-                    setLoginTask, setWeeklyLogin
+                    journalTask, setJournalTask, weeklyLogin, setWeeklyLogin
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -145,8 +154,10 @@ export const HomePage = ({navigation}) =>{
                 setSundayLogin, setMondayLogin, setTuesdayLogin, 
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
                 setSaturdayLogin, updateCurrency, setShowNotification,
-                setLoginTask, setWeeklyLogin});
-            resetTask();
+                journalTask, setJournalTask, weeklyLogin, setWeeklyLogin})
+                // .then(() => {
+                //     resetTask();
+                // });
         }, [])
     )
 
