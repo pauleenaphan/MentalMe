@@ -24,8 +24,8 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
          useWednesdayLogin, useThursdayLogin, 
          useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
-import { useShowNotification } from "./progress_files/showNotificationContext.js";
-
+import { useShowDailyNotification } from "./progress_files/showDailyNotificationContext.js";
+import { useShowWeeklyNotification } from "./progress_files/showWeeklyNotificationContext.js";
 
 
 //Main home page 
@@ -46,7 +46,9 @@ export const HomePage = ({navigation}) =>{
     const { fridayLogin, setFridayLogin } = useFridayLogin();
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
 
-    const { showNotification, setShowNotification } = useShowNotification();
+    const { showDailyNotification, setShowDailyNotification } = useShowDailyNotification();
+    const { showWeeklyNotification, setShowWeeklyNotification } = useShowWeeklyNotification();
+
     //load moobie on the homepage
     const setBody = async () => {
         try {
@@ -119,8 +121,8 @@ export const HomePage = ({navigation}) =>{
         fridayLogin, setFridayLogin, 
         saturdayLogin, setSaturdayLogin,
         currency, updateCurrency,
-        showNotification, setShowNotification,
-        // loginTask, setLoginTask,
+        showDailyNotification, setShowDailyNotification,
+        showWeeklyNotification, setShowWeeklyNotification,
         journalTask, setJournalTask,
         weeklyLogin, setWeeklyLogin}) => {
             try {
@@ -128,8 +130,9 @@ export const HomePage = ({navigation}) =>{
                     setDailyLogins, setConsecutiveDLs, setLongestStreak,
                     setSundayLogin, setMondayLogin, setTuesdayLogin,
                     setWednesdayLogin, setThursdayLogin, setFridayLogin,
-                    setSaturdayLogin, updateCurrency, setShowNotification,
-                    journalTask, setJournalTask, weeklyLogin, setWeeklyLogin
+                    setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                    setShowWeeklyNotification, journalTask, setJournalTask, 
+                    weeklyLogin, setWeeklyLogin
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -142,7 +145,11 @@ export const HomePage = ({navigation}) =>{
     }
 
     const toggleDailyLoginPopUp = () =>{
-        setShowNotification(!showNotification);
+        setShowDailyNotification(!showDailyNotification);
+    }
+
+    const toggleWeeklyLoginPopUp = () =>{
+        setShowWeeklyNotification(!showWeeklyNotification);
     }
 
     useFocusEffect(
@@ -153,8 +160,9 @@ export const HomePage = ({navigation}) =>{
                 setDailyLogins, setConsecutiveDLs, setLongestStreak, 
                 setSundayLogin, setMondayLogin, setTuesdayLogin, 
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification,
-                journalTask, setJournalTask, weeklyLogin, setWeeklyLogin})
+                setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                setShowWeeklyNotification, journalTask, setJournalTask, 
+                weeklyLogin, setWeeklyLogin})
                 // .then(() => {
                 //     resetTask();
                 // });
@@ -280,7 +288,7 @@ export const HomePage = ({navigation}) =>{
                 </Modal>
                 
                 <Modal
-                    isVisible = { showNotification } // taskPopup for testing and comment out ^^^
+                    isVisible = { showDailyNotification } // taskPopup for testing and comment out ^^^
                     animationIn = {'zoomIn'}
                     animationOut = {'zoomOut'}
                     onBackdropPress={() => toggleDailyLoginPopUp()} // toggleTaskPopup() for testing
@@ -301,6 +309,22 @@ export const HomePage = ({navigation}) =>{
                             <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
                             <Text style={{marginTop: 5}}>Daily Login ✅</Text>
                             <Text>Reward: +1 Honey Coin</Text>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    isVisible = { showWeeklyNotification }
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleWeeklyLoginPopUp()}
+                    backdropOpacity={.35}
+                >
+                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                        <View style = {{alignItems: 'center'}}>
+                            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5}}>Weekly Login ✅</Text>
+                            <Text>Reward: +2 Honey Coin</Text>
                         </View>
                     </View>
                 </Modal>

@@ -19,7 +19,8 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
 
 import { getCurrency } from "./currency.js";
 
-import { useShowNotification } from "./progress_files/showNotificationContext.js";
+import { useShowDailyNotification } from "./progress_files/showDailyNotificationContext.js";
+import { useShowWeeklyNotification } from "./progress_files/showWeeklyNotificationContext.js";
 
 import { getTaskInfo } from "./task.js";
 
@@ -305,8 +306,9 @@ export const dailyIncrement = async ({
     setDailyLogins, setConsecutiveDLs, setLongestStreak, 
     setSundayLogin, setMondayLogin, setTuesdayLogin, 
     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-    setSaturdayLogin, updateCurrency, setShowNotification,
-    journalTask, setJournalTask, weeklyLogin, setWeeklyLogin}) => {
+    setSaturdayLogin, updateCurrency, setShowDailyNotification,
+    setShowWeeklyNotification, journalTask, setJournalTask, 
+    weeklyLogin, setWeeklyLogin}) => {
     try {
         const currUserEmail = await getCurrEmail(); 
         await setPersonalCounters({
@@ -338,8 +340,9 @@ export const dailyIncrement = async ({
                 setDailyLogins, setConsecutiveDLs, setLongestStreak,
                 setSundayLogin, setMondayLogin, setTuesdayLogin,
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification,
-                journalTask, setJournalTask, weeklyLogin, setWeeklyLogin
+                setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                setShowWeeklyNotification, journalTask, setJournalTask, 
+                weeklyLogin, setWeeklyLogin
             });
         } else if (dailyLogs > 0 && storedDate != currentDate) {
             console.log("Daily Logs Greater Than 0 and the Date is Not the Same");
@@ -353,8 +356,9 @@ export const dailyIncrement = async ({
                 setDailyLogins, setConsecutiveDLs, setLongestStreak,
                 setSundayLogin, setMondayLogin, setTuesdayLogin,
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification,
-                journalTask, setJournalTask, weeklyLogin, setWeeklyLogin
+                setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                setShowWeeklyNotification, journalTask, setJournalTask, 
+                weeklyLogin, setWeeklyLogin
             });
             await AsyncStorage.setItem("latestDate", currentDate);
         } else if (dailyLogs > 0 && storedDate === currentDate) {
@@ -504,8 +508,8 @@ export const incrementCounters = async ({
     setDailyLogins, setConsecutiveDLs, setLongestStreak, 
     setSundayLogin, setMondayLogin, setTuesdayLogin, 
     setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-    setSaturdayLogin, updateCurrency, setShowNotification,
-    journalTask, setJournalTask, weeklyLogin, setWeeklyLogin}) => {
+    setSaturdayLogin, updateCurrency, setShowDailyNotification,
+    setShowWeeklyNotification, journalTask, setJournalTask, weeklyLogin, setWeeklyLogin}) => {
         try {
             const email = await getCurrEmail();
             let currentUser = email;
@@ -579,6 +583,7 @@ export const incrementCounters = async ({
                         journalTask: journalTask,
                         weeklyLogin: 'true'
                     })
+                    setShowWeeklyNotification(true);
                 }
                 await AsyncStorage.setItem('sundayLogin', 'true');
                 setSundayLogin(true);
@@ -650,9 +655,7 @@ export const incrementCounters = async ({
                 honeyCoins: currencyAmt.toString()
             });
 
-            setShowNotification(true);
-            // console.log("Tempweekly is: " + tempWeekly);
-            // setWeeklyLogin(tempWeekly); // import ALL of the task.js and then import to firebase and then call from firebase
+            setShowDailyNotification(true);
             console.log("Increment Counters Function Success!");
         } catch (error) {
             console.log("Increment Counters Function Error: " + error);
