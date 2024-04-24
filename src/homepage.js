@@ -300,7 +300,7 @@ export const HomePage = ({navigation}) =>{
                     onBackdropPress={() => toggleDailyLoginPopUp()} // toggleTaskPopup() for testing
                     backdropOpacity={.35}
                 >
-                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
                         {/* <IconButton
                             onPress={() => {
                                 navigation.navigate("Home Page")
@@ -312,28 +312,28 @@ export const HomePage = ({navigation}) =>{
                             color="black"
                         /> */}
                         <View style = {{alignItems: 'center'}}>
-                            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
-                            <Text style={{marginTop: 5}}>Daily Login ✅</Text>
-                            <Text>Reward: +1 Honey Coin</Text>
+                            <Text style={{fontWeight: 'bold', fontSize: 30}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Daily Login ✅</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Reward: +1 Honey Coin!</Text>
                         </View>
                     </View>
                 </Modal>
 
-                <Modal
+                {/* <Modal
                     isVisible = { showJournalNotification } // taskPopup for testing and comment out ^^^
                     animationIn = {'zoomIn'}
                     animationOut = {'zoomOut'}
                     onBackdropPress={() => toggleJournalLoginPopUp()} // toggleTaskPopup() for testing
                     backdropOpacity={.35}
                 >
-                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
                         <View style = {{alignItems: 'center'}}>
                             <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
                             <Text style={{marginTop: 5}}>Daily Journaling ✅</Text>
                             <Text>Reward: +1 Honey Coin</Text>
                         </View>
                     </View>
-                </Modal>
+                </Modal> */}
 
                 <Modal
                     isVisible = { showWeeklyNotification }
@@ -342,11 +342,11 @@ export const HomePage = ({navigation}) =>{
                     onBackdropPress={() => toggleWeeklyLoginPopUp()}
                     backdropOpacity={.35}
                 >
-                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
                         <View style = {{alignItems: 'center'}}>
-                            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
-                            <Text style={{marginTop: 5}}>Weekly Login ✅</Text>
-                            <Text>Reward: +2 Honey Coin</Text>
+                            <Text style={{fontWeight: 'bold', fontSize: 30}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Weekly Login ✅</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Reward: +2 Honey Coin!</Text>
                         </View>
                     </View>
                 </Modal>
