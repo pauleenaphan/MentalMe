@@ -26,6 +26,7 @@ import { IconButton } from './homepage.js';
 import { Ionicons } from "@expo/vector-icons";
 import { TaskContextProvider } from './task.js';
 import { ShowDailyNotificationProvider } from './progress_files/showDailyNotificationContext.js';
+import { ShowJournalNotificationProvider } from './progress_files/showJournalNotificationContext.js';
 import { ShowWeeklyNotificationProvider } from './progress_files/showWeeklyNotificationContext.js';
 
 
@@ -54,6 +55,7 @@ export default function App() {
     <UserInfoProvider>
       <TaskContextProvider>
       <ShowDailyNotificationProvider>
+      <ShowJournalNotificationProvider>
       <ShowWeeklyNotificationProvider>
       <DailyLoginsProvider>
         <ConsecutiveLoginsProvider>
@@ -365,6 +367,7 @@ export default function App() {
         </ConsecutiveLoginsProvider>
       </DailyLoginsProvider>
       </ShowWeeklyNotificationProvider>
+      </ShowJournalNotificationProvider>
       </ShowDailyNotificationProvider>
       </TaskContextProvider>       
     </UserInfoProvider>

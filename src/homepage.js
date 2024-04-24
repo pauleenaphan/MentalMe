@@ -25,6 +25,7 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
          useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
 import { useShowDailyNotification } from "./progress_files/showDailyNotificationContext.js";
+import { useShowJournalNotification } from "./progress_files/showJournalNotificationContext.js";
 import { useShowWeeklyNotification } from "./progress_files/showWeeklyNotificationContext.js";
 
 
@@ -47,6 +48,7 @@ export const HomePage = ({navigation}) =>{
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
 
     const { showDailyNotification, setShowDailyNotification } = useShowDailyNotification();
+    const { showJournalNotification, setShowJournalNotification } = useShowJournalNotification();
     const { showWeeklyNotification, setShowWeeklyNotification } = useShowWeeklyNotification();
 
     //load moobie on the homepage
@@ -150,6 +152,10 @@ export const HomePage = ({navigation}) =>{
 
     const toggleWeeklyLoginPopUp = () =>{
         setShowWeeklyNotification(!showWeeklyNotification);
+    }
+
+    const toggleJournalLoginPopUp = () =>{
+        setShowJournalNotification(!showJournalNotification);
     }
 
     useFocusEffect(
@@ -308,6 +314,22 @@ export const HomePage = ({navigation}) =>{
                         <View style = {{alignItems: 'center'}}>
                             <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
                             <Text style={{marginTop: 5}}>Daily Login ✅</Text>
+                            <Text>Reward: +1 Honey Coin</Text>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    isVisible = { showJournalNotification } // taskPopup for testing and comment out ^^^
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleJournalLoginPopUp()} // toggleTaskPopup() for testing
+                    backdropOpacity={.35}
+                >
+                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                        <View style = {{alignItems: 'center'}}>
+                            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5}}>Daily Journaling ✅</Text>
                             <Text>Reward: +1 Honey Coin</Text>
                         </View>
                     </View>
