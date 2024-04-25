@@ -24,8 +24,9 @@ import { useSundayLogin, useMondayLogin, useTuesdayLogin,
          useWednesdayLogin, useThursdayLogin, 
          useFridayLogin, useSaturdayLogin } from './progress_files/weeklyLoginContext.js';
 
-import { useShowNotification } from "./progress_files/showNotificationContext.js";
-
+import { useShowDailyNotification } from "./progress_files/showDailyNotificationContext.js";
+import { useShowJournalNotification } from "./progress_files/showJournalNotificationContext.js";
+import { useShowWeeklyNotification } from "./progress_files/showWeeklyNotificationContext.js";
 
 
 //Main home page 
@@ -33,7 +34,7 @@ export const HomePage = ({navigation}) =>{
     const [taskPopup, setTaskPopup] = useState(false);
     const {bodyPart, handlePart} = getMoobie();
     const {currency, updateCurrency} = getCurrency();
-    const {setLoginTask, setJournalTask, setWeeklyLogin, loginTask, journalTask, weeklyLogin} = getTaskInfo();
+    const {setJournalTask, setWeeklyLogin, journalTask, weeklyLogin} = getTaskInfo();
 
     const { dailyLogins, setDailyLogins } = useDailyLogins();
     const { consecutiveDLs, setConsecutiveDLs } = useConsecutiveLogins();
@@ -46,7 +47,10 @@ export const HomePage = ({navigation}) =>{
     const { fridayLogin, setFridayLogin } = useFridayLogin();
     const { saturdayLogin, setSaturdayLogin } = useSaturdayLogin();
 
-    const { showNotification, setShowNotification } = useShowNotification();
+    const { showDailyNotification, setShowDailyNotification } = useShowDailyNotification();
+    const { showJournalNotification, setShowJournalNotification } = useShowJournalNotification();
+    const { showWeeklyNotification, setShowWeeklyNotification } = useShowWeeklyNotification();
+
     //load moobie on the homepage
     const setBody = async () => {
         try {
@@ -66,37 +70,45 @@ export const HomePage = ({navigation}) =>{
     };
 
     //resets the task if the user has not logged in today
-    const resetTask = async () =>{
-        try{
-            const currUserEmail = await getCurrEmail();
+    // const resetTask = async () =>{
+    //     try{
+    //         const currUserEmail = await getCurrEmail(); 
 
-            //gets the last login datw
-            const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
-            console.log("LAST LOGIN ", loginDate.data().userLastLogin);
+    //         console.log("WeeklyLogin: " + weeklyLogin);
+
+    //         //gets the last login date
+    //         const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
+    //         console.log("LAST LOGIN ", loginDate.data().userLastLogin);
      
-            console.log("THIS IS TODAYS DATE", getDate());
-            //compares today's date and the last date the user logged in
-            //if the dates are the same then do nothing, keep the current task
-            //else reset all of the task
-            if(loginDate.data().userLastLogin == getDate()){
-                const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
-                setJournalTask(taskDoc.data().journalTask);
-                setLoginTask(taskDoc.data().loginTask);
-                setWeeklyLogin(taskDoc.data().weeklyLogin);
-            }else{
-                await updateDoc(doc(db, currUserEmail, "User Task"), {
-                    loginTask: "false",
-                    journalTask: "false",
-                    weeklyLogin: "false"
-                })
-                setLoginTask('false');
-                setJournalTask('false');
-                setWeeklyLogin('false');
-            }
-        }catch(error){
-            console.log("Error ", error);
-        }
-    }
+    //         console.log("THIS IS TODAYS DATE", getDate());
+    //         //compares today's date and the last date the user logged in
+    //         //if the dates are the same then do nothing, keep the current task
+    //         //else reset all of the task
+    //         if(loginDate.data().userLastLogin == getDate()){
+    //             const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
+    //             setJournalTask(taskDoc.data().journalTask);
+    //             // setLoginTask(taskDoc.data().loginTask);
+    //             setWeeklyLogin(taskDoc.data().weeklyLogin);
+    //         } else if (weeklyLogin === 'true' && loginDate.data().userLastLogin === getDate()) { 
+    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
+    //                 journalTask: journalTask,
+    //                 weeklyLogin: "true"
+    //             })
+    //         } else {
+    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
+    //                 // loginTask: "false",
+    //                 journalTask: "false",
+    //                 weeklyLogin: "false"
+    //             })
+    //             // setLoginTask('false');
+    //             setJournalTask('false');
+    //             setWeeklyLogin('false');
+    //             console.log("Cleared task data.");
+    //         }
+    //     }catch(error){
+    //         console.log("Error ", error);
+    //     }
+    // }
 
 
     const handleDailyIncrement = async ({
@@ -111,16 +123,18 @@ export const HomePage = ({navigation}) =>{
         fridayLogin, setFridayLogin, 
         saturdayLogin, setSaturdayLogin,
         currency, updateCurrency,
-        showNotification, setShowNotification,
-        loginTask, setLoginTask,
+        showDailyNotification, setShowDailyNotification,
+        showWeeklyNotification, setShowWeeklyNotification,
+        journalTask, setJournalTask,
         weeklyLogin, setWeeklyLogin}) => {
             try {
                 await dailyIncrement({
                     setDailyLogins, setConsecutiveDLs, setLongestStreak,
                     setSundayLogin, setMondayLogin, setTuesdayLogin,
                     setWednesdayLogin, setThursdayLogin, setFridayLogin,
-                    setSaturdayLogin, updateCurrency, setShowNotification,
-                    setLoginTask, setWeeklyLogin
+                    setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                    setShowWeeklyNotification, journalTask, setJournalTask, 
+                    weeklyLogin, setWeeklyLogin
                 });
                 console.log("Daily incrementation successful");
             } catch (error) {
@@ -133,7 +147,15 @@ export const HomePage = ({navigation}) =>{
     }
 
     const toggleDailyLoginPopUp = () =>{
-        setShowNotification(!showNotification);
+        setShowDailyNotification(!showDailyNotification);
+    }
+
+    const toggleWeeklyLoginPopUp = () =>{
+        setShowWeeklyNotification(!showWeeklyNotification);
+    }
+
+    const toggleJournalLoginPopUp = () =>{
+        setShowJournalNotification(!showJournalNotification);
     }
 
     useFocusEffect(
@@ -144,9 +166,12 @@ export const HomePage = ({navigation}) =>{
                 setDailyLogins, setConsecutiveDLs, setLongestStreak, 
                 setSundayLogin, setMondayLogin, setTuesdayLogin, 
                 setWednesdayLogin, setThursdayLogin, setFridayLogin, 
-                setSaturdayLogin, updateCurrency, setShowNotification,
-                setLoginTask, setWeeklyLogin});
-            resetTask();
+                setSaturdayLogin, updateCurrency, setShowDailyNotification,
+                setShowWeeklyNotification, journalTask, setJournalTask, 
+                weeklyLogin, setWeeklyLogin})
+                // .then(() => {
+                //     resetTask();
+                // });
         }, [])
     )
 
@@ -269,13 +294,13 @@ export const HomePage = ({navigation}) =>{
                 </Modal>
                 
                 <Modal
-                    isVisible = { showNotification } // taskPopup for testing and comment out ^^^
+                    isVisible = { showDailyNotification } // taskPopup for testing and comment out ^^^
                     animationIn = {'zoomIn'}
                     animationOut = {'zoomOut'}
                     onBackdropPress={() => toggleDailyLoginPopUp()} // toggleTaskPopup() for testing
                     backdropOpacity={.35}
                 >
-                    <View style = {{backgroundColor: 'white', padding: 20}}>
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
                         {/* <IconButton
                             onPress={() => {
                                 navigation.navigate("Home Page")
@@ -287,9 +312,41 @@ export const HomePage = ({navigation}) =>{
                             color="black"
                         /> */}
                         <View style = {{alignItems: 'center'}}>
+                            <Text style={{fontWeight: 'bold', fontSize: 30}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Daily Login ✅</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Reward: +1 Honey Coin!</Text>
+                        </View>
+                    </View>
+                </Modal>
+
+                {/* <Modal
+                    isVisible = { showJournalNotification } // taskPopup for testing and comment out ^^^
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleJournalLoginPopUp()} // toggleTaskPopup() for testing
+                    backdropOpacity={.35}
+                >
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
+                        <View style = {{alignItems: 'center'}}>
                             <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>Task Completed!</Text>
-                            <Text style={{marginTop: 5}}>Daily Login ✅</Text>
+                            <Text style={{marginTop: 5}}>Daily Journaling ✅</Text>
                             <Text>Reward: +1 Honey Coin</Text>
+                        </View>
+                    </View>
+                </Modal> */}
+
+                <Modal
+                    isVisible = { showWeeklyNotification }
+                    animationIn = {'zoomIn'}
+                    animationOut = {'zoomOut'}
+                    onBackdropPress={() => toggleWeeklyLoginPopUp()}
+                    backdropOpacity={.35}
+                >
+                    <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
+                        <View style = {{alignItems: 'center'}}>
+                            <Text style={{fontWeight: 'bold', fontSize: 30}}>Task Completed!</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Weekly Login ✅</Text>
+                            <Text style={{marginTop: 5, fontSize: 20}}>Reward: +2 Honey Coin!</Text>
                         </View>
                     </View>
                 </Modal>

@@ -11,6 +11,8 @@ import { IconButton } from "./homepage.js";
 import { getCurrency } from "./currency.js";
 import { getTaskInfo } from "./task.js";
 
+import { useShowJournalNotification } from "./progress_files/showJournalNotificationContext.js";
+import Modal from "react-native-modal";
 
 //Return's today's date
 export const getDate = () =>{
@@ -24,6 +26,7 @@ export const getDate = () =>{
 //Main Journal Homepage
 export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
+    const { showJournalNotification, setShowJournalNotification } = useShowJournalNotification();
 
     //shows all entries in journal
     useFocusEffect(
@@ -51,6 +54,10 @@ export const JournalHomePage = ({navigation}) =>{
             console.log("error getting entries", error);
         }
     };
+
+    const toggleJournalLoginPopUp = () =>{
+        setShowJournalNotification(!showJournalNotification);
+    }
     
     return(
         <View style = {journalPage.fullPageContainer}>
@@ -105,6 +112,21 @@ export const JournalHomePage = ({navigation}) =>{
                     </View>
                 </TouchableOpacity>
             </View>
+            <Modal
+                isVisible = { showJournalNotification } // taskPopup for testing and comment out ^^^
+                animationIn = {'zoomIn'}
+                animationOut = {'zoomOut'}
+                onBackdropPress={() => toggleJournalLoginPopUp()} // toggleTaskPopup() for testing
+                backdropOpacity={.35}
+            >
+                <View style = {{backgroundColor: '#B6D3B3', padding: 20}}>
+                    <View style = {{alignItems: 'center'}}>
+                        <Text style={{fontWeight: 'bold', fontSize: 30}}>Task Completed!</Text>
+                        <Text style={{marginTop: 5, fontSize: 20}}>Daily Journaling ✅</Text>
+                        <Text style={{marginTop: 5, fontSize: 20}}>Reward: +1 Honey Coin!</Text>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -113,6 +135,7 @@ export const JournalHomePage = ({navigation}) =>{
 export const AddJournalEntryPage = ({navigation}) =>{
     const {setJournalTask} = getTaskInfo();
     const {currency, updateCurrency} = getCurrency();
+    const {showJournalNotification, setShowJournalNotification} = useShowJournalNotification();
     
     const handlePressOutside = () => {
         //brings the keyboard down
@@ -153,6 +176,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                     journalTask: "true"
                 })
                 setJournalTask("true");
+                setShowJournalNotification(true);
             }
             //creates a subcollection in User Information Document called Journal Entries
             const entry = await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
