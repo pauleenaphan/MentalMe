@@ -63,3 +63,7 @@ Users can install the app in the app store or the google play store
 # Team Members and Contact Info
 Pauleena Phan, Pauleena2002@gmail.com
 <br> Matthew Tran, 2020mtran@gmail.com
+
+# Privacy Policies
+
+[Link](https://pauleenaphan.github.io/MentalMe/privacyPolicies.html)
