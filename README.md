@@ -52,11 +52,10 @@ Users can install the app in the app store or the google play store
 
 <br>
 
-# Libraries and Frameworkes Used
+# Technologies Used
 - [React Native](https://reactnative.dev/docs/getting-started)
 - [Firebase](https://firebase.google.com/)
 - [Expo](https://expo.dev/)
-- [React Native Fast Images](https://github.com/FaridSafi/react-native-gifted-chat)
 
 <br>
 
