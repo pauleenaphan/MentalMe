@@ -36,12 +36,7 @@
     },
     "owner": "pauleenaphan",
     "plugins": [
-      "expo-build-properties",
-      {
-        "ios": {
-          "useFrameworks": "static"
-        }
-      }
+      "expo-build-properties"
     ]
   }
 }
