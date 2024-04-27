@@ -17,6 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pauleenaphan.mentalme"
+      
     },
     "android": {
       "adaptiveIcon": {
@@ -33,6 +34,14 @@
         "projectId": "d55f227c-6164-4fc5-ac60-040c4b42bad2"
       }
     },
-    "owner": "pauleenaphan"
+    "owner": "pauleenaphan",
+    "plugins": [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }
+    ]
   }
 }
