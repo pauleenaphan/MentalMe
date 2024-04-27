@@ -101,13 +101,13 @@ export const StorePage = () =>{
     const HeadAccTab = ({navigation}) =>{
         return(
             <View style = {storePage.pageContainer}>
-                <Button
+                {/* <Button
                     title = "add currency (testing)"
                     onPress = {() =>{
                         console.log(typeof currency);
                         updateCurrency(parseInt(currency) + 100);
                     }}
-                />
+                /> */}
                 {/* amount of coins that the user owns */}
                 <View style = {storePage.headingContainer}>
                     <View style = {storePage.headingContainer2}>
