@@ -296,7 +296,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pauleenaphan.mentalme;
-				PRODUCT_NAME = ios;
+				PRODUCT_NAME = mentalme;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -319,8 +319,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.ios;
-				PRODUCT_NAME = ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pauleenaphan.mentalme;
+				PRODUCT_NAME = mentalme;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
