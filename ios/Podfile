@@ -18,11 +18,11 @@ prepare_react_native_project!
 # You need to set `use_modular_headers!` globally in your Podfile or specify `:modular_headers => true` for Firebase dependencies
 use_modular_headers!
 
-target 'ios' do
+target 'mentalme' do
   use_expo_modules!
   config = use_native_modules!
 
-  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  use_frameworks! :linkage => podfile_properties['mentalme.useFrameworks'].to_sym if podfile_properties['mentalme.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
 
   use_react_native!(
