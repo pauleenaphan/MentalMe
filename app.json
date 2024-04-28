@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "LA72Z36S97.com.pauleenaphan.mentalme"
+      "bundleIdentifier": "com-pauleenaphan-mentalme"
       
     },
     "android": {
