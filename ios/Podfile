@@ -18,6 +18,20 @@ prepare_react_native_project!
 # You need to set `use_modular_headers!` globally in your Podfile or specify `:modular_headers => true` for Firebase dependencies
 use_modular_headers!
 
+# Define Flipper configuration
+flipper_config = FlipperConfiguration.disabled
+if ENV['NO_FLIPPER'] == '1'
+  # Explicitly disabled through environment variables
+  flipper_config = FlipperConfiguration.disabled
+elsif podfile_properties.key?('ios.flipper')
+  # Configure Flipper in Podfile.properties.json
+  if podfile_properties['ios.flipper'] == 'true'
+    flipper_config = FlipperConfiguration.enabled(["Debug", "Release"])
+  elsif podfile_properties['ios.flipper'] != 'false'
+    flipper_config = FlipperConfiguration.enabled(["Debug", "Release"], { 'Flipper' => podfile_properties['ios.flipper'] })
+  end
+end
+
 target 'mentalme' do
   use_expo_modules!
   config = use_native_modules!
