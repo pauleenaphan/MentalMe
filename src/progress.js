@@ -480,7 +480,7 @@ export const setPersonalCounters = async ({
             console.log("No such document found!");
         }
         console.log("DailyLogs has: " + prevDL);
-        await AsyncStorage.setItem('dailyLogins', prevDL);
+        await AsyncStorage.setItem('dailyLogins', prevDL.toString());
         await AsyncStorage.setItem('latestDate', lastLogin);
         await AsyncStorage.setItem('consecutiveDLs', prevCDL);
         await AsyncStorage.setItem('longestStreak', prevLS);
