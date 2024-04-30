@@ -20,7 +20,7 @@ import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
 import com.pauleenaphan.mentalme.BuildConfig
-
+import com.pauleenaphan.mentalme.R
 
 class MainApplication : Application(), ReactApplication {
 

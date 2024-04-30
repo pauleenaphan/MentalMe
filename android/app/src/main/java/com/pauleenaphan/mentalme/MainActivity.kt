@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import expo.modules.ReactActivityDelegateWrapper
 
 import com.pauleenaphan.mentalme.BuildConfig
+import com.pauleenaphan.mentalme.R
 
 
 class MainActivity : ReactActivity() {
