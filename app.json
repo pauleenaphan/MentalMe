@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.pauleenaphan.mentalme"
+      "package": "com.pauleenaphan.mentalme",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
