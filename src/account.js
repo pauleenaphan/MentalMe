@@ -22,7 +22,7 @@ const auth1 = auth;
 //Page where user can create an account
 export const CreateAccPage = ({navigation}) => {
     const {userEmail, setUserEmail, userPassword, setUserPassword, setUserName} = getUserInfo();
-    const {setLoginTask, setJournalTask, setWeeklyLogin} = getTaskInfo();
+    const {setJournalTask, setWeeklyLogin} = getTaskInfo();
     const [confirmPass, setConfirmPass] = useState('');
     const [showPassword, setShowPassword] = useState('');
     const {bodyPart, handlePart} = getMoobie();
@@ -226,7 +226,6 @@ export const CreateAccPage = ({navigation}) => {
 
             //adds doc for the user's daily/weekly task
             await setDoc(doc(db, currentUserEmail, "User Task"), {
-                loginTask: "false",
                 journalTask: "false",
                 weeklyLogin: "false"
             })
@@ -242,7 +241,6 @@ export const CreateAccPage = ({navigation}) => {
                 then logs out and creates a new acccount, it will show the status from the previous
                 accounts
              */
-            setLoginTask('false');
             setJournalTask('false');
             setWeeklyLogin('false');
 

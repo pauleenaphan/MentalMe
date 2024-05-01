@@ -69,48 +69,6 @@ export const HomePage = ({navigation}) =>{
         }
     };
 
-    //resets the task if the user has not logged in today
-    // const resetTask = async () =>{
-    //     try{
-    //         const currUserEmail = await getCurrEmail(); 
-
-    //         console.log("WeeklyLogin: " + weeklyLogin);
-
-    //         //gets the last login date
-    //         const loginDate = await getDoc(doc(db, currUserEmail, "ProgressTrackingDoc"));
-    //         console.log("LAST LOGIN ", loginDate.data().userLastLogin);
-     
-    //         console.log("THIS IS TODAYS DATE", getDate());
-    //         //compares today's date and the last date the user logged in
-    //         //if the dates are the same then do nothing, keep the current task
-    //         //else reset all of the task
-    //         if(loginDate.data().userLastLogin == getDate()){
-    //             const taskDoc = await getDoc(doc(db, currUserEmail, "User Task"));
-    //             setJournalTask(taskDoc.data().journalTask);
-    //             // setLoginTask(taskDoc.data().loginTask);
-    //             setWeeklyLogin(taskDoc.data().weeklyLogin);
-    //         } else if (weeklyLogin === 'true' && loginDate.data().userLastLogin === getDate()) { 
-    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
-    //                 journalTask: journalTask,
-    //                 weeklyLogin: "true"
-    //             })
-    //         } else {
-    //             await updateDoc(doc(db, currUserEmail, "User Task"), {
-    //                 // loginTask: "false",
-    //                 journalTask: "false",
-    //                 weeklyLogin: "false"
-    //             })
-    //             // setLoginTask('false');
-    //             setJournalTask('false');
-    //             setWeeklyLogin('false');
-    //             console.log("Cleared task data.");
-    //         }
-    //     }catch(error){
-    //         console.log("Error ", error);
-    //     }
-    // }
-
-
     const handleDailyIncrement = async ({
         dailyLogins, setDailyLogins, 
         consecutiveDLs, setConsecutiveDLs, 

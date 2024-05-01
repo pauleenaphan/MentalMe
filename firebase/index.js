@@ -23,12 +23,12 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 
-if (isAnalyticsSupported()) {
-    const analytics = getAnalytics(app);
-    // Initialize Firebase Analytics
-  } else {
-    // Firebase Analytics is not supported in this environment
-  }
+// if (isAnalyticsSupported()) {
+//     const analytics = getAnalytics(app);
+//     // Initialize Firebase Analytics
+//   } else {
+//     // Firebase Analytics is not supported in this environment
+//   }
 
 export const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
