@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'; //global storage in react, data will stay even when the app is closed
+import { Ionicons } from "@expo/vector-icons";
 
 import { CreateAccPage, LoginPage } from './src/account.js';
-import { LoadingPage } from './src/loading.js';
 import { CoverPage } from './src/cover.js';
 import { AddJournalEntryPage, JournalHomePage, ViewJournalEntry } from './src/journal.js';
 import { HomePage } from './src/homepage.js';
 import { ProgressTracker } from "./src/progress.js";
 import { UserInfoProvider} from './src/userInfo.js';
 import { AccountSettingsPage, SettingsPage, AccountChangePassword } from './src/settings.js';
-import { StorePage, ViewItemPage } from './src/store.js';
+import { StorePage} from './src/store.js';
 import { MoobieProvider } from './src/moobie.js';
 import { UserCurrencyProvider } from './src/currency.js';
 import { ClosetPage } from './src/closet.js';
@@ -23,7 +23,6 @@ import { SundayLoginProvider, MondayLoginProvider, TuesdayLoginProvider,
          FridayLoginProvider, SaturdayLoginProvider } from './src/progress_files/weeklyLoginContext.js';
 import { ChatPage } from './src/chat.js';
 import { IconButton } from './src/homepage.js';
-import { Ionicons } from "@expo/vector-icons";
 import { TaskContextProvider } from './src/task.js';
 import { ShowDailyNotificationProvider } from './src/progress_files/showDailyNotificationContext.js';
 import { ShowJournalNotificationProvider } from './src/progress_files/showJournalNotificationContext.js';
@@ -98,16 +97,6 @@ export default function App() {
                         options = {{
                           headerBackVisible: false, 
                           animation: 'none',
-                          gestureEnabled: false,
-                          headerShown: false 
-                        }}>
-                      </Stack.Screen>
-                      <Stack.Screen 
-                        name = "Loading Page" 
-                        component = {LoadingPage}
-                        options = {{
-                          headerBackVisible: true, 
-                          animation: 'none', 
                           gestureEnabled: false,
                           headerShown: false 
                         }}>

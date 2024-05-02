@@ -5,7 +5,6 @@ import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat'
 import { setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 import { db } from '../firebase/index.js';
 import { getUserInfo } from './userInfo';
 import { getCurrEmail } from './account';
@@ -66,7 +65,6 @@ export const ChatPage = ({ navigation }) => {
                     console.error("Error fetching user status:", error);
                 }
             };
-    
             fetchData();
         }, [])
     );
@@ -74,9 +72,6 @@ export const ChatPage = ({ navigation }) => {
     //checks whether or not the user is new so we can display the correct chat prompt
     useFocusEffect(
         React.useCallback(() => {
-            // if (newUserStatus == 'true') {
-            //     console.log("check status is TRUEEE");
-            // }
             console.log("NEW USER STATUS: ", newUserStatus);
             if (newUserStatus == 'true' || newUserStatus == true) {
                 const text = "Hi! I'm Moobie, your very own personal mental health buddy! My goal is to help you on your journey to improving your mental health! Before we begin, what should I call you, friend?";
@@ -92,42 +87,39 @@ export const ChatPage = ({ navigation }) => {
     //this function will handle the user input based on what they press for the options
     const handleUserInput = (newMessages = []) => {
         const userMessage = newMessages[0];
-        
-        //check if the message is triggered by a button press
-        
-            //handle button press without adding it to the chat messages
-            const botResponse = getBotResponse(userMessage.text);
-            //loops through the response array because in our responses some of the text options can be in the form of an array to send two msgs in a row
-            if (Array.isArray(botResponse)) {
-                botResponse.forEach(message => {
-                    //adds on to the previous message
-                    setMessages(previousMessages =>
-                        GiftedChat.append(previousMessages, [
-                            {
-                                _id: generateMessageId(),
-                                ...message
-                            }
-                        ])
-                    );
-                });
-            } else {
-                //if the msg is not in the form of an array then just add that single msg to the chat "from Moobie"
+        //handle button press without adding it to the chat messages
+        const botResponse = getBotResponse(userMessage.text);
+        //loops through the response array because in our responses some of the text options can be in the form of an array to send two msgs in a row
+        if (Array.isArray(botResponse)) {
+            botResponse.forEach(message => {
+                //adds on to the previous message
                 setMessages(previousMessages =>
                     GiftedChat.append(previousMessages, [
                         {
                             _id: generateMessageId(),
-                            text: botResponse,
-                            createdAt: new Date(),
-                            user: {
-                                _id: 2,
-                                name: 'Moobie',
-                                avatar: require('../imgs/moobie_head/head1.png'),
-                            },
+                            ...message
                         }
                     ])
                 );
-            }
-            return; 
+            });
+        } else {
+            //if the msg is not in the form of an array then just add that single msg to the chat "from Moobie"
+            setMessages(previousMessages =>
+                GiftedChat.append(previousMessages, [
+                    {
+                        _id: generateMessageId(),
+                        text: botResponse,
+                        createdAt: new Date(),
+                        user: {
+                            _id: 2,
+                            name: 'Moobie',
+                            avatar: require('../imgs/moobie_head/head1.png'),
+                        },
+                    }
+                ])
+            );
+        }
+        return; 
     };
 
     const getBotResponse = (userInput) => {
@@ -446,4 +438,3 @@ const formatTime = (time) => {
     const formattedMinute = minute < 10 ? `0${minute}` : minute; // Add leading zero if minute is less than 10
     return `${formattedHour}:${formattedMinute} ${ampm}`;
 };
-  

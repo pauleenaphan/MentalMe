@@ -40,5 +40,4 @@ export const images = {
         {name: 'Pickle Board', image: require('../imgs/moobie_feet/feet3.png'), imageP:('../imgs/moobie_feet/feet3.png'), price: '10'},
         {name: 'Purple Crocs', image: require('../imgs/moobie_feet/feet11.png'), imageP:('../imgs/moobie_feet/feet11.png'), price: '15'}
     ]
-
 };

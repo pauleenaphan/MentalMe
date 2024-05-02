@@ -5,15 +5,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import Modal from "react-native-modal";
-import { Ionicons } from "@expo/vector-icons";
-import { db } from "../firebase/index.js";
-import { collection, addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 
-import { homePageMoobie, styles, homePage, notifStyle, userTaskPopup } from "./styles.js";
+import { styles, homePage, userTaskPopup } from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { getCurrency } from "./currency.js";
-import { getCurrEmail } from "./account.js";
-import { getDate } from "./journal.js";
 import { getTaskInfo } from "./task.js";
 
 import { dailyIncrement } from "./progress.js";
@@ -353,10 +348,8 @@ export const HomePage = ({navigation}) =>{
 //used to created a new icon from the expo vector icons
 export const IconButton = ({ onPress, iconName, iconComponent: IconComponent, size, color }) => {
     return (
-      <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
         <IconComponent name={iconName} size={size} color={color} />
-      </TouchableOpacity>
+    </TouchableOpacity>
     );
-  };
-  
- 
+};

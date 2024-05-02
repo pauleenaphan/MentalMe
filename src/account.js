@@ -5,11 +5,11 @@ import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, Feather, AntDesign, Fontisto } from '@expo/vector-icons'; //used for icons
+import { Feather, AntDesign} from '@expo/vector-icons'; //used for icons
 
 
 import { auth, db } from '../firebase/index.js';
-import { styles, loginPage } from './styles.js'; 
+import { loginPage } from './styles.js'; 
 import { getUserInfo } from './userInfo.js';
 import { getMoobie } from './moobie.js';
 import { getCurrency } from './currency.js';
@@ -25,8 +25,8 @@ export const CreateAccPage = ({navigation}) => {
     const {setJournalTask, setWeeklyLogin} = getTaskInfo();
     const [confirmPass, setConfirmPass] = useState('');
     const [showPassword, setShowPassword] = useState('');
-    const {bodyPart, handlePart} = getMoobie();
-    const {currency, updateCurrency} = getCurrency();
+    const {handlePart} = getMoobie();
+    const {updateCurrency} = getCurrency();
 
     //resets the values in the textinput when the page is displayed
     useFocusEffect(
@@ -187,23 +187,6 @@ export const CreateAccPage = ({navigation}) => {
         }
     }
 
-    // //adds a journal entry that moobie wrote
-    // const addMoobieEntry = async () =>{
-    //     console.log("ADDING MOOBIE DOC 1");
-    //     try{
-    //         let currentUserEmail = await getCurrEmail();
-    //         await addDoc(collection(db, currentUserEmail, "User Information Document", "Journal Entries"),{
-    //             title: "Lost Honey",
-    //             description: "Today I was walking through the forest looking for something to do. While I walked past a tree I saw something glowing. It was a tub of honey! This was the best day ever because I love honey and honey is super good. Moobie is having a good day today.",
-    //             date: getDate().toString()
-    //         });
-    //         console.log("ADDING MOOBIE DOC 2");
-    //     }catch(error){
-    //         console.log("Error ", error);
-    //     }
-        
-    // }
-
     const setUserStatus = async () => {
         console.log("SET USER STATUS FUNCTIONNNNNN ");
         try {
@@ -250,8 +233,6 @@ export const CreateAccPage = ({navigation}) => {
         } catch (error) {
             console.error("Error setting user status:", error);
         }
-
-
     };
 
     //checks whether or not the confirm password matches the new user's password
@@ -357,7 +338,7 @@ export const CreateAccPage = ({navigation}) => {
 export const LoginPage = ({navigation}) =>{
     const {userEmail, setUserEmail, userPassword, setUserPassword, userName, setUserName} = getUserInfo();
     const {bodyPart, handlePart} = getMoobie();
-    const {currency, updateCurrency} = getCurrency();
+    const {updateCurrency} = getCurrency();
     const [showPassword, setShowPassword] = useState(false);
 
     //resets value in the text input when the page is being displayed
@@ -448,7 +429,6 @@ export const LoginPage = ({navigation}) =>{
             //sets the current currency to our usestate and asyncstorage
             console.log("User has this much coins upon login: ", honeyCoins);
             updateCurrency(honeyCoins);
-            // AsyncStorage.setItem("userCurrency", JSON.stringify(honeyCoins));
 
         }catch(error){
             console.log("error: ", error);

@@ -1,24 +1,19 @@
 import React, {useState} from "react";
-import { View, Text, Button, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from 'expo-image';
-import { collection, setDoc, doc, getDocs, deleteDoc, getDoc, updateDoc} from "firebase/firestore"; 
+import { collection, doc, getDocs, updateDoc} from "firebase/firestore"; 
 import { db } from "../firebase";
 import { useFocusEffect } from "@react-navigation/core";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
-import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome6, Feather } from "@expo/vector-icons";
 
 import { getCurrEmail } from "./account.js";
-import { styles, closetPage, closetContainer, storePage } from "./styles.js";
+import { closetPage} from "./styles.js";
 import { getMoobie } from "./moobie.js";
 import { images } from "./images.js";
-import { IconButton } from "./homepage.js";
-
-
 
 export const ClosetPage = ({navigation}) =>{
     const {bodyPart, handlePart} = getMoobie();
     const [closet, setCloset] = useState([]);
-
 
     useFocusEffect(
         React.useCallback(()=>{

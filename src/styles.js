@@ -762,6 +762,107 @@ export const settingsPage = StyleSheet.create({
     alignItems: 'flex-start', 
     padding: 10
   },
+  userNameContainer:{
+    flexDirection: 'row', 
+    marginBottom: 20, 
+    marginRight: 10, 
+    marginLeft: 10
+  },
+  avatarIcon:{
+    width: 100, 
+    height: 80, 
+    borderRadius: 10, 
+    borderWidth: 1, 
+    marginRight: 10, 
+    backgroundColor: '#81A282', 
+    borderColor: '#81A282'
+  },
+  userName:{
+    fontSize: 20, 
+    backgroundColor: '#81A282', 
+    width: 190, 
+    height: 80, 
+    borderRadius: 10, 
+    borderWidth: 1, 
+    overflow: 'hidden', 
+    borderColor: '#81A282', 
+    padding: 10
+  },
+  emailTitle:{
+    fontWeight: 'bold', 
+    fontSize: 20
+  },
+  userEmail:{
+    backgroundColor: '#81A282',  
+    marginLeft: 10, 
+    marginRight: 10, 
+    marginTop: 10, 
+    marginBottom: 50, 
+    width: 300, 
+    alignItems: 'flex-start', 
+    padding: 15, fontSize: 19, 
+    borderWidth: 1, 
+    borderRadius: 10, 
+    borderColor: '#81A282', 
+    overflow: 'hidden'
+  },
+  passTitle:{
+    fontWeight: 'bold', 
+    fontSize: 20
+  },
+  changePassContainer:{
+    backgroundColor: '#81A282',  
+    marginLeft: 10, 
+    marginRight: 10, 
+    marginTop: 10, 
+    marginBottom: 50, 
+    width: 300, 
+    borderRadius: 10, 
+    alignItems: 'flex-start', 
+    padding: 10
+  },
+  changePassPageContainer:{
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: '#B6D3B3',
+    marginTop: -200,
+  },
+  changePassTitle:{
+    fontWeight: 'bold', 
+    fontSize: 35, 
+    marginBottom: 20
+  },
+  showPassContainer:{
+    flexDirection: 'column', 
+    width: 300
+  },
+  passContainer:{
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  passContainer2:{
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    width: 200
+  },
+  inputPass:{
+    paddingTop: 20, 
+    paddingBottom: 20, 
+    paddingLeft: 20, 
+    width: 300, 
+    backgroundColor: '#DBE9D9', 
+    borderRadius: 10, 
+    marginRight: -15, 
+    marginTop: 10, 
+    marginBottom: 10
+  },
+  confirmPassBtn:{
+    backgroundColor: '#568258', 
+    borderRadius: 10, 
+    marginTop: 20, 
+    padding: 10,
+  }
 })
 
 //style for chat page

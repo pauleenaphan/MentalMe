@@ -5,7 +5,6 @@ import {setDoc, doc} from '@firebase/firestore';
 import { getCurrEmail } from './account';
 import { db } from '../firebase/index.js';
 
-
 const UserCurrencyContext = createContext();
 
 export const UserCurrencyProvider = ({children}) =>{

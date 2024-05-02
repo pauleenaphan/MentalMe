@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
-import { backButton, journalPage, entryPage, newEntryPage } from "./styles.js";
+import { journalPage, entryPage, newEntryPage } from "./styles.js";
 import { getCurrEmail } from "./account.js";
 import { db } from "../firebase/index.js";
 import { IconButton } from "./homepage.js";
@@ -64,7 +64,7 @@ export const JournalHomePage = ({navigation}) =>{
             <View style = {journalPage.homePageContainer}>
                 <View style = {journalPage.homePage}>
                     <View style = {journalPage.headerContainer}>
-                       <Text style = {journalPage.title}>
+                        <Text style = {journalPage.title}>
                             Journal Entries
                         </Text>
                     </View>
@@ -184,7 +184,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
             });
-           
+            
             console.log("entry was created " + entry.id);
         }catch(error){
             console.log("error " + error)

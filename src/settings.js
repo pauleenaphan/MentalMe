@@ -7,8 +7,9 @@ import { doc, getDoc} from '@firebase/firestore';
 import { Feather } from '@expo/vector-icons'; //used for icons
 
 import { settingsPage } from "./styles.js";
-import { getCurrEmail, getCurrPassword, getCurrName } from "./account.js";
+import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
+import { set } from "firebase/database";
 
 //to get user information from the firecloud db
 const auth = getAuth();
@@ -90,7 +91,6 @@ export const SettingsPage = ({navigation}) =>{
                     }}
                 />
             </View>
-
         </View>
     );
 };
@@ -129,17 +129,17 @@ export const AccountSettingsPage = ({navigation}) =>{
         <View style = {settingsPage.pageContainer}>
             <Text style = {settingsPage.pageTitle}> Account Information </Text>
             <View>
-                <View style = {{flexDirection: 'row', marginBottom: 20, marginRight: 10, marginLeft: 10}}>
-                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {{width: 100, height: 80, borderRadius: 10, borderWidth: 1, marginRight: 10, backgroundColor: '#81A282', borderColor: '#81A282'}}/>
-                    <Text style = {{fontSize: 20, backgroundColor: '#81A282', width: 190, height: 80, borderRadius: 10, borderWidth: 1, overflow: 'hidden', borderColor: '#81A282', padding: 10}}> {userName} </Text>
+                <View style = {settingsPage.userNameContainer}>
+                    <Image source = {require( "../imgs/moobie_head/head1.png")} style = {settingsPage.avatarIcon}/>
+                    <Text style = {settingsPage.userName}> {userName} </Text>
                 </View>
                 
-                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Email </Text>
+                <Text style = {settingsPage.emailTitle}> Email </Text>
                 {/* Removes quotes from the string */}
-                <Text style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, alignItems: 'flex-start', padding: 15, fontSize: 19, borderWidth: 1, borderRadius: 10, borderColor: '#81A282', overflow: 'hidden'}}> {userEmail.trim().replace(/['"]+/g, '')} </Text> 
+                <Text style = {settingsPage.userEmail}> {userEmail.trim().replace(/['"]+/g, '')} </Text> 
 
-                <Text style = {{fontWeight: 'bold', fontSize: 20}}> Password </Text>
-                <View style = {{backgroundColor: '#81A282',  marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 50, width: 300, borderRadius: 10, alignItems: 'flex-start', padding: 10}}>
+                <Text style = {settingsPage.passTitle}> Password </Text>
+                <View style = {settingsPage.changePassContainer}>
                     <Button 
                         color = "black"
                         title = "Change Password"
@@ -250,12 +250,12 @@ export const AccountChangePassword = ({navigation}) => {
     }
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B6D3B3'}}>
-            <Text style = {{fontWeight: 'bold', fontSize: 35, marginBottom: 20}}> Change Password </Text>
-            <View style = {{flexDirection: 'column', width: 300}}>
-                <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={settingsPage.changePassPageContainer}>
+            <Text style = {settingsPage.changePassTitle}> Change Password </Text>
+            <View style = {settingsPage.showPassContainer}>
+                <View style = {settingsPage.passContainer}>
                     <TextInput
-                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        style = {settingsPage.inputPass}
                         placeholder = "Current Password"
                         secureTextEntry = {!showPassword}
                         value = {currentPass}
@@ -269,9 +269,9 @@ export const AccountChangePassword = ({navigation}) => {
                         onPress={toggleShowPass} 
                     /> 
                 </View>
-                <View  style = {{flexDirection: 'row', alignItems: 'center', width: 200 }}>
+                <View  style = {settingsPage.passContainer2}>
                     <TextInput
-                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        style = {settingsPage.inputPass}
                         placeholder = "New password"
                         secureTextEntry = {!showPassword}
                         value = {newPass}
@@ -284,9 +284,9 @@ export const AccountChangePassword = ({navigation}) => {
                         onPress={toggleShowPass} 
                     /> 
                 </View>
-                <View  style = {{flexDirection: 'row', alignItems: 'center'}}>
+                <View  style = {settingsPage.passContainer}>
                     <TextInput
-                        style = {{paddingTop: 20, paddingBottom: 20, paddingLeft: 20,  width: 300, backgroundColor: '#DBE9D9', borderRadius: 10, marginRight: -15, marginTop: 10, marginBottom: 10}}
+                        style = {settingsPage.inputPass}
                         placeholder = "Confirm new password"
                         secureTextEntry = {!showPassword}
                         value = {confirmPass}
@@ -300,11 +300,10 @@ export const AccountChangePassword = ({navigation}) => {
                     /> 
                 </View>
             </View>
-            
-            <View style = {{backgroundColor: '#568258', borderRadius: 10, marginTop: 20, padding: 10,}}>
+            <View style = {settingsPage.confirmPassBtn}>
                 <Button
                     color = "white"
-                    title="Confirm Password Change"
+                    title="Confirm Change"
                     onPress={() => {
                         //check if the old password is the user's current password
                         //check if the new password is not the same as the old password

@@ -10,7 +10,6 @@ export const MoobieProvider = ({children}) =>{
         lowerBody: require('../imgs/moobie_feet/feet1.png')
     })
 
-
     //prev state will guarantee that the latest state will be set
     const handlePart = (part, imgFile) => {
         setBodyPart(prevState => ({

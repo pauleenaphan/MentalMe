@@ -1,9 +1,9 @@
-import React, { useEffect, useState} from "react";
-import { View, Text, Button, ScrollView, Alert, TouchableOpacity } from "react-native";
+import React, { useState} from "react";
+import { View, Text, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from 'expo-image';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
-import { doc, setDoc, addDoc, collection, getDocs } from "@firebase/firestore";
+import { addDoc, collection, getDocs } from "@firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -27,7 +27,7 @@ export const StorePage = () =>{
         image: '',
         price: '',
     })
-    const [closet, setCloset] = useState([]);
+    const [setCloset] = useState([]);
     const {currency, updateCurrency} = getCurrency();
 
     useFocusEffect(
