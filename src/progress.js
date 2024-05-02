@@ -306,8 +306,8 @@ export const setPersonalCounters = async ({
         console.log("DailyLogs has: " + prevDL);
         await AsyncStorage.setItem('dailyLogins', prevDL.toString());
         await AsyncStorage.setItem('latestDate', lastLogin);
-        await AsyncStorage.setItem('consecutiveDLs', prevCDL);
-        await AsyncStorage.setItem('longestStreak', prevLS);
+        await AsyncStorage.setItem('consecutiveDLs', prevCDL.toString());
+        await AsyncStorage.setItem('longestStreak', prevLS.toString());
         await AsyncStorage.setItem('sundayLogin', prevSunday);
         await AsyncStorage.setItem('mondayLogin', prevMonday);
         await AsyncStorage.setItem('tuesdayLogin', prevTuesday);
