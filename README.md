@@ -21,7 +21,9 @@ add gifs here
 <br>
 
 # Installing 
-Users can install the app in the app store or the google play store 
+Access the app using expo go
+<br> ![image](https://github.com/pauleenaphan/MentalMe/assets/77126730/bcd4f801-9840-4d9c-a15b-22cad1319a08)
+
 <br> link to app store 
 <br> link to google play store 
 
