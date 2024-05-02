@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "mentalme"
+      "bundleIdentifier": "com.pauleenaphan.mentalme"
       
     },
     "android": {
