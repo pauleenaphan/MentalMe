@@ -4,12 +4,12 @@
     "slug": "mentalme",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./imgs/moobie_head/head1.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./imgs/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#B6D3B3"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -17,7 +17,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pauleenaphan.mentalme"
-      
     },
     "android": {
       "adaptiveIcon": {
@@ -38,6 +37,10 @@
     "owner": "pauleenaphan",
     "plugins": [
       "expo-build-properties"
-    ]
+    ],
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/d55f227c-6164-4fc5-ac60-040c4b42bad2"
+    }
   }
 }
