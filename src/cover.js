@@ -7,7 +7,12 @@ export const CoverPage = ({navigation, isLogged}) =>{
     
     useEffect(()=>{
         const timer = setTimeout(()=>{
-            navigation.navigate("Home Page");
+            if(isLogged){
+                navigation.navigate("Home Page");
+            }else{
+                navigation.navigate("Login Page");
+            }
+            
         }, 5000)
         return () => clearTimeout(timer);
     })
