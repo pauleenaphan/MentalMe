@@ -16,8 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "mentalme"
-      
+      "bundleIdentifier": "com.pauleenaphan.mentalme"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,8 +34,9 @@
       }
     },
     "owner": "pauleenaphan",
-    "plugins": [
-      "expo-build-properties"
-    ]
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/d55f227c-6164-4fc5-ac60-040c4b42bad2"
+    }
   }
 }
