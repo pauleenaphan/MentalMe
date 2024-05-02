@@ -25,7 +25,8 @@
     "react-native-gifted-chat": "^2.4.0",
     "react-native-modal": "^13.0.1",
     "react-native-screens": "~3.29.0",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "expo-updates": "~0.24.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
