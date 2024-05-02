@@ -23,6 +23,7 @@ add gifs here
 # Installing 
 Access the app using expo go
 <br> ![image](https://github.com/pauleenaphan/MentalMe/assets/77126730/bcd4f801-9840-4d9c-a15b-22cad1319a08)
+<br> [Link to expo barcode](https://expo.dev/preview/update?message=fixed%20crashing&updateRuntimeVersion=1.0.0&createdAt=2024-05-02T05%3A08%3A59.029Z&slug=exp&projectId=d55f227c-6164-4fc5-ac60-040c4b42bad2&group=bfa43060-c811-4642-bd46-1a298097aaa0)
 
 <br> link to app store 
 <br> link to google play store 
