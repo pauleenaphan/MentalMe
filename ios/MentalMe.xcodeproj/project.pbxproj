@@ -247,7 +247,6 @@
 		};
 		32BD4CA53F79E598F1743301 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
