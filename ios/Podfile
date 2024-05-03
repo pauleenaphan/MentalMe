@@ -81,8 +81,8 @@ target 'ios' do
   end
 end
 
-target 'richNotification' do
-  pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'Firebase/Messaging', :modular_headers => true
-  pod 'GoogleUtilities', :modular_headers => true
-end
+# target 'richNotification' do
+#   pod 'FirebaseCoreInternal', :modular_headers => true
+#   pod 'Firebase/Messaging', :modular_headers => true
+#   pod 'GoogleUtilities', :modular_headers => true
+# end
