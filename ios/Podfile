@@ -52,7 +52,10 @@ target 'ios' do
   # Add gRPC-C++ dependency
   pod 'gRPC-C++', '~> 1.0'
 
-  
+  #   pod 'FirebaseCoreInternal', :modular_headers => true
+  #   pod 'Firebase/Messaging', :modular_headers => true
+  #   pod 'GoogleUtilities', :modular_headers => true
+    
   post_install do |installer|
     react_native_post_install(
       installer,
