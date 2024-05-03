@@ -13,27 +13,31 @@ install! 'cocoapods',
 
 prepare_react_native_project!
 
-# Add these lines to enable modular headers for Firebase dependencies
-# FirebaseCoreInternal depends upon GoogleUtilities, which does not define modules
-# You need to set `use_modular_headers!` globally in your Podfile or specify `:modular_headers => true` for Firebase dependencies
-use_modular_headers!
-use_frameworks! :linkage => :static
-
-# Define Flipper configuration
+# If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
+# because `react-native-flipper` depends on (FlipperKit,...), which will be excluded. To fix this,
+# you can also exclude `react-native-flipper` in `react-native.config.js`
+#
+# ```js
+# module.exports = {
+#   dependencies: {
+#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
+#   }
+# }
+# ```
 flipper_config = FlipperConfiguration.disabled
-if ENV['NO_FLIPPER'] == '1'
+if ENV['NO_FLIPPER'] == '1' then
   # Explicitly disabled through environment variables
   flipper_config = FlipperConfiguration.disabled
-elsif podfile_properties.key?('ios.flipper')
+elsif podfile_properties.key?('ios.flipper') then
   # Configure Flipper in Podfile.properties.json
-  if podfile_properties['ios.flipper'] == 'true'
+  if podfile_properties['ios.flipper'] == 'true' then
     flipper_config = FlipperConfiguration.enabled(["Debug", "Release"])
-  elsif podfile_properties['ios.flipper'] != 'false'
+  elsif podfile_properties['ios.flipper'] != 'false' then
     flipper_config = FlipperConfiguration.enabled(["Debug", "Release"], { 'Flipper' => podfile_properties['ios.flipper'] })
   end
 end
 
-target 'ios' do
+target 'MentalMe' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -49,13 +53,6 @@ target 'ios' do
     :flipper_configuration => flipper_config
   )
 
-  # Add gRPC-C++ dependency
-  pod 'gRPC-C++', '~> 1.0'
-
-  pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'Firebase/Messaging', :modular_headers => true
-  pod 'GoogleUtilities', :modular_headers => true
-    
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -83,9 +80,3 @@ target 'ios' do
     end
   end
 end
-
-# target 'richNotification' do
-#   pod 'FirebaseCoreInternal', :modular_headers => true
-#   pod 'Firebase/Messaging', :modular_headers => true
-#   pod 'GoogleUtilities', :modular_headers => true
-# end
