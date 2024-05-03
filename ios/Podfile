@@ -16,7 +16,7 @@ prepare_react_native_project!
 # Add these lines to enable modular headers for Firebase dependencies
 # FirebaseCoreInternal depends upon GoogleUtilities, which does not define modules
 # You need to set `use_modular_headers!` globally in your Podfile or specify `:modular_headers => true` for Firebase dependencies
-# use_modular_headers!
+use_modular_headers!
 use_frameworks! :linkage => :static
 
 # Define Flipper configuration
