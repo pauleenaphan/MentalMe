@@ -50,7 +50,7 @@ target 'MentalMe' do
   pod 'FirebaseFirestore', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'FirebaseCoreExtension', :modular_headers => true
-  pod 'FirebaseFirestoreInternal', :modular_headers => true
+  # pod 'FirebaseFirestoreInternal', :modular_headers => true
   $RNFirebaseAsStaticFramework = true
 
   # use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
