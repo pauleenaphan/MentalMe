@@ -42,6 +42,8 @@ target 'MentalMe' do
   use_expo_modules!
   config = use_native_modules!
 
+  project './MentalMe.xcodeproj'
+
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
