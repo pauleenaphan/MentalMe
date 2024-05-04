@@ -44,17 +44,20 @@ target 'MentalMe' do
 
   project 'MentalMe.xcodeproj'
 
-  pod 'Firebase', :modular_headers => true
-  pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'GoogleUtilities', :modular_headers => true
-  pod 'FirebaseFirestore', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
-  pod 'FirebaseCoreExtension', :modular_headers => true
-  pod 'FirebaseFirestoreInternal', :modular_headers => true
-  $RNFirebaseAsStaticFramework = true
+  # pod 'Firebase', :modular_headers => true
+  # pod 'FirebaseCoreInternal', :modular_headers => true
+  # pod 'GoogleUtilities', :modular_headers => true
+  # pod 'FirebaseFirestore', :modular_headers => true
+  # pod 'FirebaseCore', :modular_headers => true
+  # pod 'FirebaseCoreExtension', :modular_headers => true
+  # pod 'FirebaseFirestoreInternal', :modular_headers => true
+  # $RNFirebaseAsStaticFramework = true
 
-  # use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-  # use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+
+  use_frameworks! :linkage => :static 
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -62,7 +65,7 @@ target 'MentalMe' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
-    :flipper_configuration => flipper_config
+    # :flipper_configuration => flipper_config
   )
 
   post_install do |installer|
@@ -91,4 +94,11 @@ target 'MentalMe' do
       Pod::UI.warn e
     end
   end
+  pod 'Firebase'
+  pod 'FirebaseCoreInternal'
+  pod 'GoogleUtilities'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseCore'
+  pod 'FirebaseCoreExtension'
+  pod 'FirebaseFirestoreInternal'
 end
