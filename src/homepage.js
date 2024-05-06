@@ -133,18 +133,9 @@ export const HomePage = ({navigation}) =>{
             source = {require("../imgs/backgrounds/background1.png")} 
             style = {homePage.background}>
                 
-            <View style = {styles.container}>
-                <TouchableOpacity onPress={() => navigation.navigate('Chat Page')} activeOpacity={0.9}>
-                    <View style = {{}}>
-                        <Image source = {bodyPart.head} style = {{height: 400, width: 400, marginTop: -550, left: 18}}/>
-                        <Image source = {bodyPart.body} style = {{height: 400, width: 500, marginTop: -353}}/>
-                        <Image source = {bodyPart.lowerBody} style = {{height: 400, width: 400, marginTop: -297, left: 35}}/>
-                    </View>
-                    
-                </TouchableOpacity>
-                
-                <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: -830, paddingRight: 20, paddingLeft: 10, paddingTop:100, paddingBottom: 20}}>
-                    <View style = {{alignItems: 'center', flexDirection: 'row'}}>
+            <View style = {{height: "100%"}}>
+                <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', height: "10%",}}>
+                    <View style = {{alignItems: 'center', flexDirection: 'row', marginLeft: 10}}>
                         <Image 
                             source = {require("../imgs/honeycoin.png")}
                             style = {{width: 60, height: 50}}
@@ -152,7 +143,7 @@ export const HomePage = ({navigation}) =>{
                         <Text style = {{fontSize: 30, marginTop: 10}}>{currency}</Text>
                     </View>
                     {/* Positions the setting icon */}
-                    <View style = {{}}>
+                    <View style = {{marginRight: 10}}>
                         <IconButton
                             onPress = {() => navigation.navigate("Settings Page")}
                             iconName = "settings"
@@ -163,7 +154,7 @@ export const HomePage = ({navigation}) =>{
                     </View>
                 </View>
                 {/* Icon for the daily task */}
-                <View style = {{marginRight: 'auto', marginLeft: 30}}>
+                <View style = {{marginRight: 'auto', marginLeft: 27, height: "5%"}}>
                     <IconButton
                         onPress = {() =>{ toggleTaskPopup() }}
                         iconName = "tasks"
@@ -172,6 +163,13 @@ export const HomePage = ({navigation}) =>{
                         color = "black"
                     />
                 </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Chat Page')} activeOpacity={0.9}>
+                    <View style = {{justifyContent: 'center', alignItems: 'center', height: "77%"}}>
+                        <Image source = {bodyPart.head} style = {{position: "absolute", height: "110%", width: "100%", top: "5%", left:"-3%" }}/>
+                        <Image source = {bodyPart.body} style = {{position: "absolute", height: "110%", width: "112%", top: "15%", left: "-1%", left: "-3%"}}/>
+                        <Image source = {bodyPart.lowerBody} style = {{position: "absolute", height: "100%", width: "98%", top: "36%", left: "1%"}}/>
+                    </View>
+                </TouchableOpacity>
                 <Modal
                     isVisible = {taskPopup}
                     animationIn = {'zoomIn'}
@@ -305,7 +303,8 @@ export const HomePage = ({navigation}) =>{
                 </Modal>
 
                 {/* All icons on the bottom bar */}
-                <View style = {homePage.iconBarContainer}>
+                {/* <View style = {homePage.iconBarContainer}> */}
+                <View style = {{}}>
                     <View style = {homePage.iconBar}>
                         <IconButton
                             onPress = {() => navigation.navigate('Journal Home Page')}
