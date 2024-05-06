@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { View, Text, Button, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, Button, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Image } from 'expo-image';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
@@ -162,7 +162,7 @@ export const StorePage = () =>{
                             <Image source = {boughtItem.image} style = {storePopup.headItemImg}/>
                             <View style = {storePopup.buyBtn}>
                                 <Button
-                                    color = 'white'
+                                    color = {Platform.OS === "android" ? "#568258" : "white"}
                                     title = "Buy Item"
                                     onPress = {async () =>{
                                         //first checks to see if the user owns the item already
@@ -199,7 +199,7 @@ export const StorePage = () =>{
                                 />
                             </View>
                             <Button
-                                color = 'black'
+                                color = {Platform.OS === "android" ? "transparent" : "black"}
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
                                 
@@ -319,7 +319,7 @@ export const StorePage = () =>{
                             <Image source = {boughtItem.image} style = {storePopup.bodyItemImg}/>
                             <View style = {storePopup.buyBtn}>
                                 <Button
-                                    color = 'white'
+                                    color = {Platform.OS === "android" ? "#568258" : "white"}
                                     title = "Buy Item"
                                     onPress = {async () =>{
                                         //first checks to see if the user owns the item already
@@ -355,7 +355,7 @@ export const StorePage = () =>{
                                 />
                             </View>
                             <Button
-                                color = 'black'
+                                color = {Platform.OS === "android" ? "transparent" : "black"}
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
                             />
@@ -469,7 +469,7 @@ export const StorePage = () =>{
                             <Image source = {boughtItem.image} style = {storePopup.lowerBodyItemImg}/>
                             <View style = {storePopup.buyBtn}>
                                 <Button
-                                    color = 'white'
+                                    color = {Platform.OS === "android" ? "#568258" : "white"}
                                     title = "Buy Item"
                                     onPress = {async () =>{
                                         //first checks to see if the user owns the item already
@@ -503,7 +503,8 @@ export const StorePage = () =>{
                                 />
                             </View>
                             <Button
-                                color = 'black'
+                                // color = 'black'
+                                color = {Platform.OS === "android" ? "transparent" : "black"}
                                 title = "Return to store page"
                                 onPress = {toggleItemPopup}
                             />
