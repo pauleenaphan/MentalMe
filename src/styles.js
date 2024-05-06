@@ -225,29 +225,29 @@ export const closetPage = StyleSheet.create({
     fontSize: 35
   },
   moobieContainer:{
-    height: 500, 
-    marginTop: 10
+    height: "60%", 
+    justifyContent: 'center', 
+    alignItems: 'center'
   },
   moobieHead:{
-    position: 'absolute',
-    width: 400,
-    height: 400,
-    top: -10,
-    left: -25
+    position: 'absolute', 
+    height: "70%", 
+    width: "85%", 
+    top: "5%"
   },
   moobieBody:{
-    position: 'absolute',
-    width: 500,
-    height: 400,
-    top: 38,
-    right: -40
+    position: 'absolute', 
+    height: "70%", 
+    width: "100%", 
+    top: "14%", 
+    left: "5%"
   },
   moobieFeet:{
-    position: 'absolute',
-    width: 400,
-    height: 400,
-    top: 141,
-    right: 25,
+    position: 'absolute', 
+    height: "80%", 
+    width: "86%", 
+    top: "25%", 
+    left: "9%"
   },
   //style for the imgs of the clothes
   clothesImg:{

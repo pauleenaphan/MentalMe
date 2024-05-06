@@ -67,9 +67,13 @@ export const ClosetPage = ({navigation}) =>{
             
             {/* Displays Moobie in the closet */}
             <View style = {closetPage.moobieContainer}>
+            {/* <View style = {{height: "60%", justifyContent: 'center', alignItems: 'center'}}> */}
                 <Image source = {bodyPart.head} style = {closetPage.moobieHead}/>
                 <Image source = {bodyPart.body} style = {closetPage.moobieBody}/>
                 <Image source = {bodyPart.lowerBody} style = {closetPage.moobieFeet}/>
+                {/* <Image source = {bodyPart.head} style = {{position: 'absolute', height: "70%", width: "85%", top: "5%"}}/>
+                <Image source = {bodyPart.body} style = {{position: 'absolute', height: "70%", width: "100%", top: "14%", left: "5%"}}/>
+                <Image source = {bodyPart.lowerBody} style = {{position: 'absolute', height: "80%", width: "86%", top: "25%", left: "9%"}}/> */}
             </View>
 
             <View style = {{flex: 1}}>
