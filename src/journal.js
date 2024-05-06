@@ -96,7 +96,12 @@ export const JournalHomePage = ({navigation}) =>{
                 </ScrollView>
                 <TouchableOpacity
                     onPress = {() => navigation.navigate('Journal New Entry Page')}
-                    style = {journalPage.addEntryBtnBoxContainer}
+                    // style = {journalPage.addEntryBtnBoxContainer}
+                    style = {{flexDirection: 'row', 
+                    justifyContent: 'flex-end', 
+                    width: '90%', 
+                    top: "70%",
+                    position: 'absolute'}}
                     activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
                 >
                     <View style = {journalPage.addEntryContainer}>
