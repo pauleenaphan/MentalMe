@@ -28,13 +28,13 @@ export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
     const { showJournalNotification, setShowJournalNotification } = useShowJournalNotification();
 
-    //shows all entries in journal
+    // // //shows all entries in journal
     useFocusEffect(
         React.useCallback(() => {
             console.log('Showing new Entries');
             console.log("DATE FORMAT", getDate());
             getEntries();
-        }, [entries])
+        }, [])
     );
 
 
@@ -164,7 +164,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
             let currDate = getDate();
             const lastDate = await getDoc(doc(db, currentUserEmail, "Journal Date"));
             if(lastDate.data().date == currDate){
-                console.log("user has journaled today already")
+                console.log("user has journaled today already");
             }else{
                 //updates the date and give the user a coin
                 await setDoc(doc(db, currentUserEmail, "Journal Date"),{
@@ -184,7 +184,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 description: journalInfo.description.toString(),
                 date: getDate().toString()
             });
-            
+            navigation.navigate("Journal Home Page");
             console.log("entry was created " + entry.id);
         }catch(error){
             console.log("error " + error)
@@ -215,7 +215,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                 <TouchableOpacity
                     onPress={()=>{
                         addEntry();
-                        navigation.navigate("Journal Home Page");
+                        // navigation.navigate("Journal Home Page");
                     }}
                     style={{
                         alignSelf: 'center',
