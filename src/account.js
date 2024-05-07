@@ -484,7 +484,7 @@ export const LoginPage = ({navigation}) =>{
                 </View>
                 <View style = {loginPage.button}>
                     <Button
-                        color = 'white'
+                        color = {Platform.OS === "android" ? "#568258" : "white"}
                         title = "LOGIN"
                         onPress={async () =>{
                             if(await loginAcc()){
