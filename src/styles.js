@@ -408,7 +408,7 @@ export const newEntryPage = StyleSheet.create({
     textAlign: 'center'
   },
   descriptionContainer:{
-    height: 500, 
+    height: "60%", 
     width: '100%', 
     padding: 20, 
     borderTopWidth: 1,
