@@ -485,7 +485,6 @@ export const progressPage = StyleSheet.create({
   moobieImg:{
     width: '100%', 
     height: '100%', 
-    bottom: '15%'
   }
 })
 
@@ -542,7 +541,7 @@ export const storePage = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5, // Elevation for Android
     borderRadius: 10,
-    margin: 10
+    margin: 5
   },
   itemImgHead:{
     width: 150, 

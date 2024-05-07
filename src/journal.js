@@ -1,5 +1,5 @@
-import React, { useState} from "react";
-import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Button, TextInput, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity, Dimensions } from "react-native";
 import { collection, addDoc, doc, getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
@@ -23,12 +23,17 @@ export const getDate = () =>{
     return `${month}/${date}/${year}`;
 }
 
+const screenHeight = Dimensions.get('window').height;
+
 //Main Journal Homepage
 export const JournalHomePage = ({navigation}) =>{
     const [entries, setEntries] = useState([]);
     const { showJournalNotification, setShowJournalNotification } = useShowJournalNotification();
 
-    // // //shows all entries in journal
+    //calculates position for the add new entry button
+    const topPosition = (2 * screenHeight) / 3;
+
+    //shows all entries in journal
     useFocusEffect(
         React.useCallback(() => {
             console.log('Showing new Entries');
@@ -100,7 +105,7 @@ export const JournalHomePage = ({navigation}) =>{
                     style = {{flexDirection: 'row', 
                     justifyContent: 'flex-end', 
                     width: '90%', 
-                    top: "70%",
+                    top: topPosition,
                     position: 'absolute'}}
                     activeOpacity={0.8} // Set activeOpacity to 1 to prevent opacity change on press
                 >
@@ -229,7 +234,7 @@ export const AddJournalEntryPage = ({navigation}) =>{
                         alignItems: 'center',
                         backgroundColor: '#568258',
                         padding: 10,
-                        borderRadius: 10
+                        borderRadius: 10,
                     }}
                     activeOpacity={0.8}
                     > 

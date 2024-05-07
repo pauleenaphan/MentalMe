@@ -80,7 +80,8 @@ export const ClosetPage = ({navigation}) =>{
                 <ScrollView horizontal = {true} showsHorizontalScrollIndicator={true}
                     bounces = {false}
                 >
-                    <View style = {closetPage.closetContainer}>
+                    {/* <View style = {closetPage.closetContainer}> */}
+                    <View style = {{  flexDirection: 'row', height: "40%"}}>
                         {/* Maps through the closet in order to display all the clothes the user has bought */}
                         {closet.map(item =>(
                             <TouchableOpacity
@@ -140,7 +141,14 @@ export const ClosetPage = ({navigation}) =>{
                                     })}
                                 }}
                             >
-                                <View key = {item.itemName} style = {closetPage.clothesContainer}>
+                                {/* <View key = {item.itemName} style = {closetPage.clothesContainer}> */}
+                                <View key = {item.itemName} style = {{ borderRadius: 10, 
+                                        backgroundColor: '#568258',
+                                        alignItems: 'center', 
+                                        justifyContent: 'center',
+                                        marginLeft: 10,
+                                        marginTop: 50,
+                                        }}>
                                     {allImgs.map((img)=>{
                                         if(img.name === item.itemName){
                                             return <Image source = {img.image} style = {closetPage.clothesImg}/>

@@ -165,7 +165,7 @@ export const HomePage = ({navigation}) =>{
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('Chat Page')} activeOpacity={0.9}>
                     <View style = {{justifyContent: 'center', alignItems: 'center', height: "77%"}}>
-                        <Image source = {bodyPart.head} style = {{position: "absolute", height: "110%", width: "100%", top: "5%", left:"-3%" }}/>
+                        <Image source = {bodyPart.head} style = {{position: "absolute", height: "100%", width: "100%", top: "11%", left:"-3%" }}/>
                         <Image source = {bodyPart.body} style = {{position: "absolute", height: "110%", width: "112%", top: "15%", left: "-1%", left: "-3%"}}/>
                         <Image source = {bodyPart.lowerBody} style = {{position: "absolute", height: "100%", width: "98%", top: "36%", left: "1%"}}/>
                     </View>
