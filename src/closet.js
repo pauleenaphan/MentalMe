@@ -149,9 +149,9 @@ export const ClosetPage = ({navigation}) =>{
                                         marginLeft: 10,
                                         marginTop: 50,
                                         }}>
-                                    {allImgs.map((img)=>{
+                                    {allImgs.map((img, index)=>{
                                         if(img.name === item.itemName){
-                                            return <Image source = {img.image} style = {closetPage.clothesImg}/>
+                                            return <Image key = {index} source = {img.image} style = {closetPage.clothesImg}/>
                                         }
                                     })}
                                     <Text style = {{fontSize: 20, padding: 10}}> {item.itemName} </Text>
