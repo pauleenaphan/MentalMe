@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, Button, TextInput, Alert } from "react-native";
+import { View, Text, Button, TextInput, Alert, Platform } from "react-native";
 import { Image } from 'expo-image';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePassword, getAuth } from "@firebase/auth";
-import { doc, getDoc} from '@firebase/firestore';
+import { doc, getDoc } from '@firebase/firestore';
 import { Feather } from '@expo/vector-icons'; //used for icons
 
 import { settingsPage } from "./styles.js";
 import { getCurrEmail, getCurrPassword } from "./account.js";
 import { getUserInfo } from "./userInfo.js";
-import { set } from "firebase/database";
+import { db } from '../firebase/index.js';
 
 //to get user information from the firecloud db
 const auth = getAuth();
@@ -55,7 +55,7 @@ export const SettingsPage = ({navigation}) =>{
             <Text style = {settingsPage.pageTitle}> Settings </Text> 
         
             <View>
-                <Text style = {settingsPage.headerTitle}> In App </Text>
+                {/* <Text style = {settingsPage.headerTitle}> In App </Text>
                 <View style = {settingsPage.optionsContainer}>
                     <Button
                         color = "black"
@@ -65,13 +65,13 @@ export const SettingsPage = ({navigation}) =>{
                         color = "black"
                         title = "Notification"
                     />
-                </View>
+                </View> */}
 
                 <Text style = {settingsPage.headerTitle}> Account </Text>
 
                 <View style = {settingsPage.optionsContainer}>
                     <Button
-                        color = "black"
+                        color = {Platform.OS === "android" ? "transparent" : "black"}
                         title = "Account Information"
                         onPress = {()=>{
                             navigation.navigate('Account Settings Page');
@@ -83,7 +83,7 @@ export const SettingsPage = ({navigation}) =>{
             
             <View style = {settingsPage.logOutBtn}>
                 <Button
-                    color = "white"
+                    color = {Platform.OS === "android" ? "#568258" : "white"}
                     title = "Log Out"
                     onPress = {() => {
                         logOut();
@@ -141,7 +141,7 @@ export const AccountSettingsPage = ({navigation}) =>{
                 <Text style = {settingsPage.passTitle}> Password </Text>
                 <View style = {settingsPage.changePassContainer}>
                     <Button 
-                        color = "black"
+                        color = {Platform.OS === "android" ? "transparent" : "black"}
                         title = "Change Password"
                         onPress = {()=>{
                             navigation.navigate('Change Password Page');
@@ -302,7 +302,7 @@ export const AccountChangePassword = ({navigation}) => {
             </View>
             <View style = {settingsPage.confirmPassBtn}>
                 <Button
-                    color = "white"
+                    color = {Platform.OS === "android" ? "#568258" : "white"}
                     title="Confirm Change"
                     onPress={() => {
                         //check if the old password is the user's current password

@@ -1,7 +1,6 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
 import { useFocusEffect } from "@react-navigation/native";
-import { View, Text, TextInput, Button, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection, setDoc, doc, getDoc} from '@firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -294,7 +293,7 @@ export const CreateAccPage = ({navigation}) => {
                 <View style = {{flexDirection:'row', alignItems:'center', justifyContent: 'space-between', marginTop: -10}}>
                     <View style = {loginPage.button}>
                         <Button
-                            color = "white"
+                            color = {Platform.OS === "android" ? "#568258" : "white"}
                             title = "Sign Up"
                             onPress={
                                 async () =>{
@@ -323,7 +322,7 @@ export const CreateAccPage = ({navigation}) => {
                         />
                     </View>
                     <Button
-                        color = "black"
+                        color = {Platform.OS === "android" ? "transparent" : "black"}
                         title = "Login"
                         onPress = {() => navigation.navigate('Login Page')}
                     />
@@ -504,7 +503,7 @@ export const LoginPage = ({navigation}) =>{
                     />
                 </View>
                 <Button
-                    color = 'black'
+                    color = {Platform.OS === "android" ? "transparent" : "black"}
                     title = "Create Account"
                     onPress = {() => navigation.navigate('Create Account Page')}
                 />

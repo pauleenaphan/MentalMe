@@ -68,7 +68,7 @@ export const coverPage = StyleSheet.create({
     paddingTop: 200
   },
   logo:{
-    width: '120%', 
+    width: '100%', 
     height: '40%', 
     marginBottom: -140,
     marginLeft: 20
@@ -357,7 +357,7 @@ export const entryPage = StyleSheet.create({
   headerContainer:{
     marginLeft: 40, 
     marginRight: 40, 
-    marginBottom: 50
+    marginBottom: 20
   },
   //title of the entry
   title:{
@@ -379,7 +379,7 @@ export const entryPage = StyleSheet.create({
     marginRight: 40, 
     fontSize: 20, 
     backgroundColor: '#81A282', 
-    height: 500, 
+    height: "60%", 
     padding: 10,
     borderWidth: 10,
     borderRadius: 10,
@@ -485,6 +485,7 @@ export const progressPage = StyleSheet.create({
   moobieImg:{
     width: '100%', 
     height: '100%', 
+    bottom: '15%'
   }
 })
 
@@ -741,8 +742,8 @@ export const settingsPage = StyleSheet.create({
   logOutBtn:{
     backgroundColor: '#568258', 
     borderRadius: 10, 
-    paddingTop: 10, 
-    paddingBottom: 10, 
+    paddingTop: 5, 
+    paddingBottom: 5, 
     paddingLeft: 20,
     paddingRight: 20,
     marginTop: 10, 

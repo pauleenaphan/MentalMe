@@ -274,7 +274,10 @@ export const ViewJournalEntry = ({route, navigation}) =>{
         //Prints the journal entry that the user pressed on 
         <View style = {entryPage.pageContainer}>
             <Text style = {entryPage.entryDate}> {entryDate} </Text>
-            <View style = {entryPage.headerContainer}>
+            {/* <View style = {entryPage.headerContainer}> */}
+            <View style = {{ marginLeft: 40, 
+                marginRight: 40, 
+                marginBottom: 20}}>
                 <Text style = {entryPage.title} numberOfLines={2}>{entryTitle}</Text>
             </View>      
             {/* <ScrollView style = {{maxHeight: 500}}> */}
