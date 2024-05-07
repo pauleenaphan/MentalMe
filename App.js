@@ -224,7 +224,6 @@ export default function App() {
                         name = "Journal New Entry Page" 
                         component = {AddJournalEntryPage}
                         options={({navigation}) =>({
-                          animation: 'slide',
                           gestureEnabled: false,
                           headerTitle: "",
                           headerShadowVisible: false,
