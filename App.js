@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'; //global storage in react, data will stay even when the app is closed
 import { Ionicons } from "@expo/vector-icons";
+import 'react-native-reanimated';
 
 import { CreateAccPage, LoginPage } from './src/account.js';
 import { CoverPage } from './src/cover.js';
